@@ -6,9 +6,16 @@ from typing import Any, Literal
 
 import httpx
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, field_validator
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:8080", "http://127.0.0.1:8080"],
+    allow_methods=["GET", "POST", "OPTIONS"],
+    allow_headers=["*"],
+)
 
 HEIGIT_PELIAS_URL = "https://api.heigit.org/pelias/v1/search"
 HEIGIT_DIRECTIONS_URL = "https://api.heigit.org/openrouteservice/v2/directions"
