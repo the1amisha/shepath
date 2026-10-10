@@ -54,6 +54,28 @@ class PilotAPITests(unittest.TestCase):
     def get(self, **params):
         return self.client.get("/pilot/ranchi/comparison", params=params)
 
+    def test_comparison_cors_allows_local_frontend_origins(self):
+        for origin in (
+            "http://localhost:8080",
+            "http://localhost:8081",
+            "http://127.0.0.1:8080",
+            "http://127.0.0.1:8081",
+        ):
+            with self.subTest(origin=origin):
+                response = self.client.get(
+                    "/pilot/ranchi/comparison", headers={"Origin": origin}
+                )
+                self.assertEqual(response.status_code, 200, response.text)
+                self.assertEqual(response.headers.get("access-control-allow-origin"), origin)
+                self.assertIn("origin", response.headers.get("vary", "").lower())
+
+    def test_comparison_cors_does_not_allow_unauthorized_origin(self):
+        response = self.client.get(
+            "/pilot/ranchi/comparison", headers={"Origin": "https://unauthorized.example"}
+        )
+        self.assertEqual(response.status_code, 200, response.text)
+        self.assertNotIn("access-control-allow-origin", response.headers)
+
     def test_success_and_lossless_comparison_payload(self):
         with patch.object(main, "get_heigit_api_key", side_effect=AssertionError("No API key access")), patch.object(main, "fetch_directions", side_effect=AssertionError("No provider call")):
             response = self.get()
