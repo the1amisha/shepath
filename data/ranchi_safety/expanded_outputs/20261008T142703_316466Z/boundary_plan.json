@@ -1,0 +1,137 @@
+{
+  "bbox_south_west_north_east": [
+    23.335059,
+    85.308481,
+    23.38,
+    85.34
+  ],
+  "original_bbox": [
+    23.35,
+    85.31,
+    23.38,
+    85.34
+  ],
+  "analysis_buffer_metres": 100,
+  "extra_margin_metres": 50,
+  "construction": "Envelope of metric route-buffer union plus margin, union original pilot bbox; outward rounded to 6 decimals",
+  "geometric_validation_before_download": "all three centerlines, full 100m buffers, buffer-plus-margin union and prior uncovered geometry contained",
+  "saved_route_retrieved_at_utc": "2026-10-08T13:59:45.189759+00:00",
+  "input_sha256": {
+    "ROUTE_COVERAGE_REPORT.md": "4e551612b5113513dc9e227f58a60800eeffcf51e98aab692ee36ca18e0c37f9",
+    "route_coverage_runs\\20261008T140112_006152Z\\routes.json": "3ed66baf470b718fff3ce768e83eadd6df79dcaf5f8efbd6b401178b207123b1",
+    "route_coverage_runs\\20261008T140112_006152Z\\coverage_results.json": "c0d2eccacf1a0694989237d335bb03db2b41ee0d0066c2ba8b6cab8c7feb822b",
+    "route_coverage_runs\\20261008T140112_006152Z\\uncovered_areas.geojson": "bbc8dcb49f5f8fc8aa3ce507e308d6d14b465432009978478c7272c6642156c8"
+  },
+  "original_snapshot": {
+    "snapshot_folder": "outputs\\20261008T133610_076939Z",
+    "source": {
+      "attribution": "© OpenStreetMap contributors",
+      "license": "ODbL 1.0",
+      "license_url": "https://www.openstreetmap.org/copyright",
+      "bbox_south_west_north_east": [
+        23.35,
+        85.31,
+        23.38,
+        85.34
+      ],
+      "run_time_utc": "20261008T133610_076939Z",
+      "mode": "live_overpass",
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "input_file": null,
+      "osm_base_timestamp": "2026-10-08T13:33:00Z"
+    },
+    "raw_response_sha256": "010156f527f69ca1fee7897349459bc878d9bfd27e7c8a43361ab6dd1cbe1d11"
+  },
+  "route_coverage": [
+    {
+      "route_id": "heigit-foot-walking-route-1",
+      "backend_distance_metres": 5348.2,
+      "backend_duration_seconds": 3850.6,
+      "coordinate_count": 159,
+      "polyline_length_metres": 5336.767111011035,
+      "inside_length_metres": 5336.767111011035,
+      "outside_length_metres": 0.0,
+      "inside_percent": 99.99999999999999,
+      "outside_percent": 0.0,
+      "centerline_fully_covered": true,
+      "analysis_buffer": {
+        "buffer_metres": 100,
+        "total_area_m2": 1039029.5543830195,
+        "inside_area_m2": 1039029.5543830217,
+        "outside_area_m2": 0.0,
+        "inside_percent": 100.00000000000021,
+        "outside_percent": 0.0,
+        "fully_covered": true
+      },
+      "adequate_geographic_extent_for_full_route_analysis": true,
+      "missing_directions": [],
+      "missing_buffer_bounds_west_south_east_north": null,
+      "suggested_future_extraction_envelope_west_south_east_north": [
+        85.31260211383153,
+        23.335603048961037,
+        85.32603907822013,
+        23.37080091177115
+      ]
+    },
+    {
+      "route_id": "heigit-foot-walking-route-2",
+      "backend_distance_metres": 5257.2,
+      "backend_duration_seconds": 3785.1,
+      "coordinate_count": 132,
+      "polyline_length_metres": 5245.253997892622,
+      "inside_length_metres": 5245.253997892622,
+      "outside_length_metres": 0.0,
+      "inside_percent": 99.99999999999999,
+      "outside_percent": 0.0,
+      "centerline_fully_covered": true,
+      "analysis_buffer": {
+        "buffer_metres": 100,
+        "total_area_m2": 1036826.1501247126,
+        "inside_area_m2": 1036826.1501247078,
+        "outside_area_m2": 0.0,
+        "inside_percent": 99.99999999999953,
+        "outside_percent": 0.0,
+        "fully_covered": true
+      },
+      "adequate_geographic_extent_for_full_route_analysis": true,
+      "missing_directions": [],
+      "missing_buffer_bounds_west_south_east_north": null,
+      "suggested_future_extraction_envelope_west_south_east_north": [
+        85.31685515916922,
+        23.335943057166624,
+        85.3276879547364,
+        23.37080091177115
+      ]
+    },
+    {
+      "route_id": "heigit-foot-walking-route-3",
+      "backend_distance_metres": 6607.6,
+      "backend_duration_seconds": 4757.4,
+      "coordinate_count": 219,
+      "polyline_length_metres": 6596.844479597563,
+      "inside_length_metres": 6596.844479597563,
+      "outside_length_metres": 0.0,
+      "inside_percent": 100.0,
+      "outside_percent": 0.0,
+      "centerline_fully_covered": true,
+      "analysis_buffer": {
+        "buffer_metres": 100,
+        "total_area_m2": 1261865.9700565366,
+        "inside_area_m2": 1261865.9700565354,
+        "outside_area_m2": 0.0,
+        "inside_percent": 99.99999999999991,
+        "outside_percent": 0.0,
+        "fully_covered": true
+      },
+      "adequate_geographic_extent_for_full_route_analysis": true,
+      "missing_directions": [],
+      "missing_buffer_bounds_west_south_east_north": null,
+      "suggested_future_extraction_envelope_west_south_east_north": [
+        85.30907501196218,
+        23.335603048961037,
+        85.32603907822013,
+        23.37080091177115
+      ]
+    }
+  ]
+}

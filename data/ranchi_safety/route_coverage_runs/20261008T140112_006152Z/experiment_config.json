@@ -1,0 +1,30 @@
+{
+  "request": {
+    "origin": "Albert Ekka Chowk, Ranchi",
+    "destination": "Doranda, Ranchi",
+    "travelMode": "walk"
+  },
+  "snapshot": {
+    "snapshot_folder": "outputs\\20261008T133610_076939Z",
+    "source": {
+      "attribution": "© OpenStreetMap contributors",
+      "license": "ODbL 1.0",
+      "license_url": "https://www.openstreetmap.org/copyright",
+      "bbox_south_west_north_east": [
+        23.35,
+        85.31,
+        23.38,
+        85.34
+      ],
+      "run_time_utc": "20261008T133610_076939Z",
+      "mode": "live_overpass",
+      "endpoint": "https://overpass-api.de/api/interpreter",
+      "input_file": null,
+      "osm_base_timestamp": "2026-10-08T13:33:00Z"
+    },
+    "raw_response_sha256": "010156f527f69ca1fee7897349459bc878d9bfd27e7c8a43361ab6dd1cbe1d11"
+  },
+  "buffer_metres": 100,
+  "base_url": "http://127.0.0.1:8000",
+  "offline_input": "data\\ranchi_safety\\route_coverage_runs\\20261008T135942_299748Z\\routes.json"
+}

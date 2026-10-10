@@ -1,0 +1,6 @@
+{
+  "endpoint": "https://overpass-api.de/api/interpreter",
+  "max_attempts": 1,
+  "query_sha256": "9eddbf72e0e75e8e211962b5cd9e604eda7bce61278b71356773e6603f96da82",
+  "request_started_at_utc": "2026-10-09T12:30:52.916282+00:00"
+}

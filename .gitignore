@@ -1,1 +1,10 @@
 
+# Local secrets and environments; examples must be reviewed before adding.
+.env
+.env.*
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.audit_work/

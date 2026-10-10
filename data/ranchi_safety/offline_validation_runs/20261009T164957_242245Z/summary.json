@@ -1,0 +1,66 @@
+{
+  "tests": 92,
+  "failures": 0,
+  "errors": 0,
+  "skipped": 0,
+  "successful": true,
+  "seconds": 14.591597999999976,
+  "python": "3.11.9 (tags/v3.11.9:de54cf5, Apr  2 2024, 10:12:12) [MSC v.1938 64 bit (AMD64)]",
+  "versions": {
+    "osmium": "4.3.1",
+    "shapely": "2.1.2",
+    "pyproj": "3.7.2"
+  },
+  "script_sha256": "2f69b9717493e16025af789343981bd9020c26dc00cf8c5d15ac25873732cfc7",
+  "regional_pbf_downloaded": false,
+  "synthetic_demo": {
+    "status": "complete",
+    "quality": {
+      "unique_features": 2,
+      "feature_types": {
+        "node": 1,
+        "way": 1
+      },
+      "category_memberships": {
+        "shops_and_businesses": 1,
+        "roads_and_pedestrian_ways": 1,
+        "ways_with_lit_tag": 1,
+        "pedestrian_infrastructure": 1,
+        "recorded_highway_lighting": 1
+      },
+      "category_types": {
+        "shops_and_businesses:node": 1,
+        "roads_and_pedestrian_ways:way": 1,
+        "ways_with_lit_tag:way": 1,
+        "pedestrian_infrastructure:way": 1,
+        "recorded_highway_lighting:way": 1
+      },
+      "supporting_objects": 2,
+      "source_unique_records": 4,
+      "duplicate_records": {},
+      "lighting_values": {
+        "no": 1
+      },
+      "lighting": {
+        "present": 1,
+        "denominator": 1,
+        "missing": 0,
+        "missing_percent": 0.0
+      },
+      "sidewalk_tag_presence": {
+        "present": 1,
+        "denominator": 1,
+        "missing": 0,
+        "missing_percent": 0.0
+      },
+      "opening_hours_nonblank": {
+        "present": 0,
+        "denominator": 1,
+        "missing": 1,
+        "missing_percent": 100.0
+      },
+      "unresolved_issues": 0,
+      "potential_facility_duplicate_pairs": 0
+    }
+  }
+}

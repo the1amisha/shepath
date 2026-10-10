@@ -1,0 +1,4521 @@
+{
+  "backend_distance_metres": 6607.6,
+  "backend_duration_seconds": 4757.4,
+  "buffer_metres": 100,
+  "categories": {
+    "businesses_with_opening_hours": {
+      "count": 1,
+      "count_unit": "unique_OSM_objects",
+      "data_availability": "mapped_records_present",
+      "ids": [
+        "node/6108256107"
+      ],
+      "real_world_completeness": "unknown",
+      "route_proximity": {
+        "denominator": 6596.623363313912,
+        "numerator": 76.50657994293128,
+        "percent": 1.1597839641476373,
+        "unit": "metres_of_route"
+      },
+      "types": {
+        "node": 1
+      }
+    },
+    "healthcare_facilities": {
+      "count": 6,
+      "count_unit": "unique_OSM_objects",
+      "data_availability": "mapped_records_present",
+      "ids": [
+        "node/10273470909",
+        "node/11955676977",
+        "node/11955699026",
+        "node/7013103023",
+        "node/7673773508",
+        "way/287216863"
+      ],
+      "real_world_completeness": "unknown",
+      "route_proximity": {
+        "denominator": 6596.623363313912,
+        "numerator": 648.5326580488024,
+        "percent": 9.831282192879394,
+        "unit": "metres_of_route"
+      },
+      "types": {
+        "node": 5,
+        "way": 1
+      }
+    },
+    "hospitals": {
+      "count": 1,
+      "count_unit": "unique_OSM_objects",
+      "data_availability": "mapped_records_present",
+      "ids": [
+        "way/287216863"
+      ],
+      "real_world_completeness": "unknown",
+      "route_proximity": {
+        "denominator": 6596.623363313912,
+        "numerator": 221.77604011196863,
+        "percent": 3.3619630513595995,
+        "unit": "metres_of_route"
+      },
+      "types": {
+        "way": 1
+      }
+    },
+    "pedestrian_infrastructure": {
+      "count": 16,
+      "count_unit": "unique_OSM_objects",
+      "data_availability": "mapped_records_present",
+      "ids": [
+        "node/10960428795",
+        "way/1450453582",
+        "way/1502774532",
+        "way/287429607",
+        "way/368746473",
+        "way/368765867",
+        "way/368767219",
+        "way/368900568",
+        "way/368900584",
+        "way/368900590",
+        "way/368908941",
+        "way/368928684",
+        "way/368928737",
+        "way/369062961",
+        "way/425596544",
+        "way/995255493"
+      ],
+      "real_world_completeness": "unknown",
+      "route_proximity": {
+        "denominator": 6596.623363313912,
+        "numerator": 1939.1557269037996,
+        "percent": 29.39618680805866,
+        "unit": "metres_of_route"
+      },
+      "types": {
+        "node": 1,
+        "way": 15
+      }
+    },
+    "pharmacies": {
+      "count": 1,
+      "count_unit": "unique_OSM_objects",
+      "data_availability": "mapped_records_present",
+      "ids": [
+        "node/11955699026"
+      ],
+      "real_world_completeness": "unknown",
+      "route_proximity": {
+        "denominator": 6596.623363313912,
+        "numerator": 85.08153807294453,
+        "percent": 1.2897740766300556,
+        "unit": "metres_of_route"
+      },
+      "types": {
+        "node": 1
+      }
+    },
+    "police_stations": {
+      "count": 0,
+      "count_unit": "unique_OSM_objects",
+      "data_availability": "no_matching_mapped_records",
+      "ids": [],
+      "real_world_completeness": "unknown",
+      "route_proximity": {
+        "denominator": 6596.623363313912,
+        "numerator": 0,
+        "percent": 0.0,
+        "unit": "metres_of_route"
+      },
+      "types": {}
+    },
+    "roads_and_pedestrian_ways": {
+      "count": 306,
+      "count_unit": "unique_OSM_objects",
+      "data_availability": "mapped_records_present",
+      "ids": [
+        "way/1000378525",
+        "way/1006717477",
+        "way/1042925719",
+        "way/1042925720",
+        "way/1042932071",
+        "way/1042932072",
+        "way/1042932073",
+        "way/1042936668",
+        "way/1042948011",
+        "way/1082018384",
+        "way/1082018385",
+        "way/1091202273",
+        "way/1101405225",
+        "way/1103402868",
+        "way/1110917708",
+        "way/1189603965",
+        "way/1231051108",
+        "way/1250707958",
+        "way/1262418616",
+        "way/1363396959",
+        "way/1417520488",
+        "way/1450453582",
+        "way/1459474582",
+        "way/1502774532",
+        "way/1502774533",
+        "way/1507437423",
+        "way/1507437424",
+        "way/1507437425",
+        "way/1507437426",
+        "way/1544989979",
+        "way/216670718",
+        "way/237170565",
+        "way/287429478",
+        "way/287429484",
+        "way/287429607",
+        "way/287429814",
+        "way/287429987",
+        "way/287430140",
+        "way/287431735",
+        "way/287433664",
+        "way/287659826",
+        "way/288630639",
+        "way/288630640",
+        "way/288630643",
+        "way/288630671",
+        "way/288630679",
+        "way/288630704",
+        "way/288630742",
+        "way/288630746",
+        "way/288630748",
+        "way/288630753",
+        "way/288630759",
+        "way/288630761",
+        "way/288630763",
+        "way/288630766",
+        "way/288630771",
+        "way/288630776",
+        "way/288630780",
+        "way/288630782",
+        "way/288630786",
+        "way/288630789",
+        "way/288630796",
+        "way/288632260",
+        "way/288632264",
+        "way/288632269",
+        "way/288632274",
+        "way/288632276",
+        "way/288638743",
+        "way/288638747",
+        "way/288638748",
+        "way/364088545",
+        "way/364088552",
+        "way/364088558",
+        "way/364088561",
+        "way/364088563",
+        "way/364088565",
+        "way/364088568",
+        "way/364088570",
+        "way/364088574",
+        "way/364088579",
+        "way/364088585",
+        "way/364088587",
+        "way/364088594",
+        "way/364088608",
+        "way/364088631",
+        "way/364088633",
+        "way/364133705",
+        "way/364133707",
+        "way/364133709",
+        "way/364135185",
+        "way/368746473",
+        "way/368765853",
+        "way/368765854",
+        "way/368765855",
+        "way/368765857",
+        "way/368765859",
+        "way/368765863",
+        "way/368765864",
+        "way/368765865",
+        "way/368765866",
+        "way/368765867",
+        "way/368765868",
+        "way/368765869",
+        "way/368765870",
+        "way/368767209",
+        "way/368767210",
+        "way/368767216",
+        "way/368767219",
+        "way/368770660",
+        "way/368900559",
+        "way/368900564",
+        "way/368900568",
+        "way/368900571",
+        "way/368900572",
+        "way/368900574",
+        "way/368900575",
+        "way/368900576",
+        "way/368900578",
+        "way/368900579",
+        "way/368900581",
+        "way/368900582",
+        "way/368900584",
+        "way/368900585",
+        "way/368900588",
+        "way/368900589",
+        "way/368900590",
+        "way/368900591",
+        "way/368900593",
+        "way/368900594",
+        "way/368903903",
+        "way/368903905",
+        "way/368903906",
+        "way/368903907",
+        "way/368903908",
+        "way/368903909",
+        "way/368903911",
+        "way/368903913",
+        "way/368903916",
+        "way/368903917",
+        "way/368903918",
+        "way/368903919",
+        "way/368903920",
+        "way/368903921",
+        "way/368903922",
+        "way/368903923",
+        "way/368903924",
+        "way/368903926",
+        "way/368903928",
+        "way/368903929",
+        "way/368903930",
+        "way/368903933",
+        "way/368903934",
+        "way/368903935",
+        "way/368903939",
+        "way/368903940",
+        "way/368903941",
+        "way/368903943",
+        "way/368903944",
+        "way/368903945",
+        "way/368903946",
+        "way/368903947",
+        "way/368908935",
+        "way/368908941",
+        "way/368908948",
+        "way/368908964",
+        "way/368916133",
+        "way/368916135",
+        "way/368916136",
+        "way/368916142",
+        "way/368916143",
+        "way/368916144",
+        "way/368916146",
+        "way/368916148",
+        "way/368916151",
+        "way/368916153",
+        "way/368916157",
+        "way/368916158",
+        "way/368916160",
+        "way/368916162",
+        "way/368916164",
+        "way/368916165",
+        "way/368916166",
+        "way/368916168",
+        "way/368916169",
+        "way/368916171",
+        "way/368916172",
+        "way/368916173",
+        "way/368916174",
+        "way/368916175",
+        "way/368916178",
+        "way/368916179",
+        "way/368916180",
+        "way/368916181",
+        "way/368916182",
+        "way/368928684",
+        "way/368928737",
+        "way/369061829",
+        "way/369062961",
+        "way/369062963",
+        "way/369062964",
+        "way/369082509",
+        "way/372055649",
+        "way/405636432",
+        "way/405636440",
+        "way/405636488",
+        "way/405636496",
+        "way/405636503",
+        "way/405636528",
+        "way/406004208",
+        "way/422648667",
+        "way/425596549",
+        "way/425596550",
+        "way/425596551",
+        "way/425596552",
+        "way/516371542",
+        "way/516371543",
+        "way/516371553",
+        "way/516371554",
+        "way/516371558",
+        "way/516371560",
+        "way/61406264",
+        "way/61406269",
+        "way/61406272",
+        "way/61406277",
+        "way/61409241",
+        "way/651852552",
+        "way/978057799",
+        "way/978057801",
+        "way/978358982",
+        "way/978358987",
+        "way/978358989",
+        "way/978358990",
+        "way/978358991",
+        "way/978358992",
+        "way/978358993",
+        "way/978358994",
+        "way/978362156",
+        "way/978362157",
+        "way/978362159",
+        "way/978400411",
+        "way/978400414",
+        "way/978400415",
+        "way/978400418",
+        "way/978400433",
+        "way/978400434",
+        "way/978401638",
+        "way/978404426",
+        "way/978410037",
+        "way/978410038",
+        "way/978410040",
+        "way/978410041",
+        "way/978415562",
+        "way/978415574",
+        "way/978415576",
+        "way/978415577",
+        "way/978415580",
+        "way/978415581",
+        "way/978415582",
+        "way/978415584",
+        "way/978415585",
+        "way/978415586",
+        "way/978415587",
+        "way/978419784",
+        "way/978419785",
+        "way/978419786",
+        "way/978419787",
+        "way/978419788",
+        "way/978419789",
+        "way/978419791",
+        "way/978419792",
+        "way/979454070",
+        "way/979454071",
+        "way/979455004",
+        "way/979455005",
+        "way/979477975",
+        "way/979477976",
+        "way/979477977",
+        "way/979477978",
+        "way/979477980",
+        "way/979477981",
+        "way/979477982",
+        "way/979483341",
+        "way/979487674",
+        "way/979487675",
+        "way/979487676",
+        "way/979487679",
+        "way/979487680",
+        "way/980058656",
+        "way/980058657",
+        "way/980058658",
+        "way/980058659",
+        "way/980058660",
+        "way/980103153",
+        "way/980103154",
+        "way/980103155",
+        "way/980103157",
+        "way/980495996",
+        "way/980516894",
+        "way/980556845",
+        "way/980556846",
+        "way/984958186",
+        "way/984958188",
+        "way/984958189",
+        "way/984958190",
+        "way/995230946",
+        "way/995255493"
+      ],
+      "real_world_completeness": "unknown",
+      "route_proximity": {
+        "denominator": 6596.623363313912,
+        "numerator": 6596.623363313912,
+        "percent": 99.99999999999999,
+        "unit": "metres_of_route"
+      },
+      "types": {
+        "way": 306
+      }
+    },
+    "shops_and_businesses": {
+      "count": 23,
+      "count_unit": "unique_OSM_objects",
+      "data_availability": "mapped_records_present",
+      "ids": [
+        "node/10273464311",
+        "node/10273464409",
+        "node/10902633303",
+        "node/10960377198",
+        "node/10960468777",
+        "node/10960469638",
+        "node/10960491160",
+        "node/11955667146",
+        "node/11955699026",
+        "node/13172748071",
+        "node/13172748072",
+        "node/2910313161",
+        "node/2910320721",
+        "node/2910326372",
+        "node/2910372011",
+        "node/2912310727",
+        "node/2945288129",
+        "node/4248823882",
+        "node/6108256107",
+        "node/6235445762",
+        "node/9835161493",
+        "way/287006191",
+        "way/516913716"
+      ],
+      "real_world_completeness": "unknown",
+      "route_proximity": {
+        "denominator": 6596.623363313912,
+        "numerator": 1216.3310147576658,
+        "percent": 18.438691248042147,
+        "unit": "metres_of_route"
+      },
+      "types": {
+        "node": 21,
+        "way": 2
+      }
+    },
+    "street_lamps": {
+      "count": 0,
+      "count_unit": "unique_OSM_objects",
+      "data_availability": "no_matching_mapped_records",
+      "ids": [],
+      "real_world_completeness": "unknown",
+      "route_proximity": {
+        "denominator": 6596.623363313912,
+        "numerator": 0,
+        "percent": 0.0,
+        "unit": "metres_of_route"
+      },
+      "types": {}
+    },
+    "ways_with_lit_tag": {
+      "count": 12,
+      "count_unit": "unique_OSM_objects",
+      "data_availability": "mapped_records_present",
+      "ids": [
+        "way/368746473",
+        "way/368765867",
+        "way/368767219",
+        "way/368900568",
+        "way/368900584",
+        "way/368900590",
+        "way/368903934",
+        "way/368908941",
+        "way/368928684",
+        "way/368928737",
+        "way/369062961",
+        "way/995255493"
+      ],
+      "real_world_completeness": "unknown",
+      "route_proximity": {
+        "denominator": 6596.623363313912,
+        "numerator": 1539.7084446581655,
+        "percent": 23.340857281939314,
+        "unit": "metres_of_route"
+      },
+      "types": {
+        "way": 12
+      }
+    }
+  },
+  "duplicate_sensitivity": {
+    "healthcare_facilities": {
+      "affected_pairs": [],
+      "conditional_count_if_all_flagged_pairs_same_entity": 6,
+      "interpretation": "Sensitivity scenario for flagged pairs only; not bounds on true physical facilities.",
+      "raw_OSM_object_count": 6,
+      "records_merged": false
+    },
+    "police_stations": {
+      "affected_pairs": [],
+      "conditional_count_if_all_flagged_pairs_same_entity": 0,
+      "interpretation": "Sensitivity scenario for flagged pairs only; not bounds on true physical facilities.",
+      "raw_OSM_object_count": 0,
+      "records_merged": false
+    },
+    "shops_and_businesses": {
+      "affected_pairs": [],
+      "conditional_count_if_all_flagged_pairs_same_entity": 23,
+      "interpretation": "Sensitivity scenario for flagged pairs only; not bounds on true physical facilities.",
+      "raw_OSM_object_count": 23,
+      "records_merged": false
+    }
+  },
+  "evidence_confidence": {
+    "OSM_real_world_completeness": "unknown",
+    "actual_street_attribution": "unverified",
+    "business_hours_availability": "partial_in_selected_records",
+    "business_operating_status": "not_observed",
+    "facility_accessibility": "unverified",
+    "facility_identity": "mapped_records_not_field_verified",
+    "geographic_extent": "complete_100m_buffer",
+    "lighting_availability": "partial_in_selected_records",
+    "pedestrian_activity": "not_observed",
+    "proximity_method": "geometric_intersection_of_verified_records",
+    "scope": "Evidence completeness, never personal safety or calibrated probability",
+    "sidewalk_availability": "partial_in_selected_records",
+    "source_artifact_integrity": "hash_and_geometry_verified"
+  },
+  "geographic_coverage": {
+    "adequate_geographic_extent_for_full_route_analysis": true,
+    "analysis_buffer": {
+      "buffer_metres": 100,
+      "fully_covered": true,
+      "inside_area_m2": 1261865.9700565354,
+      "inside_percent": 99.99999999999991,
+      "outside_area_m2": 0.0,
+      "outside_percent": 0.0,
+      "total_area_m2": 1261865.9700565366
+    },
+    "backend_distance_metres": 6607.6,
+    "backend_duration_seconds": 4757.4,
+    "centerline_fully_covered": true,
+    "coordinate_count": 219,
+    "inside_length_metres": 6596.844479597563,
+    "inside_percent": 100.0,
+    "missing_buffer_bounds_west_south_east_north": null,
+    "missing_directions": [],
+    "outside_length_metres": 0.0,
+    "outside_percent": 0.0,
+    "polyline_length_metres": 6596.844479597563,
+    "route_id": "heigit-foot-walking-route-3",
+    "suggested_future_extraction_envelope_west_south_east_north": [
+      85.30907501196218,
+      23.335603048961037,
+      85.32603907822013,
+      23.37080091177115
+    ]
+  },
+  "lighting": {
+    "actual_walked_street_coverage": null,
+    "availability_indicator": "partial_in_selected_records",
+    "blank_value_count": 0,
+    "missing_key_count": 294,
+    "raw_value_counts": {
+      "<absent>": 294,
+      "yes": 12
+    },
+    "road_object_denominator": 306,
+    "route_without_usable_tag_within_buffer": {
+      "denominator": 6596.623363313912,
+      "numerator": 5056.914918655746,
+      "percent": 76.65914271806068,
+      "unit": "metres_of_route"
+    },
+    "scope": "nearby_OSM_road_objects_not_verified_walked_street",
+    "states": {
+      "no": {
+        "clipped_road_length": {
+          "denominator": 31321.927887883314,
+          "numerator": 0,
+          "percent": 0.0,
+          "unit": "metres_of_nearby_OSM_road_lines"
+        },
+        "ids": [],
+        "object_availability": {
+          "denominator": 306,
+          "numerator": 0,
+          "percent": 0.0,
+          "unit": "OSM_road_objects"
+        },
+        "route_proximity": {
+          "denominator": 6596.623363313912,
+          "numerator": 0,
+          "percent": 0.0,
+          "unit": "metres_of_route"
+        }
+      },
+      "other_recorded": {
+        "clipped_road_length": {
+          "denominator": 31321.927887883314,
+          "numerator": 0,
+          "percent": 0.0,
+          "unit": "metres_of_nearby_OSM_road_lines"
+        },
+        "ids": [],
+        "object_availability": {
+          "denominator": 306,
+          "numerator": 0,
+          "percent": 0.0,
+          "unit": "OSM_road_objects"
+        },
+        "route_proximity": {
+          "denominator": 6596.623363313912,
+          "numerator": 0,
+          "percent": 0.0,
+          "unit": "metres_of_route"
+        }
+      },
+      "unknown": {
+        "clipped_road_length": {
+          "denominator": 31321.927887883314,
+          "numerator": 29662.26415543663,
+          "percent": 94.70127209797737,
+          "unit": "metres_of_nearby_OSM_road_lines"
+        },
+        "ids": [
+          "way/1000378525",
+          "way/1006717477",
+          "way/1042925719",
+          "way/1042925720",
+          "way/1042932071",
+          "way/1042932072",
+          "way/1042932073",
+          "way/1042936668",
+          "way/1042948011",
+          "way/1082018384",
+          "way/1082018385",
+          "way/1091202273",
+          "way/1101405225",
+          "way/1103402868",
+          "way/1110917708",
+          "way/1189603965",
+          "way/1231051108",
+          "way/1250707958",
+          "way/1262418616",
+          "way/1363396959",
+          "way/1417520488",
+          "way/1450453582",
+          "way/1459474582",
+          "way/1502774532",
+          "way/1502774533",
+          "way/1507437423",
+          "way/1507437424",
+          "way/1507437425",
+          "way/1507437426",
+          "way/1544989979",
+          "way/216670718",
+          "way/237170565",
+          "way/287429478",
+          "way/287429484",
+          "way/287429607",
+          "way/287429814",
+          "way/287429987",
+          "way/287430140",
+          "way/287431735",
+          "way/287433664",
+          "way/287659826",
+          "way/288630639",
+          "way/288630640",
+          "way/288630643",
+          "way/288630671",
+          "way/288630679",
+          "way/288630704",
+          "way/288630742",
+          "way/288630746",
+          "way/288630748",
+          "way/288630753",
+          "way/288630759",
+          "way/288630761",
+          "way/288630763",
+          "way/288630766",
+          "way/288630771",
+          "way/288630776",
+          "way/288630780",
+          "way/288630782",
+          "way/288630786",
+          "way/288630789",
+          "way/288630796",
+          "way/288632260",
+          "way/288632264",
+          "way/288632269",
+          "way/288632274",
+          "way/288632276",
+          "way/288638743",
+          "way/288638747",
+          "way/288638748",
+          "way/364088545",
+          "way/364088552",
+          "way/364088558",
+          "way/364088561",
+          "way/364088563",
+          "way/364088565",
+          "way/364088568",
+          "way/364088570",
+          "way/364088574",
+          "way/364088579",
+          "way/364088585",
+          "way/364088587",
+          "way/364088594",
+          "way/364088608",
+          "way/364088631",
+          "way/364088633",
+          "way/364133705",
+          "way/364133707",
+          "way/364133709",
+          "way/364135185",
+          "way/368765853",
+          "way/368765854",
+          "way/368765855",
+          "way/368765857",
+          "way/368765859",
+          "way/368765863",
+          "way/368765864",
+          "way/368765865",
+          "way/368765866",
+          "way/368765868",
+          "way/368765869",
+          "way/368765870",
+          "way/368767209",
+          "way/368767210",
+          "way/368767216",
+          "way/368770660",
+          "way/368900559",
+          "way/368900564",
+          "way/368900571",
+          "way/368900572",
+          "way/368900574",
+          "way/368900575",
+          "way/368900576",
+          "way/368900578",
+          "way/368900579",
+          "way/368900581",
+          "way/368900582",
+          "way/368900585",
+          "way/368900588",
+          "way/368900589",
+          "way/368900591",
+          "way/368900593",
+          "way/368900594",
+          "way/368903903",
+          "way/368903905",
+          "way/368903906",
+          "way/368903907",
+          "way/368903908",
+          "way/368903909",
+          "way/368903911",
+          "way/368903913",
+          "way/368903916",
+          "way/368903917",
+          "way/368903918",
+          "way/368903919",
+          "way/368903920",
+          "way/368903921",
+          "way/368903922",
+          "way/368903923",
+          "way/368903924",
+          "way/368903926",
+          "way/368903928",
+          "way/368903929",
+          "way/368903930",
+          "way/368903933",
+          "way/368903935",
+          "way/368903939",
+          "way/368903940",
+          "way/368903941",
+          "way/368903943",
+          "way/368903944",
+          "way/368903945",
+          "way/368903946",
+          "way/368903947",
+          "way/368908935",
+          "way/368908948",
+          "way/368908964",
+          "way/368916133",
+          "way/368916135",
+          "way/368916136",
+          "way/368916142",
+          "way/368916143",
+          "way/368916144",
+          "way/368916146",
+          "way/368916148",
+          "way/368916151",
+          "way/368916153",
+          "way/368916157",
+          "way/368916158",
+          "way/368916160",
+          "way/368916162",
+          "way/368916164",
+          "way/368916165",
+          "way/368916166",
+          "way/368916168",
+          "way/368916169",
+          "way/368916171",
+          "way/368916172",
+          "way/368916173",
+          "way/368916174",
+          "way/368916175",
+          "way/368916178",
+          "way/368916179",
+          "way/368916180",
+          "way/368916181",
+          "way/368916182",
+          "way/369061829",
+          "way/369062963",
+          "way/369062964",
+          "way/369082509",
+          "way/372055649",
+          "way/405636432",
+          "way/405636440",
+          "way/405636488",
+          "way/405636496",
+          "way/405636503",
+          "way/405636528",
+          "way/406004208",
+          "way/422648667",
+          "way/425596549",
+          "way/425596550",
+          "way/425596551",
+          "way/425596552",
+          "way/516371542",
+          "way/516371543",
+          "way/516371553",
+          "way/516371554",
+          "way/516371558",
+          "way/516371560",
+          "way/61406264",
+          "way/61406269",
+          "way/61406272",
+          "way/61406277",
+          "way/61409241",
+          "way/651852552",
+          "way/978057799",
+          "way/978057801",
+          "way/978358982",
+          "way/978358987",
+          "way/978358989",
+          "way/978358990",
+          "way/978358991",
+          "way/978358992",
+          "way/978358993",
+          "way/978358994",
+          "way/978362156",
+          "way/978362157",
+          "way/978362159",
+          "way/978400411",
+          "way/978400414",
+          "way/978400415",
+          "way/978400418",
+          "way/978400433",
+          "way/978400434",
+          "way/978401638",
+          "way/978404426",
+          "way/978410037",
+          "way/978410038",
+          "way/978410040",
+          "way/978410041",
+          "way/978415562",
+          "way/978415574",
+          "way/978415576",
+          "way/978415577",
+          "way/978415580",
+          "way/978415581",
+          "way/978415582",
+          "way/978415584",
+          "way/978415585",
+          "way/978415586",
+          "way/978415587",
+          "way/978419784",
+          "way/978419785",
+          "way/978419786",
+          "way/978419787",
+          "way/978419788",
+          "way/978419789",
+          "way/978419791",
+          "way/978419792",
+          "way/979454070",
+          "way/979454071",
+          "way/979455004",
+          "way/979455005",
+          "way/979477975",
+          "way/979477976",
+          "way/979477977",
+          "way/979477978",
+          "way/979477980",
+          "way/979477981",
+          "way/979477982",
+          "way/979483341",
+          "way/979487674",
+          "way/979487675",
+          "way/979487676",
+          "way/979487679",
+          "way/979487680",
+          "way/980058656",
+          "way/980058657",
+          "way/980058658",
+          "way/980058659",
+          "way/980058660",
+          "way/980103153",
+          "way/980103154",
+          "way/980103155",
+          "way/980103157",
+          "way/980495996",
+          "way/980516894",
+          "way/980556845",
+          "way/980556846",
+          "way/984958186",
+          "way/984958188",
+          "way/984958189",
+          "way/984958190",
+          "way/995230946"
+        ],
+        "object_availability": {
+          "denominator": 306,
+          "numerator": 294,
+          "percent": 96.07843137254902,
+          "unit": "OSM_road_objects"
+        },
+        "route_proximity": {
+          "denominator": 6596.623363313912,
+          "numerator": 6596.623363313912,
+          "percent": 99.99999999999999,
+          "unit": "metres_of_route"
+        }
+      },
+      "yes": {
+        "clipped_road_length": {
+          "denominator": 31321.927887883314,
+          "numerator": 1659.66373244668,
+          "percent": 5.298727902022628,
+          "unit": "metres_of_nearby_OSM_road_lines"
+        },
+        "ids": [
+          "way/368746473",
+          "way/368765867",
+          "way/368767219",
+          "way/368900568",
+          "way/368900584",
+          "way/368900590",
+          "way/368903934",
+          "way/368908941",
+          "way/368928684",
+          "way/368928737",
+          "way/369062961",
+          "way/995255493"
+        ],
+        "object_availability": {
+          "denominator": 306,
+          "numerator": 12,
+          "percent": 3.9215686274509802,
+          "unit": "OSM_road_objects"
+        },
+        "route_proximity": {
+          "denominator": 6596.623363313912,
+          "numerator": 1539.7084446581655,
+          "percent": 23.340857281939314,
+          "unit": "metres_of_route"
+        }
+      }
+    },
+    "street_match_status": "not_performed",
+    "usable_tag_availability": {
+      "denominator": 306,
+      "numerator": 12,
+      "percent": 3.9215686274509802,
+      "unit": "OSM_road_objects"
+    }
+  },
+  "nearby_evidence": [
+    {
+      "categories": [
+        "shops_and_businesses"
+      ],
+      "minimum_geometric_distance_metres": 99.71246159498139,
+      "on_walked_street_verified": null,
+      "osm_id": "node/10273464311",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "shops_and_businesses"
+      ],
+      "minimum_geometric_distance_metres": 92.86540370282232,
+      "on_walked_street_verified": null,
+      "osm_id": "node/10273464409",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "healthcare_facilities"
+      ],
+      "minimum_geometric_distance_metres": 47.61117436200038,
+      "on_walked_street_verified": null,
+      "osm_id": "node/10273470909",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "shops_and_businesses"
+      ],
+      "minimum_geometric_distance_metres": 83.70916946577509,
+      "on_walked_street_verified": null,
+      "osm_id": "node/10902633303",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "shops_and_businesses"
+      ],
+      "minimum_geometric_distance_metres": 94.82200347010547,
+      "on_walked_street_verified": null,
+      "osm_id": "node/10960377198",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "pedestrian_infrastructure"
+      ],
+      "minimum_geometric_distance_metres": 84.12209513926015,
+      "on_walked_street_verified": null,
+      "osm_id": "node/10960428795",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "shops_and_businesses"
+      ],
+      "minimum_geometric_distance_metres": 3.9243731688450945,
+      "on_walked_street_verified": null,
+      "osm_id": "node/10960468777",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "shops_and_businesses"
+      ],
+      "minimum_geometric_distance_metres": 35.096199116755095,
+      "on_walked_street_verified": null,
+      "osm_id": "node/10960469638",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "shops_and_businesses"
+      ],
+      "minimum_geometric_distance_metres": 97.29603056719121,
+      "on_walked_street_verified": null,
+      "osm_id": "node/10960491160",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "shops_and_businesses"
+      ],
+      "minimum_geometric_distance_metres": 34.175896751104005,
+      "on_walked_street_verified": null,
+      "osm_id": "node/11955667146",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "healthcare_facilities"
+      ],
+      "minimum_geometric_distance_metres": 35.06506521977845,
+      "on_walked_street_verified": null,
+      "osm_id": "node/11955676977",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "healthcare_facilities",
+        "pharmacies",
+        "shops_and_businesses"
+      ],
+      "minimum_geometric_distance_metres": 25.194984696135585,
+      "on_walked_street_verified": null,
+      "osm_id": "node/11955699026",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "shops_and_businesses"
+      ],
+      "minimum_geometric_distance_metres": 19.589950724063307,
+      "on_walked_street_verified": null,
+      "osm_id": "node/13172748071",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "shops_and_businesses"
+      ],
+      "minimum_geometric_distance_metres": 62.463802170891725,
+      "on_walked_street_verified": null,
+      "osm_id": "node/13172748072",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "shops_and_businesses"
+      ],
+      "minimum_geometric_distance_metres": 16.030327915361305,
+      "on_walked_street_verified": null,
+      "osm_id": "node/2910313161",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "shops_and_businesses"
+      ],
+      "minimum_geometric_distance_metres": 72.22457040420214,
+      "on_walked_street_verified": null,
+      "osm_id": "node/2910320721",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "shops_and_businesses"
+      ],
+      "minimum_geometric_distance_metres": 8.947040242007919,
+      "on_walked_street_verified": null,
+      "osm_id": "node/2910326372",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "shops_and_businesses"
+      ],
+      "minimum_geometric_distance_metres": 58.70012196992788,
+      "on_walked_street_verified": null,
+      "osm_id": "node/2910372011",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "shops_and_businesses"
+      ],
+      "minimum_geometric_distance_metres": 85.98181367183624,
+      "on_walked_street_verified": null,
+      "osm_id": "node/2912310727",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "shops_and_businesses"
+      ],
+      "minimum_geometric_distance_metres": 75.50163443279372,
+      "on_walked_street_verified": null,
+      "osm_id": "node/2945288129",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "shops_and_businesses"
+      ],
+      "minimum_geometric_distance_metres": 35.76439761241883,
+      "on_walked_street_verified": null,
+      "osm_id": "node/4248823882",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "shops_and_businesses",
+        "businesses_with_opening_hours"
+      ],
+      "minimum_geometric_distance_metres": 77.80957140806737,
+      "on_walked_street_verified": null,
+      "osm_id": "node/6108256107",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "shops_and_businesses"
+      ],
+      "minimum_geometric_distance_metres": 78.90018648361132,
+      "on_walked_street_verified": null,
+      "osm_id": "node/6235445762",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "healthcare_facilities"
+      ],
+      "minimum_geometric_distance_metres": 48.97155769903786,
+      "on_walked_street_verified": null,
+      "osm_id": "node/7013103023",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "healthcare_facilities"
+      ],
+      "minimum_geometric_distance_metres": 52.39579255849585,
+      "on_walked_street_verified": null,
+      "osm_id": "node/7673773508",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "shops_and_businesses"
+      ],
+      "minimum_geometric_distance_metres": 91.54511508790104,
+      "on_walked_street_verified": null,
+      "osm_id": "node/9835161493",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/1000378525",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 25.250359675790005,
+      "on_walked_street_verified": null,
+      "osm_id": "way/1006717477",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 29.86260073966627,
+      "on_walked_street_verified": null,
+      "osm_id": "way/1042925719",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 48.0568722396188,
+      "on_walked_street_verified": null,
+      "osm_id": "way/1042925720",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/1042932071",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/1042932072",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 90.6545109092174,
+      "on_walked_street_verified": null,
+      "osm_id": "way/1042932073",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 68.10420326432384,
+      "on_walked_street_verified": null,
+      "osm_id": "way/1042936668",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.026608178107760512,
+      "on_walked_street_verified": null,
+      "osm_id": "way/1042948011",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 57.602792252249536,
+      "on_walked_street_verified": null,
+      "osm_id": "way/1082018384",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/1082018385",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/1091202273",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/1101405225",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 89.50816139193562,
+      "on_walked_street_verified": null,
+      "osm_id": "way/1103402868",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 74.4379508186614,
+      "on_walked_street_verified": null,
+      "osm_id": "way/1110917708",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.043945435013850925,
+      "on_walked_street_verified": null,
+      "osm_id": "way/1189603965",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 77.59465764310063,
+      "on_walked_street_verified": null,
+      "osm_id": "way/1231051108",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 24.08848305043663,
+      "on_walked_street_verified": null,
+      "osm_id": "way/1250707958",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/1262418616",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/1363396959",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 27.276970896454877,
+      "on_walked_street_verified": null,
+      "osm_id": "way/1417520488",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways",
+        "pedestrian_infrastructure"
+      ],
+      "minimum_geometric_distance_metres": 96.0478580802023,
+      "on_walked_street_verified": null,
+      "osm_id": "way/1450453582",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 70.87877088422059,
+      "on_walked_street_verified": null,
+      "osm_id": "way/1459474582",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways",
+        "pedestrian_infrastructure"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/1502774532",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/1502774533",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.06028876385326902,
+      "on_walked_street_verified": null,
+      "osm_id": "way/1507437423",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 6.783788253610994,
+      "on_walked_street_verified": null,
+      "osm_id": "way/1507437424",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.013073687842141909,
+      "on_walked_street_verified": null,
+      "osm_id": "way/1507437425",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.00722493077140776,
+      "on_walked_street_verified": null,
+      "osm_id": "way/1507437426",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/1544989979",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 6.706421426179767,
+      "on_walked_street_verified": null,
+      "osm_id": "way/216670718",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 19.444311606785824,
+      "on_walked_street_verified": null,
+      "osm_id": "way/237170565",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "shops_and_businesses"
+      ],
+      "minimum_geometric_distance_metres": 30.02802874851818,
+      "on_walked_street_verified": null,
+      "osm_id": "way/287006191",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "healthcare_facilities",
+        "hospitals"
+      ],
+      "minimum_geometric_distance_metres": 26.720296926063455,
+      "on_walked_street_verified": null,
+      "osm_id": "way/287216863",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/287429478",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/287429484",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways",
+        "pedestrian_infrastructure"
+      ],
+      "minimum_geometric_distance_metres": 93.93874145205432,
+      "on_walked_street_verified": null,
+      "osm_id": "way/287429607",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/287429814",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/287429987",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.010045591502765584,
+      "on_walked_street_verified": null,
+      "osm_id": "way/287430140",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.014306788068881204,
+      "on_walked_street_verified": null,
+      "osm_id": "way/287431735",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/287433664",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/287659826",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/288630639",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/288630640",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/288630643",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.02605012201201209,
+      "on_walked_street_verified": null,
+      "osm_id": "way/288630671",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 40.07199038820369,
+      "on_walked_street_verified": null,
+      "osm_id": "way/288630679",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/288630704",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/288630742",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 64.99119227300847,
+      "on_walked_street_verified": null,
+      "osm_id": "way/288630746",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 99.57914248163888,
+      "on_walked_street_verified": null,
+      "osm_id": "way/288630748",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 57.49335419789346,
+      "on_walked_street_verified": null,
+      "osm_id": "way/288630753",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 66.99696421769966,
+      "on_walked_street_verified": null,
+      "osm_id": "way/288630759",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.009856173326065247,
+      "on_walked_street_verified": null,
+      "osm_id": "way/288630761",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 60.21109400591471,
+      "on_walked_street_verified": null,
+      "osm_id": "way/288630763",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 23.317205086582405,
+      "on_walked_street_verified": null,
+      "osm_id": "way/288630766",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/288630771",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.018768272906457804,
+      "on_walked_street_verified": null,
+      "osm_id": "way/288630776",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/288630780",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 60.3130469847275,
+      "on_walked_street_verified": null,
+      "osm_id": "way/288630782",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 72.47380058207843,
+      "on_walked_street_verified": null,
+      "osm_id": "way/288630786",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/288630789",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 61.82644283090915,
+      "on_walked_street_verified": null,
+      "osm_id": "way/288630796",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.01101013290280612,
+      "on_walked_street_verified": null,
+      "osm_id": "way/288632260",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/288632264",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/288632269",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/288632274",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/288632276",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/288638743",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 53.11703874336176,
+      "on_walked_street_verified": null,
+      "osm_id": "way/288638747",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 60.01817737348214,
+      "on_walked_street_verified": null,
+      "osm_id": "way/288638748",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.05570419285858356,
+      "on_walked_street_verified": null,
+      "osm_id": "way/364088545",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/364088552",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.025113717041828916,
+      "on_walked_street_verified": null,
+      "osm_id": "way/364088558",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/364088561",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.044512963516127976,
+      "on_walked_street_verified": null,
+      "osm_id": "way/364088563",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 45.248420536259474,
+      "on_walked_street_verified": null,
+      "osm_id": "way/364088565",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 89.50816139193562,
+      "on_walked_street_verified": null,
+      "osm_id": "way/364088568",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 45.083379899105616,
+      "on_walked_street_verified": null,
+      "osm_id": "way/364088570",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/364088574",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/364088579",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/364088585",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/364088587",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 73.39461042763406,
+      "on_walked_street_verified": null,
+      "osm_id": "way/364088594",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 51.680977837307324,
+      "on_walked_street_verified": null,
+      "osm_id": "way/364088608",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 41.108610402037755,
+      "on_walked_street_verified": null,
+      "osm_id": "way/364088631",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/364088633",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.052297848978102884,
+      "on_walked_street_verified": null,
+      "osm_id": "way/364133705",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/364133707",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/364133709",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 46.805527389774944,
+      "on_walked_street_verified": null,
+      "osm_id": "way/364135185",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways",
+        "ways_with_lit_tag",
+        "pedestrian_infrastructure",
+        "recorded_highway_lighting"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368746473",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.024337872347253982,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368765853",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 81.37173565691529,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368765854",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368765855",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.02963369818422296,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368765857",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 45.85212004220492,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368765859",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 33.55070230455331,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368765863",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.030456480250771897,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368765864",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368765865",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368765866",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways",
+        "ways_with_lit_tag",
+        "pedestrian_infrastructure",
+        "recorded_highway_lighting"
+      ],
+      "minimum_geometric_distance_metres": 89.97635824445884,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368765867",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368765868",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 91.28020784561792,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368765869",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368765870",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368767209",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368767210",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368767216",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways",
+        "ways_with_lit_tag",
+        "pedestrian_infrastructure",
+        "recorded_highway_lighting"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368767219",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368770660",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368900559",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368900564",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways",
+        "ways_with_lit_tag",
+        "pedestrian_infrastructure",
+        "recorded_highway_lighting"
+      ],
+      "minimum_geometric_distance_metres": 57.616043037695654,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368900568",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 60.4737522945588,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368900571",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368900572",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368900574",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 15.67363896509024,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368900575",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 83.55270998849177,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368900576",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368900578",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368900579",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 58.06076083168439,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368900581",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.01565765013447501,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368900582",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways",
+        "ways_with_lit_tag",
+        "pedestrian_infrastructure",
+        "recorded_highway_lighting"
+      ],
+      "minimum_geometric_distance_metres": 21.481972395135895,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368900584",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 58.036908109509945,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368900585",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 22.793009198722753,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368900588",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 62.37473225994578,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368900589",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways",
+        "ways_with_lit_tag",
+        "pedestrian_infrastructure",
+        "recorded_highway_lighting"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368900590",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 92.97546335652191,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368900591",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.023697873142602646,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368900593",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0242027484342493,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368900594",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368903903",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 16.994496506590103,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368903905",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 39.1125371436685,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368903906",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.020186190809225058,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368903907",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 24.20989327532991,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368903908",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.021101423400736036,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368903909",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368903911",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 51.6287637286592,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368903913",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368903916",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.05062517264815158,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368903917",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 68.81386248733497,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368903918",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 50.95659427669181,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368903919",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 98.63481758176852,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368903920",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 74.78073836414033,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368903921",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368903922",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 39.1125371436685,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368903923",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368903924",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0048347998684905805,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368903926",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 65.8034545463372,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368903928",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368903929",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 23.523499159263583,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368903930",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 87.71247684991332,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368903933",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways",
+        "ways_with_lit_tag",
+        "recorded_highway_lighting"
+      ],
+      "minimum_geometric_distance_metres": 75.2263077677043,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368903934",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368903935",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 49.25406535376353,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368903939",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368903940",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 45.95514680549381,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368903941",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368903943",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.03930156890514707,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368903944",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368903945",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 48.85667085809608,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368903946",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 86.43497043301144,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368903947",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 93.24775708879072,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368908935",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways",
+        "ways_with_lit_tag",
+        "pedestrian_infrastructure",
+        "recorded_highway_lighting"
+      ],
+      "minimum_geometric_distance_metres": 88.37165359464169,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368908941",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 62.74969611646206,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368908948",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 91.73466410932902,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368908964",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368916133",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368916135",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368916136",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.024322844735208175,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368916142",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 27.65149034028328,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368916143",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 29.967388701172478,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368916144",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 82.08791853106928,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368916146",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368916148",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368916151",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 70.83421626869449,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368916153",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368916157",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368916158",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 63.27905002304264,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368916160",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 22.10347081175784,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368916162",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 77.89456149995954,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368916164",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.03204838522214824,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368916165",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368916166",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 77.43903441062177,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368916168",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 82.58252081952263,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368916169",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368916171",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 71.8223319719183,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368916172",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 75.90932176590788,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368916173",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368916174",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 59.600212608903206,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368916175",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.01640553471920686,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368916178",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368916179",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368916180",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 37.70313987611221,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368916181",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 55.027383677906364,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368916182",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways",
+        "ways_with_lit_tag",
+        "pedestrian_infrastructure",
+        "recorded_highway_lighting"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368928684",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways",
+        "ways_with_lit_tag",
+        "pedestrian_infrastructure",
+        "recorded_highway_lighting"
+      ],
+      "minimum_geometric_distance_metres": 52.540228429352126,
+      "on_walked_street_verified": null,
+      "osm_id": "way/368928737",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 7.206546160409146,
+      "on_walked_street_verified": null,
+      "osm_id": "way/369061829",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways",
+        "ways_with_lit_tag",
+        "pedestrian_infrastructure",
+        "recorded_highway_lighting"
+      ],
+      "minimum_geometric_distance_metres": 53.188921207042334,
+      "on_walked_street_verified": null,
+      "osm_id": "way/369062961",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 71.62598948192532,
+      "on_walked_street_verified": null,
+      "osm_id": "way/369062963",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 80.98531770939728,
+      "on_walked_street_verified": null,
+      "osm_id": "way/369062964",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 11.535797903442319,
+      "on_walked_street_verified": null,
+      "osm_id": "way/369082509",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 31.97776099712854,
+      "on_walked_street_verified": null,
+      "osm_id": "way/372055649",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 86.2620437524159,
+      "on_walked_street_verified": null,
+      "osm_id": "way/405636432",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 83.70982667030464,
+      "on_walked_street_verified": null,
+      "osm_id": "way/405636440",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 60.3130469847275,
+      "on_walked_street_verified": null,
+      "osm_id": "way/405636488",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 98.98962736540223,
+      "on_walked_street_verified": null,
+      "osm_id": "way/405636496",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/405636503",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 73.09223364354422,
+      "on_walked_street_verified": null,
+      "osm_id": "way/405636528",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 69.90632699703815,
+      "on_walked_street_verified": null,
+      "osm_id": "way/406004208",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 5.7012832161731675,
+      "on_walked_street_verified": null,
+      "osm_id": "way/422648667",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "pedestrian_infrastructure"
+      ],
+      "minimum_geometric_distance_metres": 2.6313127225684187,
+      "on_walked_street_verified": null,
+      "osm_id": "way/425596544",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 14.044083818539047,
+      "on_walked_street_verified": null,
+      "osm_id": "way/425596549",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 12.535921226553596,
+      "on_walked_street_verified": null,
+      "osm_id": "way/425596550",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.05669140715321325,
+      "on_walked_street_verified": null,
+      "osm_id": "way/425596551",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 69.39676635397818,
+      "on_walked_street_verified": null,
+      "osm_id": "way/425596552",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 58.85534149113816,
+      "on_walked_street_verified": null,
+      "osm_id": "way/516371542",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 69.5998311611879,
+      "on_walked_street_verified": null,
+      "osm_id": "way/516371543",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 80.03985602773109,
+      "on_walked_street_verified": null,
+      "osm_id": "way/516371553",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 54.80389276562233,
+      "on_walked_street_verified": null,
+      "osm_id": "way/516371554",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/516371558",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/516371560",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "shops_and_businesses"
+      ],
+      "minimum_geometric_distance_metres": 40.58418272881546,
+      "on_walked_street_verified": null,
+      "osm_id": "way/516913716",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 5.287258491996156,
+      "on_walked_street_verified": null,
+      "osm_id": "way/61406264",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/61406269",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 33.150810042082966,
+      "on_walked_street_verified": null,
+      "osm_id": "way/61406272",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 14.640784364038277,
+      "on_walked_street_verified": null,
+      "osm_id": "way/61406277",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 37.87760755235179,
+      "on_walked_street_verified": null,
+      "osm_id": "way/61409241",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/651852552",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.007761396071008494,
+      "on_walked_street_verified": null,
+      "osm_id": "way/978057799",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/978057801",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/978358982",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 50.56310344600363,
+      "on_walked_street_verified": null,
+      "osm_id": "way/978358987",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 77.33948061946776,
+      "on_walked_street_verified": null,
+      "osm_id": "way/978358989",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 74.48519204181656,
+      "on_walked_street_verified": null,
+      "osm_id": "way/978358990",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 3.0199059725789046,
+      "on_walked_street_verified": null,
+      "osm_id": "way/978358991",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 49.763249828991576,
+      "on_walked_street_verified": null,
+      "osm_id": "way/978358992",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 9.614707673622927,
+      "on_walked_street_verified": null,
+      "osm_id": "way/978358993",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 51.83012954581618,
+      "on_walked_street_verified": null,
+      "osm_id": "way/978358994",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 68.86346570068206,
+      "on_walked_street_verified": null,
+      "osm_id": "way/978362156",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 20.952381690185373,
+      "on_walked_street_verified": null,
+      "osm_id": "way/978362157",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 37.39433225867354,
+      "on_walked_street_verified": null,
+      "osm_id": "way/978362159",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/978400411",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 94.24754440103749,
+      "on_walked_street_verified": null,
+      "osm_id": "way/978400414",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 75.38106602669997,
+      "on_walked_street_verified": null,
+      "osm_id": "way/978400415",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 75.00418715108262,
+      "on_walked_street_verified": null,
+      "osm_id": "way/978400418",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 79.38550969678553,
+      "on_walked_street_verified": null,
+      "osm_id": "way/978400433",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.05691369024897418,
+      "on_walked_street_verified": null,
+      "osm_id": "way/978400434",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 90.29559558808884,
+      "on_walked_street_verified": null,
+      "osm_id": "way/978401638",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 47.07260806364775,
+      "on_walked_street_verified": null,
+      "osm_id": "way/978404426",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.006581846861989602,
+      "on_walked_street_verified": null,
+      "osm_id": "way/978410037",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/978410038",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/978410040",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 51.976500972093866,
+      "on_walked_street_verified": null,
+      "osm_id": "way/978410041",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 47.07260806364775,
+      "on_walked_street_verified": null,
+      "osm_id": "way/978415562",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.034707197607100164,
+      "on_walked_street_verified": null,
+      "osm_id": "way/978415574",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 22.812675228637787,
+      "on_walked_street_verified": null,
+      "osm_id": "way/978415576",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 39.887212342631116,
+      "on_walked_street_verified": null,
+      "osm_id": "way/978415577",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/978415580",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 54.292554838217335,
+      "on_walked_street_verified": null,
+      "osm_id": "way/978415581",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 90.80210323440649,
+      "on_walked_street_verified": null,
+      "osm_id": "way/978415582",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/978415584",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/978415585",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/978415586",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 55.493155911996205,
+      "on_walked_street_verified": null,
+      "osm_id": "way/978415587",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 44.00845349629992,
+      "on_walked_street_verified": null,
+      "osm_id": "way/978419784",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 63.212557452117956,
+      "on_walked_street_verified": null,
+      "osm_id": "way/978419785",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 64.16909841662014,
+      "on_walked_street_verified": null,
+      "osm_id": "way/978419786",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.014502022785893267,
+      "on_walked_street_verified": null,
+      "osm_id": "way/978419787",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 99.24334798852328,
+      "on_walked_street_verified": null,
+      "osm_id": "way/978419788",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 34.17053315581089,
+      "on_walked_street_verified": null,
+      "osm_id": "way/978419789",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 39.636860953303646,
+      "on_walked_street_verified": null,
+      "osm_id": "way/978419791",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 57.57818904853375,
+      "on_walked_street_verified": null,
+      "osm_id": "way/978419792",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 81.26365025019884,
+      "on_walked_street_verified": null,
+      "osm_id": "way/979454070",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 65.03434971683076,
+      "on_walked_street_verified": null,
+      "osm_id": "way/979454071",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 68.45135216289472,
+      "on_walked_street_verified": null,
+      "osm_id": "way/979455004",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.04198170479177363,
+      "on_walked_street_verified": null,
+      "osm_id": "way/979455005",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.011004269459218907,
+      "on_walked_street_verified": null,
+      "osm_id": "way/979477975",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/979477976",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.04117452043499999,
+      "on_walked_street_verified": null,
+      "osm_id": "way/979477977",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.014905569803457653,
+      "on_walked_street_verified": null,
+      "osm_id": "way/979477978",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 82.82846812472354,
+      "on_walked_street_verified": null,
+      "osm_id": "way/979477980",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 33.328490243169675,
+      "on_walked_street_verified": null,
+      "osm_id": "way/979477981",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 43.435594389655776,
+      "on_walked_street_verified": null,
+      "osm_id": "way/979477982",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 43.34468580442303,
+      "on_walked_street_verified": null,
+      "osm_id": "way/979483341",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 89.09356340523892,
+      "on_walked_street_verified": null,
+      "osm_id": "way/979487674",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 58.155033201452525,
+      "on_walked_street_verified": null,
+      "osm_id": "way/979487675",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 49.18021265196316,
+      "on_walked_street_verified": null,
+      "osm_id": "way/979487676",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 74.85024821666964,
+      "on_walked_street_verified": null,
+      "osm_id": "way/979487679",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 5.8387765994227455e-09,
+      "on_walked_street_verified": null,
+      "osm_id": "way/979487680",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/980058656",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/980058657",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.020160844541959044,
+      "on_walked_street_verified": null,
+      "osm_id": "way/980058658",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/980058659",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/980058660",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 44.73614021237329,
+      "on_walked_street_verified": null,
+      "osm_id": "way/980103153",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 39.79947116608393,
+      "on_walked_street_verified": null,
+      "osm_id": "way/980103154",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 26.13777239992605,
+      "on_walked_street_verified": null,
+      "osm_id": "way/980103155",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.04035564224593816,
+      "on_walked_street_verified": null,
+      "osm_id": "way/980103157",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 85.1673398554442,
+      "on_walked_street_verified": null,
+      "osm_id": "way/980495996",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 25.751494180241153,
+      "on_walked_street_verified": null,
+      "osm_id": "way/980516894",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/980556845",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.025505836744080707,
+      "on_walked_street_verified": null,
+      "osm_id": "way/980556846",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 5.307726572665035,
+      "on_walked_street_verified": null,
+      "osm_id": "way/984958186",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.006896293846972381,
+      "on_walked_street_verified": null,
+      "osm_id": "way/984958188",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0016918099269309385,
+      "on_walked_street_verified": null,
+      "osm_id": "way/984958189",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 0.0,
+      "on_walked_street_verified": null,
+      "osm_id": "way/984958190",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways"
+      ],
+      "minimum_geometric_distance_metres": 55.64648100555436,
+      "on_walked_street_verified": null,
+      "osm_id": "way/995230946",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    },
+    {
+      "categories": [
+        "roads_and_pedestrian_ways",
+        "ways_with_lit_tag",
+        "pedestrian_infrastructure",
+        "recorded_highway_lighting"
+      ],
+      "minimum_geometric_distance_metres": 56.51255075364286,
+      "on_walked_street_verified": null,
+      "osm_id": "way/995255493",
+      "relation_to_route": "within_configured_buffer_geometry_proximity"
+    }
+  ],
+  "nearby_unique_object_count": 336,
+  "opening_hours": {
+    "blank_value_count": 0,
+    "currently_open": null,
+    "missing_key_count": 22,
+    "missing_or_blank_ids": [
+      "node/10273464311",
+      "node/10273464409",
+      "node/10902633303",
+      "node/10960377198",
+      "node/10960468777",
+      "node/10960469638",
+      "node/10960491160",
+      "node/11955667146",
+      "node/11955699026",
+      "node/13172748071",
+      "node/13172748072",
+      "node/2910313161",
+      "node/2910320721",
+      "node/2910326372",
+      "node/2910372011",
+      "node/2912310727",
+      "node/2945288129",
+      "node/4248823882",
+      "node/6235445762",
+      "node/9835161493",
+      "way/287006191",
+      "way/516913716"
+    ],
+    "nonblank": {
+      "denominator": 23,
+      "numerator": 1,
+      "percent": 4.3478260869565215,
+      "unit": "business_OSM_objects"
+    },
+    "operating_status_evidence": "unavailable",
+    "recorded_ids": [
+      "node/6108256107"
+    ],
+    "syntax_validated": false
+  },
+  "overlap_rule": "Category memberships and proximity percentages overlap. Do not sum them. Unknown-tag road proximity may overlap yes/no-tag road proximity.",
+  "projected_route_length_metres": 6596.623363313912,
+  "route_id": "heigit-foot-walking-route-3",
+  "route_length_geodesic_metres": 6596.844479597563,
+  "sidewalk": {
+    "actual_walked_street_coverage": null,
+    "availability_indicator": "partial_in_selected_records",
+    "interpretation": "Any usable sidewalk-family value is tag availability only; no inferred sidewalk presence, side, continuity or walkability.",
+    "raw_key_value_counts": {
+      "sidewalk=left": 1,
+      "sidewalk=no": 10
+    },
+    "road_object_denominator": 306,
+    "route_without_usable_tag_within_buffer": {
+      "denominator": 6596.623363313912,
+      "numerator": 5188.653319049719,
+      "percent": 78.65620080578805,
+      "unit": "metres_of_route"
+    },
+    "scope": "nearby_OSM_road_objects_not_verified_walked_street",
+    "states": {
+      "available": {
+        "clipped_road_length": {
+          "denominator": 31321.927887883314,
+          "numerator": 1445.9493299665105,
+          "percent": 4.616412294742133,
+          "unit": "metres_of_nearby_OSM_road_lines"
+        },
+        "ids": [
+          "way/368746473",
+          "way/368765867",
+          "way/368767219",
+          "way/368900568",
+          "way/368900584",
+          "way/368900590",
+          "way/368908941",
+          "way/368928684",
+          "way/368928737",
+          "way/369062961",
+          "way/995255493"
+        ],
+        "object_availability": {
+          "denominator": 306,
+          "numerator": 11,
+          "percent": 3.5947712418300655,
+          "unit": "OSM_road_objects"
+        },
+        "route_proximity": {
+          "denominator": 6596.623363313912,
+          "numerator": 1407.970044264193,
+          "percent": 21.343799194211964,
+          "unit": "metres_of_route"
+        }
+      },
+      "unknown": {
+        "clipped_road_length": {
+          "denominator": 31321.927887883314,
+          "numerator": 29875.978557916806,
+          "percent": 95.38358770525787,
+          "unit": "metres_of_nearby_OSM_road_lines"
+        },
+        "ids": [
+          "way/1000378525",
+          "way/1006717477",
+          "way/1042925719",
+          "way/1042925720",
+          "way/1042932071",
+          "way/1042932072",
+          "way/1042932073",
+          "way/1042936668",
+          "way/1042948011",
+          "way/1082018384",
+          "way/1082018385",
+          "way/1091202273",
+          "way/1101405225",
+          "way/1103402868",
+          "way/1110917708",
+          "way/1189603965",
+          "way/1231051108",
+          "way/1250707958",
+          "way/1262418616",
+          "way/1363396959",
+          "way/1417520488",
+          "way/1450453582",
+          "way/1459474582",
+          "way/1502774532",
+          "way/1502774533",
+          "way/1507437423",
+          "way/1507437424",
+          "way/1507437425",
+          "way/1507437426",
+          "way/1544989979",
+          "way/216670718",
+          "way/237170565",
+          "way/287429478",
+          "way/287429484",
+          "way/287429607",
+          "way/287429814",
+          "way/287429987",
+          "way/287430140",
+          "way/287431735",
+          "way/287433664",
+          "way/287659826",
+          "way/288630639",
+          "way/288630640",
+          "way/288630643",
+          "way/288630671",
+          "way/288630679",
+          "way/288630704",
+          "way/288630742",
+          "way/288630746",
+          "way/288630748",
+          "way/288630753",
+          "way/288630759",
+          "way/288630761",
+          "way/288630763",
+          "way/288630766",
+          "way/288630771",
+          "way/288630776",
+          "way/288630780",
+          "way/288630782",
+          "way/288630786",
+          "way/288630789",
+          "way/288630796",
+          "way/288632260",
+          "way/288632264",
+          "way/288632269",
+          "way/288632274",
+          "way/288632276",
+          "way/288638743",
+          "way/288638747",
+          "way/288638748",
+          "way/364088545",
+          "way/364088552",
+          "way/364088558",
+          "way/364088561",
+          "way/364088563",
+          "way/364088565",
+          "way/364088568",
+          "way/364088570",
+          "way/364088574",
+          "way/364088579",
+          "way/364088585",
+          "way/364088587",
+          "way/364088594",
+          "way/364088608",
+          "way/364088631",
+          "way/364088633",
+          "way/364133705",
+          "way/364133707",
+          "way/364133709",
+          "way/364135185",
+          "way/368765853",
+          "way/368765854",
+          "way/368765855",
+          "way/368765857",
+          "way/368765859",
+          "way/368765863",
+          "way/368765864",
+          "way/368765865",
+          "way/368765866",
+          "way/368765868",
+          "way/368765869",
+          "way/368765870",
+          "way/368767209",
+          "way/368767210",
+          "way/368767216",
+          "way/368770660",
+          "way/368900559",
+          "way/368900564",
+          "way/368900571",
+          "way/368900572",
+          "way/368900574",
+          "way/368900575",
+          "way/368900576",
+          "way/368900578",
+          "way/368900579",
+          "way/368900581",
+          "way/368900582",
+          "way/368900585",
+          "way/368900588",
+          "way/368900589",
+          "way/368900591",
+          "way/368900593",
+          "way/368900594",
+          "way/368903903",
+          "way/368903905",
+          "way/368903906",
+          "way/368903907",
+          "way/368903908",
+          "way/368903909",
+          "way/368903911",
+          "way/368903913",
+          "way/368903916",
+          "way/368903917",
+          "way/368903918",
+          "way/368903919",
+          "way/368903920",
+          "way/368903921",
+          "way/368903922",
+          "way/368903923",
+          "way/368903924",
+          "way/368903926",
+          "way/368903928",
+          "way/368903929",
+          "way/368903930",
+          "way/368903933",
+          "way/368903934",
+          "way/368903935",
+          "way/368903939",
+          "way/368903940",
+          "way/368903941",
+          "way/368903943",
+          "way/368903944",
+          "way/368903945",
+          "way/368903946",
+          "way/368903947",
+          "way/368908935",
+          "way/368908948",
+          "way/368908964",
+          "way/368916133",
+          "way/368916135",
+          "way/368916136",
+          "way/368916142",
+          "way/368916143",
+          "way/368916144",
+          "way/368916146",
+          "way/368916148",
+          "way/368916151",
+          "way/368916153",
+          "way/368916157",
+          "way/368916158",
+          "way/368916160",
+          "way/368916162",
+          "way/368916164",
+          "way/368916165",
+          "way/368916166",
+          "way/368916168",
+          "way/368916169",
+          "way/368916171",
+          "way/368916172",
+          "way/368916173",
+          "way/368916174",
+          "way/368916175",
+          "way/368916178",
+          "way/368916179",
+          "way/368916180",
+          "way/368916181",
+          "way/368916182",
+          "way/369061829",
+          "way/369062963",
+          "way/369062964",
+          "way/369082509",
+          "way/372055649",
+          "way/405636432",
+          "way/405636440",
+          "way/405636488",
+          "way/405636496",
+          "way/405636503",
+          "way/405636528",
+          "way/406004208",
+          "way/422648667",
+          "way/425596549",
+          "way/425596550",
+          "way/425596551",
+          "way/425596552",
+          "way/516371542",
+          "way/516371543",
+          "way/516371553",
+          "way/516371554",
+          "way/516371558",
+          "way/516371560",
+          "way/61406264",
+          "way/61406269",
+          "way/61406272",
+          "way/61406277",
+          "way/61409241",
+          "way/651852552",
+          "way/978057799",
+          "way/978057801",
+          "way/978358982",
+          "way/978358987",
+          "way/978358989",
+          "way/978358990",
+          "way/978358991",
+          "way/978358992",
+          "way/978358993",
+          "way/978358994",
+          "way/978362156",
+          "way/978362157",
+          "way/978362159",
+          "way/978400411",
+          "way/978400414",
+          "way/978400415",
+          "way/978400418",
+          "way/978400433",
+          "way/978400434",
+          "way/978401638",
+          "way/978404426",
+          "way/978410037",
+          "way/978410038",
+          "way/978410040",
+          "way/978410041",
+          "way/978415562",
+          "way/978415574",
+          "way/978415576",
+          "way/978415577",
+          "way/978415580",
+          "way/978415581",
+          "way/978415582",
+          "way/978415584",
+          "way/978415585",
+          "way/978415586",
+          "way/978415587",
+          "way/978419784",
+          "way/978419785",
+          "way/978419786",
+          "way/978419787",
+          "way/978419788",
+          "way/978419789",
+          "way/978419791",
+          "way/978419792",
+          "way/979454070",
+          "way/979454071",
+          "way/979455004",
+          "way/979455005",
+          "way/979477975",
+          "way/979477976",
+          "way/979477977",
+          "way/979477978",
+          "way/979477980",
+          "way/979477981",
+          "way/979477982",
+          "way/979483341",
+          "way/979487674",
+          "way/979487675",
+          "way/979487676",
+          "way/979487679",
+          "way/979487680",
+          "way/980058656",
+          "way/980058657",
+          "way/980058658",
+          "way/980058659",
+          "way/980058660",
+          "way/980103153",
+          "way/980103154",
+          "way/980103155",
+          "way/980103157",
+          "way/980495996",
+          "way/980516894",
+          "way/980556845",
+          "way/980556846",
+          "way/984958186",
+          "way/984958188",
+          "way/984958189",
+          "way/984958190",
+          "way/995230946"
+        ],
+        "object_availability": {
+          "denominator": 306,
+          "numerator": 295,
+          "percent": 96.40522875816994,
+          "unit": "OSM_road_objects"
+        },
+        "route_proximity": {
+          "denominator": 6596.623363313912,
+          "numerator": 6596.623363313912,
+          "percent": 99.99999999999999,
+          "unit": "metres_of_route"
+        }
+      }
+    },
+    "street_match_status": "not_performed",
+    "usable_tag_availability": {
+      "denominator": 306,
+      "numerator": 11,
+      "percent": 3.5947712418300655,
+      "unit": "OSM_road_objects"
+    }
+  },
+  "verified_on_walked_street": {
+    "osm_ids": null,
+    "status": "not_performed",
+    "tag_coverage": null
+  }
+}

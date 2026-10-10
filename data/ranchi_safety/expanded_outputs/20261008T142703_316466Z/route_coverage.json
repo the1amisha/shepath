@@ -1,0 +1,95 @@
+{
+  "retrieved_at_utc": "2026-10-08T13:59:45.189759+00:00",
+  "routes": [
+    {
+      "route_id": "heigit-foot-walking-route-1",
+      "backend_distance_metres": 5348.2,
+      "backend_duration_seconds": 3850.6,
+      "coordinate_count": 159,
+      "polyline_length_metres": 5336.767111011035,
+      "inside_length_metres": 5336.767111011035,
+      "outside_length_metres": 0.0,
+      "inside_percent": 99.99999999999999,
+      "outside_percent": 0.0,
+      "centerline_fully_covered": true,
+      "analysis_buffer": {
+        "buffer_metres": 100,
+        "total_area_m2": 1039029.5543830195,
+        "inside_area_m2": 1039029.5543830217,
+        "outside_area_m2": 0.0,
+        "inside_percent": 100.00000000000021,
+        "outside_percent": 0.0,
+        "fully_covered": true
+      },
+      "adequate_geographic_extent_for_full_route_analysis": true,
+      "missing_directions": [],
+      "missing_buffer_bounds_west_south_east_north": null,
+      "suggested_future_extraction_envelope_west_south_east_north": [
+        85.31260211383153,
+        23.335603048961037,
+        85.32603907822013,
+        23.37080091177115
+      ]
+    },
+    {
+      "route_id": "heigit-foot-walking-route-2",
+      "backend_distance_metres": 5257.2,
+      "backend_duration_seconds": 3785.1,
+      "coordinate_count": 132,
+      "polyline_length_metres": 5245.253997892622,
+      "inside_length_metres": 5245.253997892622,
+      "outside_length_metres": 0.0,
+      "inside_percent": 99.99999999999999,
+      "outside_percent": 0.0,
+      "centerline_fully_covered": true,
+      "analysis_buffer": {
+        "buffer_metres": 100,
+        "total_area_m2": 1036826.1501247126,
+        "inside_area_m2": 1036826.1501247078,
+        "outside_area_m2": 0.0,
+        "inside_percent": 99.99999999999953,
+        "outside_percent": 0.0,
+        "fully_covered": true
+      },
+      "adequate_geographic_extent_for_full_route_analysis": true,
+      "missing_directions": [],
+      "missing_buffer_bounds_west_south_east_north": null,
+      "suggested_future_extraction_envelope_west_south_east_north": [
+        85.31685515916922,
+        23.335943057166624,
+        85.3276879547364,
+        23.37080091177115
+      ]
+    },
+    {
+      "route_id": "heigit-foot-walking-route-3",
+      "backend_distance_metres": 6607.6,
+      "backend_duration_seconds": 4757.4,
+      "coordinate_count": 219,
+      "polyline_length_metres": 6596.844479597563,
+      "inside_length_metres": 6596.844479597563,
+      "outside_length_metres": 0.0,
+      "inside_percent": 100.0,
+      "outside_percent": 0.0,
+      "centerline_fully_covered": true,
+      "analysis_buffer": {
+        "buffer_metres": 100,
+        "total_area_m2": 1261865.9700565366,
+        "inside_area_m2": 1261865.9700565354,
+        "outside_area_m2": 0.0,
+        "inside_percent": 99.99999999999991,
+        "outside_percent": 0.0,
+        "fully_covered": true
+      },
+      "adequate_geographic_extent_for_full_route_analysis": true,
+      "missing_directions": [],
+      "missing_buffer_bounds_west_south_east_north": null,
+      "suggested_future_extraction_envelope_west_south_east_north": [
+        85.30907501196218,
+        23.335603048961037,
+        85.32603907822013,
+        23.37080091177115
+      ]
+    }
+  ]
+}

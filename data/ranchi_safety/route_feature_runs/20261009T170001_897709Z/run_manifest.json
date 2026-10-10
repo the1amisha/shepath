@@ -1,0 +1,13 @@
+{
+  "artifacts": {
+    "duplicate_review.json": "6d40fbf6e65328905f76e2bb3db6d8467c1191f05d6ede974fb6a0399954adab",
+    "feature_evidence.json": "1271e67ff5a65decb387d5b99f017dfcb28385853acf3cf4e422cdaa754ef961",
+    "heigit-foot-walking-route-1.json": "6e7362684fa24fcd635b6633a932e08724b7c848a5be7d02dc29819ede7b8244",
+    "heigit-foot-walking-route-2.json": "507ba16a7e186be29ac240b602fcfc2915af33f48b21c628e076e28ed6526824",
+    "heigit-foot-walking-route-3.json": "51313b155ee28a836bc81f56b4d4796a750c3a1fd64de292f96a77d53e1ffb66",
+    "route_features.json": "4c81472e9c6223e685af9f5ccc0034afd9aa37d2dca46e862e1c94d130ef0c80"
+  },
+  "created_at_utc": "2026-10-09T17:00:01.985408+00:00",
+  "schema_version": "SHEPATH.phase5a.v1",
+  "status": "complete"
+}

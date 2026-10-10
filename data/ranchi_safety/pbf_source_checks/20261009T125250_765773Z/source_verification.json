@@ -1,0 +1,52 @@
+{
+  "checked_at_utc": "2026-10-09T12:52:50.767535+00:00",
+  "pbf_downloaded": false,
+  "bbox_south_west_north_east": [
+    23.335059,
+    85.308481,
+    23.38,
+    85.34
+  ],
+  "head_checks": {
+    "eastern_latest": {
+      "requested_url": "https://download.geofabrik.de/asia/india/eastern-zone-latest.osm.pbf",
+      "final_url": "https://download.geofabrik.de/asia/india/eastern-zone-261008.osm.pbf",
+      "status": 200,
+      "content_length": "247225365",
+      "last_modified": "Thu, 08 Oct 2026 22:56:38 GMT",
+      "etag": "\"ebc5c15-65d5c24f1485f\"",
+      "accept_ranges": "bytes",
+      "content_type": "application/octet-stream"
+    },
+    "eastern_dated": {
+      "requested_url": "https://download.geofabrik.de/asia/india/eastern-zone-261006.osm.pbf",
+      "final_url": "https://download.geofabrik.de/asia/india/eastern-zone-261006.osm.pbf",
+      "status": 200,
+      "content_length": "247199715",
+      "last_modified": "Wed, 07 Oct 2026 02:06:52 GMT",
+      "etag": "\"ebbf7e3-65d369194e29f\"",
+      "accept_ranges": "bytes",
+      "content_type": "application/octet-stream"
+    },
+    "india_latest_fallback": {
+      "requested_url": "https://download.geofabrik.de/asia/india-latest.osm.pbf",
+      "final_url": "https://download.geofabrik.de/asia/india-261008.osm.pbf",
+      "status": 200,
+      "content_length": "1709675201",
+      "last_modified": "Thu, 08 Oct 2026 22:51:19 GMT",
+      "etag": "\"65e792c1-65d5c11e8e022\"",
+      "accept_ranges": "bytes",
+      "content_type": "application/octet-stream"
+    }
+  },
+  "local_python": "3.11.9",
+  "local_architecture": "AMD64",
+  "disk_free_bytes": 223405305856,
+  "boundary_metadata_sha256": "2355a8d987680815a074c53c0f0763e7eabdb33a4ed8280e7bd0b8c9fd5dda41",
+  "provider_boundary": {
+    "url": "https://download.geofabrik.de/asia/india/eastern-zone.poly",
+    "bytes_downloaded": 19514,
+    "sha256": "715684e1b2587d57b4e17154f3565066cf98cb5ea438cacae6bf2343e28c74d1",
+    "covers_entire_pilot_bbox": true
+  }
+}

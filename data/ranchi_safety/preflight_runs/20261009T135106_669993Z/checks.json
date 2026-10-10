@@ -1,0 +1,92 @@
+{
+  "checked_at_utc": "2026-10-09T13:51:06.667988+00:00",
+  "pbf": {
+    "path": "D:\\shepath\\data\\ranchi_safety\\pbf_sources\\eastern_261008\\eastern-zone-261008.osm.pbf",
+    "bytes": 247225365,
+    "md5": "13f2313594d4ebca894a0447c1121854",
+    "sha256": "2d712eaa733a6e0df8a290350d7e9bae90e9e5299e1f54c398741e417786a2a4",
+    "supplied_publisher_md5": "13f2313594d4ebca894a0447c1121854",
+    "local_sidecar_md5": "13f2313594d4ebca894a0447c1121854",
+    "valid_size_and_md5": true,
+    "container_framing_valid": true,
+    "full_semantic_parse_performed": false
+  },
+  "resources": {
+    "disk_free_bytes": 222742138880,
+    "total_ram_bytes": 8215261184,
+    "available_ram_bytes": 568016896
+  },
+  "git": {
+    "indexed_files": 14,
+    "staged_paths": [],
+    "indexed_env_paths": [],
+    "possible_secret_match_paths": [],
+    "ignore_checks": {
+      "data/ranchi_safety/pbf_sources/eastern_261008/eastern-zone-261008.osm.pbf": {
+        "ignored": true,
+        "rule": "data/ranchi_safety/.gitignore:5:*.pbf\tdata/ranchi_safety/pbf_sources/eastern_261008/eastern-zone-261008.osm.pbf"
+      },
+      "data/ranchi_safety/pbf_sources/eastern_261008/eastern-zone-261008.osm.pbf.md5": {
+        "ignored": true,
+        "rule": "data/ranchi_safety/.gitignore:7:*.md5\tdata/ranchi_safety/pbf_sources/eastern_261008/eastern-zone-261008.osm.pbf.md5"
+      },
+      "backend/.env": {
+        "ignored": true,
+        "rule": "backend/.gitignore:5:.env\tbackend/.env"
+      },
+      "data/ranchi_safety/.pbf_venv/pyvenv.cfg": {
+        "ignored": true,
+        "rule": "data/ranchi_safety/.gitignore:15:*_venv/\tdata/ranchi_safety/.pbf_venv/pyvenv.cfg"
+      },
+      "data/ranchi_safety/offline_runs/example/index.sqlite": {
+        "ignored": true,
+        "rule": "data/ranchi_safety/.gitignore:21:*.sqlite\tdata/ranchi_safety/offline_runs/example/index.sqlite"
+      },
+      "data/ranchi_safety/offline_runs/example/index.sqlite-journal": {
+        "ignored": true,
+        "rule": "data/ranchi_safety/.gitignore:22:*.sqlite-*\tdata/ranchi_safety/offline_runs/example/index.sqlite-journal"
+      },
+      "data/ranchi_safety/offline_runs/example/file.part": {
+        "ignored": true,
+        "rule": "data/ranchi_safety/.gitignore:27:*.part\tdata/ranchi_safety/offline_runs/example/file.part"
+      },
+      "data/ranchi_safety/offline_runs/example/attempt/features.geojson": {
+        "ignored": true,
+        "rule": "data/ranchi_safety/.gitignore:35:features.geojson\tdata/ranchi_safety/offline_runs/example/attempt/features.geojson"
+      },
+      "data/ranchi_safety/offline_runs/example/attempt/objects.jsonl": {
+        "ignored": true,
+        "rule": "data/ranchi_safety/.gitignore:34:objects.jsonl\tdata/ranchi_safety/offline_runs/example/attempt/objects.jsonl"
+      },
+      "data/ranchi_safety/.env": {
+        "ignored": true,
+        "rule": "data/ranchi_safety/.gitignore:17:.env\tdata/ranchi_safety/.env"
+      },
+      "data/ranchi_safety/offline_pbf_extract.py": {
+        "ignored": false,
+        "rule": ""
+      },
+      "data/ranchi_safety/test_offline_pbf_extract.py": {
+        "ignored": false,
+        "rule": ""
+      },
+      "data/ranchi_safety/OFFLINE_PBF_README.md": {
+        "ignored": false,
+        "rule": ""
+      },
+      "data/ranchi_safety/offline_runs/example/manifest.json": {
+        "ignored": false,
+        "rule": ""
+      },
+      "data/ranchi_safety/offline_runs/example/attempt/REPORT.md": {
+        "ignored": false,
+        "rule": ""
+      }
+    },
+    "scan_scope": "Current Git index, including staged blobs; exact local backend secret matches plus limited literal patterns. No history scan; not a universal secret detector."
+  },
+  "full_output_path": "D:\\shepath\\data\\ranchi_safety\\offline_runs\\eastern_261008_ranchi_v1",
+  "full_output_exists": false,
+  "bounded_extractor_smoke_test_supported": false,
+  "smoke_test_note": "No CLI record/time bound. max-members/depth only limit individual feature resolution; stop_after index still scans the whole regional file. Full extraction not launched."
+}

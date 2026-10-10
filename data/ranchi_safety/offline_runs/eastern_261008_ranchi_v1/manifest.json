@@ -1,0 +1,211 @@
+{
+  "status": "complete",
+  "created_at": "2026-10-09T15:17:43.211715+00:00",
+  "fingerprint": {
+    "source_sha256": "2d712eaa733a6e0df8a290350d7e9bae90e9e5299e1f54c398741e417786a2a4",
+    "source_bytes": 247225365,
+    "boundary_sha256": "2355a8d987680815a074c53c0f0763e7eabdb33a4ed8280e7bd0b8c9fd5dda41",
+    "script_sha256": "2f69b9717493e16025af789343981bd9020c26dc00cf8c5d15ac25873732cfc7",
+    "routes_sha256": "3ed66baf470b718fff3ce768e83eadd6df79dcaf5f8efbd6b401178b207123b1",
+    "max_depth": 12,
+    "max_members": 100000,
+    "versions": {
+      "osmium": "4.3.1",
+      "shapely": "2.1.2",
+      "pyproj": "3.7.2"
+    }
+  },
+  "source_path": "pbf_sources\\eastern_261008\\eastern-zone-261008.osm.pbf",
+  "source_url": "https://download.geofabrik.de/asia/india/eastern-zone-261008.osm.pbf",
+  "attribution": "© OpenStreetMap contributors",
+  "license": "ODbL 1.0",
+  "license_url": "https://www.openstreetmap.org/copyright",
+  "bbox_south_west_north_east": [
+    23.335059,
+    85.308481,
+    23.38,
+    85.34
+  ],
+  "stages": {
+    "index": "successful",
+    "selection": "successful",
+    "export": "successful"
+  },
+  "attempts": [
+    "attempt_20261009T163125_789731Z"
+  ],
+  "pbf_header": {
+    "generator": "osmium/1.16.0",
+    "osmosis_replication_timestamp": "2026-10-08T20:21:06Z",
+    "osmosis_replication_sequence_number": "1822",
+    "osmosis_replication_base_url": "https://download.geofabrik.de/asia/india/eastern-zone-updates"
+  },
+  "indexed_records": 44483763,
+  "output_folder": "attempt_20261009T163125_789731Z",
+  "quality": {
+    "unique_features": 2720,
+    "feature_types": {
+      "node": 343,
+      "way": 2377
+    },
+    "category_memberships": {
+      "pedestrian_infrastructure": 115,
+      "shops_and_businesses": 351,
+      "police_stations": 7,
+      "healthcare_facilities": 78,
+      "hospitals": 42,
+      "pharmacies": 5,
+      "businesses_with_opening_hours": 16,
+      "roads_and_pedestrian_ways": 2278,
+      "ways_with_lit_tag": 44,
+      "recorded_highway_lighting": 44
+    },
+    "category_types": {
+      "pedestrian_infrastructure:node": 10,
+      "shops_and_businesses:node": 265,
+      "police_stations:node": 4,
+      "healthcare_facilities:node": 69,
+      "hospitals:node": 34,
+      "pharmacies:node": 5,
+      "businesses_with_opening_hours:node": 9,
+      "roads_and_pedestrian_ways:way": 2278,
+      "ways_with_lit_tag:way": 44,
+      "recorded_highway_lighting:way": 44,
+      "pedestrian_infrastructure:way": 105,
+      "shops_and_businesses:way": 86,
+      "businesses_with_opening_hours:way": 7,
+      "healthcare_facilities:way": 9,
+      "hospitals:way": 8,
+      "police_stations:way": 3
+    },
+    "supporting_objects": 18871,
+    "source_unique_records": 44483763,
+    "duplicate_records": {},
+    "lighting_values": {
+      "<absent>": 2234,
+      "yes": 40,
+      "no": 4
+    },
+    "lighting": {
+      "present": 44,
+      "denominator": 2278,
+      "missing": 2234,
+      "missing_percent": 98.06848112379281
+    },
+    "sidewalk_tag_presence": {
+      "present": 44,
+      "denominator": 2278,
+      "missing": 2234,
+      "missing_percent": 98.06848112379281
+    },
+    "opening_hours_nonblank": {
+      "present": 16,
+      "denominator": 351,
+      "missing": 335,
+      "missing_percent": 95.44159544159544
+    },
+    "unresolved_issues": 0,
+    "potential_facility_duplicate_pairs": 4
+  },
+  "route_coverage": [
+    {
+      "route_id": "heigit-foot-walking-route-1",
+      "backend_distance_metres": 5348.2,
+      "backend_duration_seconds": 3850.6,
+      "coordinate_count": 159,
+      "polyline_length_metres": 5336.767111011035,
+      "inside_length_metres": 5336.767111011035,
+      "outside_length_metres": 0.0,
+      "inside_percent": 99.99999999999999,
+      "outside_percent": 0.0,
+      "centerline_fully_covered": true,
+      "analysis_buffer": {
+        "buffer_metres": 100,
+        "total_area_m2": 1039029.5543830195,
+        "inside_area_m2": 1039029.5543830217,
+        "outside_area_m2": 0.0,
+        "inside_percent": 100.00000000000021,
+        "outside_percent": 0.0,
+        "fully_covered": true
+      },
+      "adequate_geographic_extent_for_full_route_analysis": true,
+      "missing_directions": [],
+      "missing_buffer_bounds_west_south_east_north": null,
+      "suggested_future_extraction_envelope_west_south_east_north": [
+        85.31260211383153,
+        23.335603048961037,
+        85.32603907822013,
+        23.37080091177115
+      ]
+    },
+    {
+      "route_id": "heigit-foot-walking-route-2",
+      "backend_distance_metres": 5257.2,
+      "backend_duration_seconds": 3785.1,
+      "coordinate_count": 132,
+      "polyline_length_metres": 5245.253997892622,
+      "inside_length_metres": 5245.253997892622,
+      "outside_length_metres": 0.0,
+      "inside_percent": 99.99999999999999,
+      "outside_percent": 0.0,
+      "centerline_fully_covered": true,
+      "analysis_buffer": {
+        "buffer_metres": 100,
+        "total_area_m2": 1036826.1501247126,
+        "inside_area_m2": 1036826.1501247078,
+        "outside_area_m2": 0.0,
+        "inside_percent": 99.99999999999953,
+        "outside_percent": 0.0,
+        "fully_covered": true
+      },
+      "adequate_geographic_extent_for_full_route_analysis": true,
+      "missing_directions": [],
+      "missing_buffer_bounds_west_south_east_north": null,
+      "suggested_future_extraction_envelope_west_south_east_north": [
+        85.31685515916922,
+        23.335943057166624,
+        85.3276879547364,
+        23.37080091177115
+      ]
+    },
+    {
+      "route_id": "heigit-foot-walking-route-3",
+      "backend_distance_metres": 6607.6,
+      "backend_duration_seconds": 4757.4,
+      "coordinate_count": 219,
+      "polyline_length_metres": 6596.844479597563,
+      "inside_length_metres": 6596.844479597563,
+      "outside_length_metres": 0.0,
+      "inside_percent": 100.0,
+      "outside_percent": 0.0,
+      "centerline_fully_covered": true,
+      "analysis_buffer": {
+        "buffer_metres": 100,
+        "total_area_m2": 1261865.9700565366,
+        "inside_area_m2": 1261865.9700565354,
+        "outside_area_m2": 0.0,
+        "inside_percent": 99.99999999999991,
+        "outside_percent": 0.0,
+        "fully_covered": true
+      },
+      "adequate_geographic_extent_for_full_route_analysis": true,
+      "missing_directions": [],
+      "missing_buffer_bounds_west_south_east_north": null,
+      "suggested_future_extraction_envelope_west_south_east_north": [
+        85.30907501196218,
+        23.335603048961037,
+        85.32603907822013,
+        23.37080091177115
+      ]
+    }
+  ],
+  "completed_at": "2026-10-09T16:41:01.830065+00:00",
+  "artifacts": {
+    "attempt_20261009T163125_789731Z\\features.geojson": "269a62e1638afb0c63615c2eee38dce9b415615c337df53947afcd8e8b5a6ed9",
+    "attempt_20261009T163125_789731Z\\issues.jsonl": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "attempt_20261009T163125_789731Z\\objects.jsonl": "cb0aa8518249a9e1403029318a6b10f86a3f2e9fd1ffa378477076c1358fba29",
+    "attempt_20261009T163125_789731Z\\pilot.osm.pbf": "5c2df3070405eb08dc0b648e25758b87170ded44af95dfa2a56531a84eeb7ac9",
+    "attempt_20261009T163125_789731Z\\potential_duplicates.jsonl": "77e40dadb67e4a596c251a6d421d7a898c06498da08408d2e38c72a13e365bd0",
+    "attempt_20261009T163125_789731Z\\REPORT.md": "19425f97a92886dadee42a50afba2ace9683f9823cfefd1b65235184b7a0ca51"
+  }
+}

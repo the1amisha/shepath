@@ -1,0 +1,8 @@
+{
+  "status": "failed",
+  "extraction_verified": false,
+  "error": "Overpass extraction failed after bounded retries; extraction remains unverified",
+  "endpoint": "https://overpass-api.de/api/interpreter",
+  "max_attempts": 1,
+  "geographic_plan_validated": true
+}

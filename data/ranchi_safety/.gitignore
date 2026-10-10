@@ -1,0 +1,98 @@
+__pycache__/
+.route_coverage_deps/
+
+# Downloaded OSM sources and publisher checksum sidecars (keep metadata/reports).
+*.pbf
+*.pbf.*
+*.md5
+*.sha256
+
+# Local environments, secrets and Python caches.
+.pbf_venv/
+.venv/
+venv/
+env/
+*_venv/
+*.py[cod]
+.env
+.env.*
+
+# Disk indexes, SQLite sidecars, locks and interrupted writes.
+*.sqlite
+*.sqlite-*
+*.sqlite3
+*.sqlite3-*
+*.db
+*.db-*
+*.part
+*.tmp
+*.lock
+offline_test_work/
+offline_validation_runs/**/test_temp/
+
+# Bulky generated feature data; retain manifests, summaries, logs and reports.
+objects.jsonl
+features.geojson
+raw_response.json
+offline_validation_runs/**/SYNTHETIC_ONLY.osm
+
+# Preserve selected evidence, not every repeated or failed experimental output.
+/outputs/*
+!/outputs/20261008T133610_076939Z/
+/outputs/20261008T133610_076939Z/*
+!/outputs/20261008T133610_076939Z/run_status.json
+!/outputs/20261008T133610_076939Z/quality_summary.json
+!/outputs/20261008T133610_076939Z/query.overpassql
+!/outputs/20261008T133610_076939Z/raw_response.json
+
+/expanded_outputs/*
+!/expanded_outputs/20261008T142703_316466Z/
+!/expanded_outputs/20261009T123052_580371Z/
+/expanded_outputs/20261009T123052_580371Z/*
+!/expanded_outputs/20261009T123052_580371Z/run_status.json
+!/expanded_outputs/20261009T123052_580371Z/request_provenance.json
+!/expanded_outputs/20261009T123052_580371Z/http_error_1.txt
+!/expanded_outputs/20261009T123052_580371Z/query.overpassql
+
+/route_coverage_runs/*
+!/route_coverage_runs/20261008T140112_006152Z/
+/route_feature_runs/*
+!/route_feature_runs/20261009T170001_897709Z/
+/route_comparison_runs/*
+!/route_comparison_runs/20261010T060453_649409Z/
+
+/post_verification_runs/*
+!/post_verification_runs/20261009T165055_620406Z/
+/pbf_source_checks/*
+!/pbf_source_checks/20261009T125250_765773Z/
+/preflight_runs/*
+!/preflight_runs/20261009T135106_669993Z/
+!/preflight_runs/20261009T151614_432187Z/
+
+# Keep historical test summaries/logs cited by reports, not synthetic outputs.
+/offline_validation_runs/*/*
+!/offline_validation_runs/*/summary.json
+!/offline_validation_runs/*/tests.log
+
+/tiled_runs/*
+!/tiled_runs/phase4b_20261009_2x2/
+/tiled_runs/phase4b_20261009_2x2/partial/
+# Retain the one failed live request as evidence; future tasks remain local.
+/tiled_runs/phase4b_20261009_2x2/tasks/*
+!/tiled_runs/phase4b_20261009_2x2/tasks/r00c00-police/
+
+# Deliberate exception: the verified, bounded 2,720-feature pilot snapshot.
+# These six manifest-hashed artifacts allow Phase 5A regeneration and tests.
+# Regional PBFs, indexes and all future extraction runs remain ignored.
+/offline_runs/*
+!/offline_runs/eastern_261008_ranchi_v1/
+/offline_runs/eastern_261008_ranchi_v1/*
+!/offline_runs/eastern_261008_ranchi_v1/manifest.json
+!/offline_runs/eastern_261008_ranchi_v1/attempt_20261009T163125_789731Z/
+/offline_runs/eastern_261008_ranchi_v1/attempt_20261009T163125_789731Z/*
+!/offline_runs/eastern_261008_ranchi_v1/attempt_20261009T163125_789731Z/features.geojson
+!/offline_runs/eastern_261008_ranchi_v1/attempt_20261009T163125_789731Z/objects.jsonl
+!/offline_runs/eastern_261008_ranchi_v1/attempt_20261009T163125_789731Z/pilot.osm.pbf
+!/offline_runs/eastern_261008_ranchi_v1/attempt_20261009T163125_789731Z/issues.jsonl
+!/offline_runs/eastern_261008_ranchi_v1/attempt_20261009T163125_789731Z/potential_duplicates.jsonl
+!/offline_runs/eastern_261008_ranchi_v1/attempt_20261009T163125_789731Z/REPORT.md

@@ -9,6 +9,8 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, field_validator
 
+from .pilot_ranchi import router as pilot_ranchi_router
+
 app = FastAPI()
 app.add_middleware(
     CORSMiddleware,
@@ -16,6 +18,7 @@ app.add_middleware(
     allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["*"],
 )
+app.include_router(pilot_ranchi_router)
 
 HEIGIT_PELIAS_URL = "https://api.heigit.org/pelias/v1/search"
 HEIGIT_DIRECTIONS_URL = "https://api.heigit.org/openrouteservice/v2/directions"

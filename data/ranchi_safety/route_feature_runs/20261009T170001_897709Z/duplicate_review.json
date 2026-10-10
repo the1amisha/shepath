@@ -1,0 +1,362 @@
+[
+  {
+    "decision": "retain_separate_ambiguous",
+    "differing_tags": {
+      "cuisine": [
+        null,
+        "cakes_and_confectionaries"
+      ],
+      "name:sat": [
+        "ᱵᱷᱟᱨᱚᱛ ᱵᱮᱠᱨᱤ",
+        "ᱵᱷᱟᱨᱚᱛ ᱵᱮᱠᱚᱨᱤ"
+      ]
+    },
+    "first": "node/2426783543",
+    "intersection_area_m2": 0.0,
+    "matching_tags": {
+      "name": "Bharat Bakery",
+      "shop": "bakery"
+    },
+    "minimum_geometry_distance_metres": 28.820263252637776,
+    "original_records": [
+      {
+        "categories": [
+          "shops_and_businesses"
+        ],
+        "changeset": 0,
+        "coordinates": [
+          85.3257272,
+          23.3591076
+        ],
+        "id": 2426783543,
+        "tags": {
+          "name": "Bharat Bakery",
+          "name:sat": "ᱵᱷᱟᱨᱚᱛ ᱵᱮᱠᱨᱤ",
+          "shop": "bakery"
+        },
+        "timestamp": "2021-01-13 15:23:24+00:00",
+        "type": "node",
+        "uid": 0,
+        "user": "",
+        "version": 3,
+        "visible": true
+      },
+      {
+        "categories": [
+          "shops_and_businesses"
+        ],
+        "changeset": 0,
+        "coordinates": [
+          85.3258201,
+          23.3593533
+        ],
+        "id": 4245892677,
+        "tags": {
+          "cuisine": "cakes_and_confectionaries",
+          "name": "Bharat Bakery",
+          "name:sat": "ᱵᱷᱟᱨᱚᱛ ᱵᱮᱠᱚᱨᱤ",
+          "shop": "bakery"
+        },
+        "timestamp": "2022-05-25 06:40:08+00:00",
+        "type": "node",
+        "uid": 0,
+        "user": "",
+        "version": 3,
+        "visible": true
+      }
+    ],
+    "polygon_intersection_over_union": null,
+    "records_merged": false,
+    "representative_point_distance_metres": 28.821364171703344,
+    "review": "Same bakery name/category 28.82 m apart; one has cuisine detail and multilingual names differ. Neither has a unique shared business identifier. Could be separate entrances, premises or duplicate mapping; retain both.",
+    "second": "node/4245892677"
+  },
+  {
+    "decision": "retain_separate_ambiguous",
+    "differing_tags": {
+      "branch": [
+        "administration office",
+        null
+      ],
+      "brand:wikipedia": [
+        null,
+        "en:State Bank of India"
+      ],
+      "website": [
+        null,
+        "https://www.sbi.co.in"
+      ]
+    },
+    "first": "node/2910379109",
+    "intersection_area_m2": 0.0,
+    "matching_tags": {
+      "amenity": "bank",
+      "brand": "State Bank of India",
+      "brand:wikidata": "Q1340361",
+      "name": "State Bank of India",
+      "short_name": "SBI"
+    },
+    "minimum_geometry_distance_metres": 28.921482583464304,
+    "original_records": [
+      {
+        "categories": [
+          "shops_and_businesses"
+        ],
+        "changeset": 0,
+        "coordinates": [
+          85.3222564,
+          23.3787102
+        ],
+        "id": 2910379109,
+        "tags": {
+          "amenity": "bank",
+          "branch": "administration office",
+          "brand": "State Bank of India",
+          "brand:wikidata": "Q1340361",
+          "name": "State Bank of India",
+          "short_name": "SBI"
+        },
+        "timestamp": "2026-01-21 23:27:07+00:00",
+        "type": "node",
+        "uid": 0,
+        "user": "",
+        "version": 2,
+        "visible": true
+      },
+      {
+        "categories": [
+          "shops_and_businesses"
+        ],
+        "changeset": 0,
+        "coordinates": [
+          85.3225392,
+          23.3787173
+        ],
+        "id": 2910383874,
+        "tags": {
+          "amenity": "bank",
+          "brand": "State Bank of India",
+          "brand:wikidata": "Q1340361",
+          "brand:wikipedia": "en:State Bank of India",
+          "name": "State Bank of India",
+          "short_name": "SBI",
+          "website": "https://www.sbi.co.in"
+        },
+        "timestamp": "2026-01-21 23:27:07+00:00",
+        "type": "node",
+        "uid": 0,
+        "user": "",
+        "version": 5,
+        "visible": true
+      }
+    ],
+    "polygon_intersection_over_union": null,
+    "records_merged": false,
+    "representative_point_distance_metres": 28.92254822056941,
+    "review": "Same bank brand/name 28.92 m apart. One explicitly says branch=administration office; the other has a website. A shared brand is not a unique branch identity. May represent different functions; retain both.",
+    "second": "node/2910383874"
+  },
+  {
+    "decision": "retain_separate_ambiguous",
+    "differing_tags": {
+      "addr:city": [
+        "Ranchi",
+        null
+      ],
+      "addr:housenumber": [
+        "Darzi Mohalla",
+        null
+      ],
+      "addr:postcode": [
+        "834002",
+        null
+      ],
+      "addr:street": [
+        "Doranda college road",
+        null
+      ],
+      "amenity": [
+        "hospital",
+        "pharmacy"
+      ],
+      "healthcare": [
+        "hospital",
+        "pharmacy"
+      ],
+      "healthcare:speciality": [
+        "general;clinic",
+        null
+      ],
+      "internet_access": [
+        "no",
+        null
+      ],
+      "name": [
+        "aushdhalay medical store",
+        "Aushdhalay medical store"
+      ]
+    },
+    "first": "node/6235433846",
+    "intersection_area_m2": 0.0,
+    "matching_tags": {},
+    "minimum_geometry_distance_metres": 0.4185406801713262,
+    "original_records": [
+      {
+        "categories": [
+          "healthcare_facilities",
+          "hospitals"
+        ],
+        "changeset": 0,
+        "coordinates": [
+          85.3188065,
+          23.3351634
+        ],
+        "id": 6235433846,
+        "tags": {
+          "addr:city": "Ranchi",
+          "addr:housenumber": "Darzi Mohalla",
+          "addr:postcode": "834002",
+          "addr:street": "Doranda college road",
+          "amenity": "hospital",
+          "healthcare": "hospital",
+          "healthcare:speciality": "general;clinic",
+          "internet_access": "no",
+          "name": "aushdhalay medical store"
+        },
+        "timestamp": "2021-11-27 23:07:36+00:00",
+        "type": "node",
+        "uid": 0,
+        "user": "",
+        "version": 2,
+        "visible": true
+      },
+      {
+        "categories": [
+          "healthcare_facilities",
+          "pharmacies",
+          "shops_and_businesses"
+        ],
+        "changeset": 0,
+        "coordinates": [
+          85.3188105,
+          23.3351642
+        ],
+        "id": 9289123731,
+        "tags": {
+          "amenity": "pharmacy",
+          "healthcare": "pharmacy",
+          "name": "Aushdhalay medical store"
+        },
+        "timestamp": "2026-01-21 23:27:07+00:00",
+        "type": "node",
+        "uid": 0,
+        "user": "",
+        "version": 2,
+        "visible": true
+      }
+    ],
+    "polygon_intersection_over_union": null,
+    "records_merged": false,
+    "representative_point_distance_metres": 0.4185553487104969,
+    "review": "Near-coincident medical-store names (0.42 m), but hospital/general-clinic tags conflict with pharmacy tags and edit dates differ. Likely identity/classification ambiguity needing local or edit-history validation. Do not merge or relabel either record.",
+    "second": "node/9289123731"
+  },
+  {
+    "decision": "retain_separate_ambiguous",
+    "differing_tags": {
+      "addr:city": [
+        null,
+        "Ranchi"
+      ],
+      "addr:district": [
+        null,
+        "Ranchi"
+      ],
+      "addr:postcode": [
+        null,
+        "834002"
+      ],
+      "addr:street": [
+        null,
+        "Rajendra chownk"
+      ],
+      "name:sat": [
+        "ᱛᱤᱣᱟᱨᱤ ᱯᱮᱴᱨᱚᱞ ᱯᱟᱢ",
+        null
+      ],
+      "operator": [
+        null,
+        "Tiwari"
+      ]
+    },
+    "first": "way/516914807",
+    "intersection_area_m2": 102.10322599247283,
+    "matching_tags": {
+      "amenity": "fuel",
+      "name": "Tiwari Petrol Pump"
+    },
+    "minimum_geometry_distance_metres": 0.0,
+    "original_records": [
+      {
+        "categories": [
+          "shops_and_businesses"
+        ],
+        "changeset": 0,
+        "id": 516914807,
+        "nodes": [
+          5045476565,
+          5045476566,
+          5045476570,
+          5045476567,
+          5045476568,
+          5045476565
+        ],
+        "tags": {
+          "amenity": "fuel",
+          "name": "Tiwari Petrol Pump",
+          "name:sat": "ᱛᱤᱣᱟᱨᱤ ᱯᱮᱴᱨᱚᱞ ᱯᱟᱢ"
+        },
+        "timestamp": "2021-01-13 15:23:24+00:00",
+        "type": "way",
+        "uid": 0,
+        "user": "",
+        "version": 2,
+        "visible": true
+      },
+      {
+        "categories": [
+          "shops_and_businesses"
+        ],
+        "changeset": 0,
+        "id": 1360582441,
+        "nodes": [
+          12595314509,
+          12595314510,
+          12595314511,
+          12595314512,
+          12595314509
+        ],
+        "tags": {
+          "addr:city": "Ranchi",
+          "addr:district": "Ranchi",
+          "addr:postcode": "834002",
+          "addr:street": "Rajendra chownk",
+          "amenity": "fuel",
+          "name": "Tiwari Petrol Pump",
+          "operator": "Tiwari"
+        },
+        "timestamp": "2025-02-17 10:06:54+00:00",
+        "type": "way",
+        "uid": 0,
+        "user": "",
+        "version": 1,
+        "visible": true
+      }
+    ],
+    "polygon_intersection_over_union": 0.14020449705898472,
+    "records_merged": false,
+    "representative_point_distance_metres": 11.980986758402276,
+    "review": "Same fuel-station name and overlapping polygons of different size, with 2021 versus 2025 edits and different address/operator detail. Plausible duplicate or site/component representation; no verified common entity identifier. Retain both and publish conditional business count.",
+    "second": "way/1360582441"
+  }
+]

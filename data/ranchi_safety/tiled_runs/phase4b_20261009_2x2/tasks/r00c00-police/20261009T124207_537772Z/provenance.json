@@ -1,0 +1,15 @@
+{
+  "started_at_utc": "2026-10-09T12:42:07.539614+00:00",
+  "endpoint": "https://overpass-api.de/api/interpreter",
+  "bbox": [
+    23.335059,
+    85.308481,
+    23.3575295,
+    85.3242405
+  ],
+  "query_sha256": "57afcbeade7ff8331154b8e344bbd19aae0f80f4b37f065f5870dfdce3d52ec4",
+  "attempt_folder": "tasks\\r00c00-police\\20261009T124207_537772Z",
+  "result": "failed",
+  "error": "HTTP 504",
+  "http_status": 504
+}

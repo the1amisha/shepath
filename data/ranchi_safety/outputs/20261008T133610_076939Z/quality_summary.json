@@ -1,0 +1,96 @@
+{
+  "source": {
+    "attribution": "© OpenStreetMap contributors",
+    "license": "ODbL 1.0",
+    "license_url": "https://www.openstreetmap.org/copyright",
+    "bbox_south_west_north_east": [
+      23.35,
+      85.31,
+      23.38,
+      85.34
+    ],
+    "run_time_utc": "20261008T133610_076939Z",
+    "mode": "live_overpass",
+    "endpoint": "https://overpass-api.de/api/interpreter",
+    "input_file": null,
+    "osm_base_timestamp": "2026-10-08T13:33:00Z"
+  },
+  "raw_element_count": 1451,
+  "unique_raw_element_count": 1451,
+  "processed_feature_count": 1451,
+  "counts_by_category": {
+    "roads_and_pedestrian_ways": 1394,
+    "ways_with_lit_tag": 37,
+    "street_lamps": 0,
+    "police_stations": 6,
+    "hospitals": 36,
+    "pharmacies": 3,
+    "businesses_with_opening_hours": 12
+  },
+  "missing_fields_by_category": {
+    "roads_and_pedestrian_ways": {
+      "name": 1246,
+      "opening_hours": 1394,
+      "usable_geometry": 0
+    },
+    "ways_with_lit_tag": {
+      "name": 24,
+      "opening_hours": 37,
+      "usable_geometry": 0
+    },
+    "street_lamps": {
+      "name": 0,
+      "opening_hours": 0,
+      "usable_geometry": 0
+    },
+    "police_stations": {
+      "name": 0,
+      "opening_hours": 5,
+      "usable_geometry": 0
+    },
+    "hospitals": {
+      "name": 0,
+      "opening_hours": 35,
+      "usable_geometry": 0
+    },
+    "pharmacies": {
+      "name": 0,
+      "opening_hours": 3,
+      "usable_geometry": 0
+    },
+    "businesses_with_opening_hours": {
+      "name": 0,
+      "opening_hours": 0,
+      "usable_geometry": 0
+    }
+  },
+  "coordinates": {
+    "checked_points": 13820,
+    "invalid_points": 0,
+    "features_without_coordinate_points": 0,
+    "features_without_usable_geometry": 0,
+    "points_outside_pilot_bbox": 1225
+  },
+  "duplicates": {
+    "extra_records_by_osm_type_and_id": 0,
+    "ids": []
+  },
+  "lighting": {
+    "road_way_count": 1394,
+    "tag_present": 37,
+    "tag_absent_unknown": 1357,
+    "tag_completeness_percent": 2.65,
+    "recorded_values": {
+      "yes": 33,
+      "no": 4
+    }
+  },
+  "notes": [
+    "Counts overlap across categories; ways are OSM objects, not unique streets.",
+    "Missing fields indicate mapping gaps, not real-world absence.",
+    "Absent lit tags mean unknown; present tags are not field verification.",
+    "Opening hours are preserved verbatim; current open status is not evaluated.",
+    "Coordinates outside the box can belong to crossing ways or relations.",
+    "Duplicate detection uses type/id only; separate IDs may describe the same place."
+  ]
+}
