@@ -1,6 +1,9 @@
 ﻿import { cleanup, fireEvent, render, screen, waitFor } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-const { getRoutes } = vi.hoisted(() => ({ getRoutes: vi.fn() }));
+import { act } from "@testing-library/react";
+import { evidenceFixture } from "./evidenceFixture";
+const { getRoutes, fetchEvidence } = vi.hoisted(() => ({ getRoutes: vi.fn(), fetchEvidence: vi.fn() }));
+vi.mock("@/lib/routing/routeEvidence", () => ({ fetchRouteEvidence: fetchEvidence }));
 vi.mock("@/lib/routing", () => ({ routingProvider: "api", routingService: { getRoutes } }));
 vi.mock("@/components/ShePathMap", () => ({ ShePathMap: ({ routes, selected }: { routes: {id: string}[]; selected: string }) => <div data-testid="map" data-routes={JSON.stringify(routes)} data-selected={selected} /> }));
 import { ShePathApp } from "@/routes/index";
@@ -12,8 +15,45 @@ function start() {
   fireEvent.click(screen.getByRole("button", { name: /Find my routes/ }));
 }
 afterEach(cleanup);
-beforeEach(() => { getRoutes.mockReset(); });
+beforeEach(() => { getRoutes.mockReset(); fetchEvidence.mockReset().mockRejectedValue(new Error("Evidence unavailable")); });
 describe("Real routing journey", () => {
+  it("keeps different evidence with each selected route when navigating details", async () => {
+    const other = { ...route, id: "other", durationSeconds: 800 };
+    const firstEvidence = evidenceFixture();
+    const secondEvidence = evidenceFixture(); secondEvidence.route_context.categories.shops_and_businesses.count = 9;
+    getRoutes.mockResolvedValue([route, other]); fetchEvidence.mockResolvedValueOnce(firstEvidence).mockResolvedValueOnce(secondEvidence);
+    start(); await screen.findByText("9 mapped records");
+    fireEvent.click(screen.getByRole("button", { name: /Fastest/ }));
+    fireEvent.click(screen.getByRole("button", { name: /View route details/ }));
+    expect(screen.getByText("9 mapped records")).toBeInTheDocument();
+    expect(screen.queryByText("7 mapped records")).not.toBeInTheDocument();
+    expect(screen.getByTestId("map")).toHaveAttribute("data-selected", "other");
+    expect(fetchEvidence).toHaveBeenCalledTimes(2);
+  });
+  it("shows dynamic evidence without changing map geometry or route selection", async () => {
+    getRoutes.mockResolvedValue([route]); fetchEvidence.mockResolvedValue(evidenceFixture()); start();
+    await screen.findByText("7 mapped records");
+    expect(fetchEvidence.mock.calls[0]![0]).toEqual(route);
+    expect(screen.getByTestId("map")).toHaveAttribute("data-routes", JSON.stringify([route]));
+    expect(screen.getByRole("button", { name: /View route details/ })).toBeEnabled();
+    fireEvent.click(screen.getByRole("button", { name: /View route details/ }));
+    expect(screen.getByText("7 mapped records")).toBeInTheDocument();
+    expect(fetchEvidence).toHaveBeenCalledOnce();
+  });
+  it("keeps a route usable if evidence fails", async () => {
+    getRoutes.mockResolvedValue([route]); start();
+    await screen.findByText("Evidence unavailable");
+    expect(screen.getByTestId("map")).toHaveAttribute("data-routes", JSON.stringify([route]));
+    expect(screen.getByRole("button", { name: /View route details/ })).toBeEnabled();
+  });
+  it("does not analyze a late routing response after editing the journey", async () => {
+    let finish!: (routes: typeof route[]) => void;
+    getRoutes.mockImplementation(() => new Promise(resolve => { finish = resolve; })); start();
+    fireEvent.click(screen.getByRole("button", { name: "Edit" }));
+    fireEvent.change(screen.getByRole("textbox", { name: /Starting from/ }), { target: { value: "Another journey" } });
+    await act(async () => finish([route]));
+    expect(fetchEvidence).not.toHaveBeenCalled();
+  });
   it("shares one fetched route with the map and details and never adds mock safety", async () => {
     getRoutes.mockResolvedValue([route]); start();
     await screen.findByRole("button", { name: /Fastest/ });

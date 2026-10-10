@@ -1,0 +1,175 @@
+.\backend\.venv\Scripts\python.exe : D:\shepath\backend\.venv\Lib\site-packages\fastapi\testclient.py:1:
+StarletteDeprecationWarning: Using `httpx` with `starlette.testclient` is deprecated; install `httpx2` instead.
+At line:2 char:80
++ ... -packages'; .\backend\.venv\Scripts\python.exe -m unittest discover - ...
++                 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: (D:\shepath\back...ttpx2` instead.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+
+  from starlette.testclient import TestClient as TestClient  # noqa
+test_comparison_cors_allows_local_frontend_origins
+(test_pilot_ranchi.PilotAPITests.test_comparison_cors_allows_local_frontend_origins) ... ok
+test_comparison_cors_does_not_allow_unauthorized_origin
+(test_pilot_ranchi.PilotAPITests.test_comparison_cors_does_not_allow_unauthorized_origin) ... ok
+test_corruption_after_success_is_not_cached
+(test_pilot_ranchi.PilotAPITests.test_corruption_after_success_is_not_cached) ... ok
+test_health_response_unchanged (test_pilot_ranchi.PilotAPITests.test_health_response_unchanged) ... ok
+test_incomplete_and_unrecognized_assertions_rejected
+(test_pilot_ranchi.PilotAPITests.test_incomplete_and_unrecognized_assertions_rejected) ... ok
+test_inconsistent_profile_rejected_even_with_test_pin
+(test_pilot_ranchi.PilotAPITests.test_inconsistent_profile_rejected_even_with_test_pin) ... ok
+test_inconsistent_route_id_rejected_even_with_test_pin
+(test_pilot_ranchi.PilotAPITests.test_inconsistent_route_id_rejected_even_with_test_pin) ... ok
+test_malformed_comparison_unavailable (test_pilot_ranchi.PilotAPITests.test_malformed_comparison_unavailable) ... ok
+test_malformed_manifest_unavailable (test_pilot_ranchi.PilotAPITests.test_malformed_manifest_unavailable) ... ok
+test_matching_assertions_return_full_saved_comparison
+(test_pilot_ranchi.PilotAPITests.test_matching_assertions_return_full_saved_comparison) ... ok
+test_missing_comparison_explicit_unavailable
+(test_pilot_ranchi.PilotAPITests.test_missing_comparison_explicit_unavailable) ... ok
+test_missing_feature_evidence_unavailable (test_pilot_ranchi.PilotAPITests.test_missing_feature_evidence_unavailable)
+... ok
+test_missing_saved_routes_unavailable (test_pilot_ranchi.PilotAPITests.test_missing_saved_routes_unavailable) ... ok
+test_no_input_artifact_writes_and_nulls_preserved
+(test_pilot_ranchi.PilotAPITests.test_no_input_artifact_writes_and_nulls_preserved) ... ok
+test_path_escape_in_manifest_rejected (test_pilot_ranchi.PilotAPITests.test_path_escape_in_manifest_rejected) ... ok
+test_read_only_method_and_openapi_contract
+(test_pilot_ranchi.PilotAPITests.test_read_only_method_and_openapi_contract) ... ok
+test_rehashed_artifact_cannot_bypass_production_pin
+(test_pilot_ranchi.PilotAPITests.test_rehashed_artifact_cannot_bypass_production_pin) ... ok
+test_reused_route_id_does_not_override_wrong_geometry_fingerprint
+(test_pilot_ranchi.PilotAPITests.test_reused_route_id_does_not_override_wrong_geometry_fingerprint) ... ok
+test_route_ids_in_all_profiles_consistent (test_pilot_ranchi.PilotAPITests.test_route_ids_in_all_profiles_consistent)
+... ok
+test_route_invalid_mode_still_rejected (test_pilot_ranchi.PilotAPITests.test_route_invalid_mode_still_rejected) ... ok
+test_route_response_contract_unchanged_with_mocked_provider
+(test_pilot_ranchi.PilotAPITests.test_route_response_contract_unchanged_with_mocked_provider) ... ok
+test_success_and_lossless_comparison_payload
+(test_pilot_ranchi.PilotAPITests.test_success_and_lossless_comparison_payload) ... ok
+test_unknown_route_not_applicable (test_pilot_ranchi.PilotAPITests.test_unknown_route_not_applicable) ... ok
+test_unsupported_schema_rejected (test_pilot_ranchi.PilotAPITests.test_unsupported_schema_rejected) ... ok
+test_wrong_mode_or_journey_id_not_applicable
+(test_pilot_ranchi.PilotAPITests.test_wrong_mode_or_journey_id_not_applicable) ... ok
+test_wrong_origin_destination_or_direction_not_applicable
+(test_pilot_ranchi.PilotAPITests.test_wrong_origin_destination_or_direction_not_applicable) ... ok
+test_wrong_saved_journey_rejected_even_with_test_pin
+(test_pilot_ranchi.PilotAPITests.test_wrong_saved_journey_rejected_even_with_test_pin) ... ok
+test_body_timeout (test_route_evidence.ASGIBodyTests.test_body_timeout) ... ok
+test_cancellation_keeps_slot_until_completion
+(test_route_evidence.ASGIBodyTests.test_cancellation_keeps_slot_until_completion) ... ok
+test_chunked_limit_without_content_length
+(test_route_evidence.ASGIBodyTests.test_chunked_limit_without_content_length) ... ok
+test_body_limit_encoding_and_cors (test_route_evidence.HTTPTests.test_body_limit_encoding_and_cors) ... ok
+test_concurrent_requests_admit_only_one (test_route_evidence.HTTPTests.test_concurrent_requests_admit_only_one) ... ok
+test_engine_validation_and_internal_failures
+(test_route_evidence.HTTPTests.test_engine_validation_and_internal_failures) ... Ranchi route evidence analysis failed
+Traceback (most recent call last):
+  File "D:\shepath\backend\app\route_evidence.py", line 170, in _run
+    result = self.engine.analyze_route(**payload.model_dump(), buffer_metres=100, dataset=self.dataset)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program
+Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\unittest\mock.py", line
+1124, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program
+Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\unittest\mock.py", line
+1128, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program
+Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\unittest\mock.py", line
+1183, in _execute_mock_call
+    raise effect
+RuntimeError: broken
+ok
+test_invalid_inputs_are_422_without_loading
+(test_route_evidence.HTTPTests.test_invalid_inputs_are_422_without_loading) ... ok
+test_missing_corrupt_or_dependencies_unavailable_sticky_503
+(test_route_evidence.HTTPTests.test_missing_corrupt_or_dependencies_unavailable_sticky_503) ... Ranchi evidence
+dataset initialization failed
+Traceback (most recent call last):
+  File "D:\shepath\backend\app\route_evidence.py", line 163, in _run
+    self.engine = self.loader()
+                  ^^^^^^^^^^^^^
+  File "C:\Program
+Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\unittest\mock.py", line
+1124, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program
+Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\unittest\mock.py", line
+1128, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program
+Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\unittest\mock.py", line
+1183, in _execute_mock_call
+    raise effect
+FileNotFoundError: private/path
+Ranchi evidence dataset initialization failed
+Traceback (most recent call last):
+  File "D:\shepath\backend\app\route_evidence.py", line 163, in _run
+    self.engine = self.loader()
+                  ^^^^^^^^^^^^^
+  File "C:\Program
+Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\unittest\mock.py", line
+1124, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program
+Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\unittest\mock.py", line
+1128, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program
+Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\unittest\mock.py", line
+1183, in _execute_mock_call
+    raise effect
+ValueError: hash mismatch
+Ranchi evidence dataset initialization failed
+Traceback (most recent call last):
+  File "D:\shepath\backend\app\route_evidence.py", line 163, in _run
+    self.engine = self.loader()
+                  ^^^^^^^^^^^^^
+  File "C:\Program
+Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\unittest\mock.py", line
+1124, in __call__
+    return self._mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program
+Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\unittest\mock.py", line
+1128, in _mock_call
+    return self._execute_mock_call(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program
+Files\WindowsApps\PythonSoftwareFoundation.Python.3.11_3.11.2544.0_x64__qbz5n2kfra8p0\Lib\unittest\mock.py", line
+1183, in _execute_mock_call
+    raise effect
+ImportError: missing osmium
+ok
+test_timeout_retains_slot_busy_health_and_recovery
+(test_route_evidence.HTTPTests.test_timeout_retains_slot_busy_health_and_recovery) ... ok
+test_valid_fixed_buffer_cache_and_worker_thread
+(test_route_evidence.HTTPTests.test_valid_fixed_buffer_cache_and_worker_thread) ... ok
+test_actual_pinned_manifest_failure_returns_503
+(test_route_evidence.RealPilotTests.test_actual_pinned_manifest_failure_returns_503) ... Ranchi evidence dataset
+initialization failed
+Traceback (most recent call last):
+  File "D:\shepath\backend\app\route_evidence.py", line 164, in _run
+    self.dataset = self.engine.PilotDataset.load()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\shepath\data\ranchi_safety\dynamic_route_evidence.py", line 110, in load
+    verify.require(verify.extract.sha(manifest_path) == MANIFEST_SHA256, 'Unrecognized pilot manifest')
+  File "D:\shepath\data\ranchi_safety\verify_post_extraction.py", line 23, in require
+    if not condition: raise ValueError(message)
+                      ^^^^^^^^^^^^^^^^^^^^^^^^^
+ValueError: Unrecognized pilot manifest
+ok
+test_three_saved_routes_lossless_stage1_and_new_geometry
+(test_route_evidence.RealPilotTests.test_three_saved_routes_lossless_stage1_and_new_geometry) ... ok
+
+----------------------------------------------------------------------
+Ran 39 tests in 36.538s
+
+OK
+Stage 2 HTTP parity: [{"route_id": "heigit-foot-walking-route-1", "http_seconds": 9.170301799997105, "stage1_exact_match": true}, {"route_id": "heigit-foot-walking-route-2", "http_seconds": 3.5777806999976747, "stage1_exact_match": true}, {"route_id": "heigit-foot-walking-route-3", "http_seconds": 7.169877600012114, "stage1_exact_match": true}]

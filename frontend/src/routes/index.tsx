@@ -1,5 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { routingService, routingProvider, type RouteData } from "@/lib/routing";
 import {
   ArrowLeft,
@@ -22,6 +22,8 @@ import {
 import { Button } from "@/components/ui/button";
 import { ShePathMap } from "@/components/ShePathMap";
 import { SavedRanchiPilot } from "@/components/SavedRanchiPilot";
+import { RouteEvidencePanel } from "@/components/RouteEvidencePanel";
+import { useRouteEvidence } from "@/hooks/useRouteEvidence";
 import { mockPreviewRoutes } from "@/lib/routing/mockRoutingService";
 import { cn } from "@/lib/utils";
 
@@ -94,18 +96,32 @@ export function ShePathApp() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const inFlight = useRef(false);
+  const requestGeneration = useRef(0);
+  const liveJourneyVisible = !showSavedPilot && ["results", "details", "report"].includes(screen);
+  useEffect(() => {
+    if (!liveJourneyVisible) {
+      requestGeneration.current++;
+      inFlight.current = false;
+      setLoading(false);
+    }
+  }, [from, to, liveJourneyVisible]);
+  useEffect(() => () => { requestGeneration.current++; }, []);
   const routeOptions = toRouteOptions(routes);
+  const evidence = useRouteEvidence(routes, "walk", JSON.stringify([from, to]),
+    !isMock && liveJourneyVisible);
   const currentIndex = steps.indexOf(screen);
   const findRoutes = async () => {
     if (inFlight.current) return;
     inFlight.current = true;
+    const generation = ++requestGeneration.current;
     setLoading(true); setError(null); setRoutes([]); setSelected(""); setScreen("results");
     try {
       const data = await routingService.getRoutes({origin: from.trim(), destination: to.trim(), travelMode: "walk"});
+      if (generation !== requestGeneration.current) return;
       if (!data.length) throw new Error("No routes were returned. Check the locations and try again.");
       setRoutes(data); setSelected(data[0]!.id);
-    } catch (cause) { setError(cause instanceof Error ? cause.message : "Unable to fetch routes. Please try again."); }
-    finally { inFlight.current = false; setLoading(false); }
+    } catch (cause) { if (generation === requestGeneration.current) setError(cause instanceof Error ? cause.message : "Unable to fetch routes. Please try again."); }
+    finally { if (generation === requestGeneration.current) { inFlight.current = false; setLoading(false); } }
   };
 
   const goBack = () => {
@@ -217,10 +233,10 @@ export function ShePathApp() {
             <Button variant="outline" size="sm" onClick={() => setScreen("search")}>Edit</Button>
           </div>
           <div className="grid min-h-[calc(100vh-9rem)] overflow-hidden rounded-3xl border border-border bg-card app-shadow lg:grid-cols-[390px_minmax(0,1fr)]">
-            <aside className="order-2 border-t border-border p-4 lg:order-1 lg:border-r lg:border-t-0 lg:p-5">
+            <aside className="order-2 border-t border-border p-4 lg:order-1 lg:border-r lg:border-t-0 lg:p-5 lg:max-h-[calc(100vh-10rem)] lg:overflow-y-auto">
               <div className="flex items-start gap-3 rounded-2xl bg-secondary p-4"><Sparkles className="mt-0.5 size-5 shrink-0 text-primary"/><p className="text-sm leading-5 text-secondary-foreground">{isMock ? <><b>Mock route comparison.</b> Fixed Ranchi demo paths for any inputs; not verified walking routes. All times and safety signals are illustrative.</> : <><b>Safety analysis not available yet.</b> Backend travel estimates; routes are not ranked by safety.</>}</p></div>
               <div className="mt-4 space-y-3">{loading && <p role="status">Finding your routes...</p>}{error && <div role="alert" className="rounded-2xl border border-border p-4"><p>{error}</p><Button className="mt-3" variant="outline" onClick={findRoutes}>Try again</Button></div>}
-                {routeOptions.map(route => <RouteOption key={route.id} route={route} selected={selected === route.id} onSelect={() => setSelected(route.id)} />)}
+                {routeOptions.map(route => <div key={route.id}><RouteOption route={route} selected={selected === route.id} onSelect={() => setSelected(route.id)} />{!isMock && <RouteEvidencePanel name={route.name} state={evidence[route.id]} />}</div>)}
               </div>
               <Button className="mt-5 w-full" size="lg" disabled={!selectedRoute || loading} onClick={() => setScreen("details")}>View route details <ChevronRight className="size-4" /></Button>
             </aside>
@@ -237,10 +253,12 @@ export function ShePathApp() {
         <PageFrame eyebrow="Route details" title={`${selectedRoute.name}, step by step`} description={isMock ? `Mock ${selectedRoute.minutes} minute estimate from ${from} to ${to}. Fixed demo geometry.` : `${selectedRoute.minutes} minute estimate from ${from} to ${to}. Safety analysis not available yet.`}>
           <div className="mx-auto grid max-w-5xl gap-6 lg:grid-cols-[1fr_0.8fr]">
             <div className="overflow-hidden rounded-3xl border border-border bg-card app-shadow"><div className="h-72"><ShePathMap routes={routes} selected={selected} mock={isMock} /></div><div className="p-6"><div className="grid grid-cols-3 gap-4 text-center"><Stat label="Travel time" value={`${selectedRoute.minutes} min`} /><Stat label="Distance" value={selectedRoute.distanceKm} /><Stat label="Safety" value={selectedRoute.score === undefined ? "Not available yet" : `${selectedRoute.score}/100 (mock)`} /></div></div></div>
-            <div className="rounded-3xl border border-border bg-card p-6 app-shadow">{isMock ? <><h2 className="font-display text-xl font-black">Why this mock route?</h2><p className="mt-3 text-sm leading-6 text-muted-foreground">This mock explanation illustrates active, visible roads and nearby businesses. Lighting, activity, business counts, and risk are prototype data, not real observations.</p><div className="mt-6 space-y-4">{([[Sun,"Street lighting","Mock: strong for 86% of the route"],[Users,"Street activity","Mock: footfall until 9:30 PM"],[Store,"Nearby support","Mock: 14 open businesses"]] as const).map(([Icon,label,copy]) => <div key={label} className="flex gap-3"><span className="grid size-10 shrink-0 place-items-center rounded-xl bg-secondary text-secondary-foreground"><Icon className="size-4" /></span><div><b className="text-sm">{label}</b><p className="mt-0.5 text-xs text-muted-foreground">{copy}</p></div></div>)}</div></> : <><h2 className="font-display text-xl font-black">Safety analysis not available yet</h2><p className="mt-3 text-sm leading-6 text-muted-foreground">Travel estimates and geometry come from the backend. Lighting, activity, and nearby support have not been assessed.</p></>}<Button className="mt-7 w-full" onClick={() => setScreen("report")}>View full safety report <ArrowRight className="size-4" /></Button></div>
+            <div className="rounded-3xl border border-border bg-card p-6 app-shadow">{isMock ? <><h2 className="font-display text-xl font-black">Why this mock route?</h2><p className="mt-3 text-sm leading-6 text-muted-foreground">This mock explanation illustrates active, visible roads and nearby businesses. Lighting, activity, business counts, and risk are prototype data, not real observations.</p><div className="mt-6 space-y-4">{([[Sun,"Street lighting","Mock: strong for 86% of the route"],[Users,"Street activity","Mock: footfall until 9:30 PM"],[Store,"Nearby support","Mock: 14 open businesses"]] as const).map(([Icon,label,copy]) => <div key={label} className="flex gap-3"><span className="grid size-10 shrink-0 place-items-center rounded-xl bg-secondary text-secondary-foreground"><Icon className="size-4" /></span><div><b className="text-sm">{label}</b><p className="mt-0.5 text-xs text-muted-foreground">{copy}</p></div></div>)}</div></> : <><h2 className="font-display text-xl font-black">Safety analysis not available yet</h2><p className="mt-3 text-sm leading-6 text-muted-foreground">Travel estimates and geometry come from the backend. Mapped geographic context is shown below. Actual lighting, activity and personal safety remain unverified.</p></>}<Button className="mt-7 w-full" onClick={() => setScreen("report")}>View full safety report <ArrowRight className="size-4" /></Button></div>
           </div>
         </PageFrame>
       )}
+
+      {!isMock && selectedRoute && (screen === "details" || screen === "report") && <div className="mx-auto max-w-4xl px-4 pb-6"><RouteEvidencePanel name={selectedRoute.name} state={evidence[selectedRoute.id]} /></div>}
 
       {screen === "report" && selectedRoute && (
         <PageFrame eyebrow="Safety report" title={isMock ? "The context behind your score" : "Safety analysis not available yet"} description={isMock ? "A transparent breakdown of the mock signals used for this route." : "No safety score or safety factors have been calculated for this route."}>

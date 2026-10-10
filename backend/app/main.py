@@ -10,8 +10,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, field_validator
 
 from .pilot_ranchi import router as pilot_ranchi_router
+from .route_evidence import EvidenceBodyLimit, router as route_evidence_router
 
 app = FastAPI()
+app.add_middleware(EvidenceBodyLimit)
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -24,6 +26,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 app.include_router(pilot_ranchi_router)
+app.include_router(route_evidence_router)
 
 HEIGIT_PELIAS_URL = "https://api.heigit.org/pelias/v1/search"
 HEIGIT_DIRECTIONS_URL = "https://api.heigit.org/openrouteservice/v2/directions"

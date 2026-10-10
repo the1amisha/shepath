@@ -1,3 +1,9 @@
 # Research manifests hash exact artifact and source bytes. Disable Git newline
 # conversion here so Windows/Linux checkouts preserve the verified snapshot.
 * -text
+
+# Dynamic validation was generated with CRLF and summary.json hashes those bytes.
+# Store normalized LF in Git; restore exact CRLF artifact bytes on every checkout.
+# Keep all other pinned research artifacts under the byte-preserving rule above.
+dynamic_validation/*.json text eol=crlf
+dynamic_validation/tests.log text eol=crlf

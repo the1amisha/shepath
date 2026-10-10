@@ -1,3 +1,6 @@
 fastapi
 httpx
 uvicorn[standard]
+shapely==2.1.2
+pyproj==3.7.2
+osmium==4.3.1

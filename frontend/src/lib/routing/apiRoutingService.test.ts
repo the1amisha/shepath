@@ -4,6 +4,14 @@ const route = { id: "heigit-foot-walking-route-1", distanceMeters: 1411.6, durat
 const request = { origin: "Albert Ekka Chowk, Ranchi", destination: "Ranchi Railway Station, Ranchi", travelMode: "walk" as const };
 afterEach(() => vi.unstubAllGlobals());
 describe("ApiRoutingService", () => {
+  it.each(["cycle", "drive"] as const)("preserves %s routing without calling evidence", async travelMode => {
+    const fetch = vi.fn().mockResolvedValue(new Response(JSON.stringify({ routes: [route] })));
+    vi.stubGlobal("fetch", fetch);
+    expect(await new ApiRoutingService("http://localhost:8000").getRoutes({ ...request, travelMode })).toEqual([route]);
+    expect(fetch).toHaveBeenCalledOnce();
+    expect(JSON.parse(fetch.mock.calls[0]![1].body).travelMode).toBe(travelMode);
+    expect(fetch.mock.calls[0]![0]).toBe("http://localhost:8000/route");
+  });
   it("posts the unchanged contract and preserves a single arbitrary route ID and lat/lng coordinates", async () => {
     const fetch = vi.fn().mockResolvedValue(new Response(JSON.stringify({ routes: [route] })));
     vi.stubGlobal("fetch", fetch);

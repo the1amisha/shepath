@@ -1,0 +1,105 @@
+{
+  "validated_at_utc": "2026-10-10T14:02:07.261317+00:00",
+  "tests": {
+    "run": 80,
+    "failures": 0,
+    "errors": 0,
+    "skipped": 0
+  },
+  "phase5a_artifact_sha256": "4c81472e9c6223e685af9f5ccc0034afd9aa37d2dca46e862e1c94d130ef0c80",
+  "source_manifest_sha256": "ae9d1e9134b276c4ca20297b02dacf38320e2ed98e001a4419788f310e9a1d0b",
+  "code_sha256": {
+    "dynamic_route_evidence.py": "f351e0e95f88e04cfa42c8ea774728394b0b0a4c2c63b47d7e6fb8dbc0c583e5",
+    "route_feature_metrics.py": "cab92b4de848bb60d4ee16c9c259f9a7a41eb26282602837e3f21285985c49dd",
+    "verify_post_extraction.py": "d3a89e93eb454260b48d830dde094ea6bcf52671fb83db7bfd4da50f8bd1acf4",
+    "verify_route_coverage.py": "7d305ad5c9231aa682ca3147b73cb710776c8287e39ef9c6045c161b4f937228",
+    "offline_pbf_extract.py": "2f69b9717493e16025af789343981bd9020c26dc00cf8c5d15ac25873732cfc7"
+  },
+  "memory": {
+    "method": "tracemalloc Python-managed allocations only; excludes native GEOS/PROJ heaps and interpreter/import baseline",
+    "loader_retained_bytes": 9637321,
+    "loader_peak_bytes": 60340895,
+    "load_seconds_with_tracemalloc": 14.888148799989722,
+    "small_export_bytes": 7603531
+  },
+  "routes": [
+    {
+      "route_id": "heigit-foot-walking-route-1",
+      "status": "available",
+      "geometry_sha256": "d9f3307bcc18af2403eac7851006d58ec874faa3c249f9cccb6d203c41f4b460",
+      "analysis_seconds": 1.9672792999917874,
+      "phase5a_differences": [],
+      "counts": {
+        "roads_and_pedestrian_ways": 219,
+        "pedestrian_infrastructure": 11,
+        "ways_with_lit_tag": 7,
+        "street_lamps": 0,
+        "police_stations": 0,
+        "healthcare_facilities": 4,
+        "hospitals": 1,
+        "pharmacies": 1,
+        "shops_and_businesses": 19,
+        "businesses_with_opening_hours": 1
+      },
+      "nearby_road_geometry": {
+        "unique_clipped_line_length_metres": 23134.52678203195,
+        "OSM_object_line_sum_metres": 23134.52678203195,
+        "interpretation": "Unique length unions overlapping lines; lighting/sidewalk clipped_road_length retains Phase 5A object-line denominators, not unique geographic coverage."
+      }
+    },
+    {
+      "route_id": "heigit-foot-walking-route-2",
+      "status": "available",
+      "geometry_sha256": "bd1208514db8cc1cbc8732fc927740b942840dea7329e60959ae15429ba99d82",
+      "analysis_seconds": 2.055396900002961,
+      "phase5a_differences": [],
+      "counts": {
+        "roads_and_pedestrian_ways": 239,
+        "pedestrian_infrastructure": 11,
+        "ways_with_lit_tag": 7,
+        "street_lamps": 0,
+        "police_stations": 1,
+        "healthcare_facilities": 9,
+        "hospitals": 2,
+        "pharmacies": 3,
+        "shops_and_businesses": 54,
+        "businesses_with_opening_hours": 0
+      },
+      "nearby_road_geometry": {
+        "unique_clipped_line_length_metres": 25920.923576504905,
+        "OSM_object_line_sum_metres": 25920.92357650491,
+        "interpretation": "Unique length unions overlapping lines; lighting/sidewalk clipped_road_length retains Phase 5A object-line denominators, not unique geographic coverage."
+      }
+    },
+    {
+      "route_id": "heigit-foot-walking-route-3",
+      "status": "available",
+      "geometry_sha256": "38f5f3e422c407b96ae44a7ec9d0494544e3a1e1286579972849180d7b9c6a9b",
+      "analysis_seconds": 4.680848599993624,
+      "phase5a_differences": [],
+      "counts": {
+        "roads_and_pedestrian_ways": 306,
+        "pedestrian_infrastructure": 16,
+        "ways_with_lit_tag": 12,
+        "street_lamps": 0,
+        "police_stations": 0,
+        "healthcare_facilities": 6,
+        "hospitals": 1,
+        "pharmacies": 1,
+        "shops_and_businesses": 23,
+        "businesses_with_opening_hours": 1
+      },
+      "nearby_road_geometry": {
+        "unique_clipped_line_length_metres": 31321.92788788334,
+        "OSM_object_line_sum_metres": 31321.927887883314,
+        "interpretation": "Unique length unions overlapping lines; lighting/sidewalk clipped_road_length retains Phase 5A object-line denominators, not unique geographic coverage."
+      }
+    }
+  ],
+  "artifacts": {
+    "heigit-foot-walking-route-1.json": "77866df3f2e91c3eedfd3a170644b63ffdfae571b53c83ad89ebae4617fab073",
+    "heigit-foot-walking-route-2.json": "78a9e18628fabb39ddec0c6430c6114c326471924fa0c1f21c0b56ec9079736b",
+    "heigit-foot-walking-route-3.json": "f94be710321a34dcce7133e674b8d08a507cb21f1f8eb19eadadee54b59adff7",
+    "tests.log": "141d15e98d92e9cc34e526294f18677368999c11024064225ec250edcea70549"
+  }
+}

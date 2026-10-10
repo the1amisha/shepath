@@ -1,5 +1,6 @@
 import { z } from "zod";
 import type { RouteData, RouteRequest, RoutingService } from "./types";
+import { apiBaseUrl } from "./apiBaseUrl";
 
 const coordinate = z.tuple([z.number().finite().min(-90).max(90), z.number().finite().min(-180).max(180)]);
 const responseSchema = z.object({ routes: z.array(z.object({
@@ -12,7 +13,7 @@ const responseSchema = z.object({ routes: z.array(z.object({
 })).min(1) });
 
 export class ApiRoutingService implements RoutingService {
-  constructor(private readonly baseUrl = import.meta.env["VITE_API_BASE_URL"] || "http://127.0.0.1:8000") {}
+  constructor(private readonly baseUrl = apiBaseUrl()) {}
 
   async getRoutes(request: RouteRequest): Promise<RouteData[]> {
     let response: Response;
