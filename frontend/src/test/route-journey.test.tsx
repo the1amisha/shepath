@@ -42,7 +42,7 @@ describe("Real routing journey", () => {
   });
   it("keeps a route usable if evidence fails", async () => {
     getRoutes.mockResolvedValue([route]); start();
-    await screen.findByText("Evidence unavailable");
+    await screen.findByText(/Route 1: Evidence unavailable/);
     expect(screen.getByTestId("map")).toHaveAttribute("data-routes", JSON.stringify([route]));
     expect(screen.getByRole("button", { name: /View route overview/ })).toBeEnabled();
   });

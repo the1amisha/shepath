@@ -16,11 +16,13 @@ import {
   Users,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { ResultsMapPanel } from "@/components/ResultsMapPanel";
 import { ShePathMap } from "@/components/ShePathMap";
 import { SavedRanchiPilot } from "@/components/SavedRanchiPilot";
 import { RouteEvidencePanel } from "@/components/RouteEvidencePanel";
 import { useRouteEvidence } from "@/hooks/useRouteEvidence";
 import { mockPreviewRoutes } from "@/lib/routing/mockRoutingService";
+import { useJourneyFocus, focusContent } from "@/hooks/useJourneyFocus";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/")({
@@ -77,6 +79,7 @@ function Brand() {
 export function ShePathApp() {
   const [showSavedPilot, setShowSavedPilot] = useState(false);
   const [screen, setScreen] = useState<Screen>("welcome");
+  const { savedTrigger, openSaved } = useJourneyFocus(screen, showSavedPilot, () => setShowSavedPilot(true));
   const [selected, setSelected] = useState<RouteKey>("");
   const [preferences, setPreferences] = useState<string[]>([]);
   const [from, setFrom] = useState("Albert Ekka Chowk, Ranchi");
@@ -126,6 +129,7 @@ export function ShePathApp() {
   if (screen === "welcome") {
     return (
       <main className="relative min-h-screen overflow-hidden bg-background">
+        <SkipToContent />
         <div className="absolute inset-x-0 top-0 h-2 bg-primary" />
         <div className="mx-auto grid min-h-screen max-w-7xl items-center gap-12 px-6 py-16 lg:grid-cols-[0.9fr_1.1fr] lg:px-12">
           <section className="max-w-xl">
@@ -133,7 +137,7 @@ export function ShePathApp() {
             <div className="mt-16 inline-flex items-center gap-2 rounded-full bg-secondary px-4 py-2 text-xs font-bold text-secondary-foreground">
               <Sparkles className="size-4" /> Ranchi, Jharkhand, India pilot prototype
             </div>
-            <h1 className="mt-7 font-display text-5xl font-black leading-[1.02] text-foreground sm:text-6xl lg:text-7xl">
+            <h1 id="journey-heading" tabIndex={-1} className="mt-7 font-display text-5xl font-black leading-[1.02] text-foreground sm:text-6xl lg:text-7xl">
               Explore your walking route options.
             </h1>
             <p className="mt-6 max-w-lg text-base leading-7 text-muted-foreground sm:text-lg">
@@ -142,7 +146,7 @@ export function ShePathApp() {
             <Button size="lg" className="mt-9" onClick={() => setScreen("search")}>
               Compare walking routes <ArrowRight className="size-4" />
             </Button>
-            <Button variant="outline" className="mt-3 block" onClick={() => setShowSavedPilot(true)}>Saved Ranchi Pilot Comparison</Button>
+            <Button variant="outline" className="mt-3 block" ref={savedTrigger} onClick={openSaved}>Saved Ranchi Pilot Comparison</Button>
             <p className="mt-5 flex items-center gap-2 text-xs font-semibold text-muted-foreground"><Footprints className="size-4 text-primary" /> {isMock ? "Mock mode: fixed illustrative walking routes" : "Live walking routes with historical mapped context where covered"}</p>
           </section>
 
@@ -170,8 +174,9 @@ export function ShePathApp() {
 
   return (
     <main className="min-h-screen bg-background">
-      <header className="sticky top-0 z-[1000] border-b border-border/70 bg-background/92 backdrop-blur-xl">
-        <div className="mx-auto grid h-20 max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-4 sm:flex sm:px-8">
+      <SkipToContent />
+      <header data-journey-header className="sticky top-0 z-[1000] border-b border-border/70 bg-background/92 backdrop-blur-xl">
+        <div className="mx-auto grid min-h-20 py-3 max-w-7xl grid-cols-[minmax(0,1fr)_auto] items-center gap-4 px-4 sm:flex sm:px-8">
           <div className="flex min-w-0 items-center gap-4">
             <Button aria-label="Go back" title="Go back" variant="ghost" size="icon" onClick={goBack}><ArrowLeft className="size-5" /></Button>
             <Brand />
@@ -179,11 +184,11 @@ export function ShePathApp() {
           <div className="ml-auto hidden items-center gap-2 md:flex">
             {steps.slice(1).map((step, index) => <span key={step} className={cn("h-1.5 rounded-full transition-all", index <= currentIndex - 1 ? "w-8 bg-primary" : "w-3 bg-border")} />)}
           </div>
-          <div className="rounded-full bg-secondary px-3 py-2 text-xs font-bold text-secondary-foreground md:ml-6">Step {currentIndex} of 5</div>
+          <div className="rounded-full bg-secondary px-3 py-2 text-xs font-bold text-secondary-foreground md:ml-6">Step {currentIndex} of 5<span className="sr-only">: {({ search: "Plan journey", preferences: "Preference preview", results: "Compare routes", details: "Route overview", report: "Geographic evidence", welcome: "Welcome" })[screen]}</span></div>
         </div>
       </header>
 
-      <div className="mx-auto max-w-7xl px-4 pt-4 sm:px-8"><Button variant="outline" size="sm" onClick={() => setShowSavedPilot(true)}>Saved Ranchi Pilot Comparison</Button></div>
+      <div className="mx-auto max-w-7xl px-4 pt-4 sm:px-8"><Button variant="outline" size="sm" ref={savedTrigger} onClick={openSaved}>Saved Ranchi Pilot Comparison</Button></div>
 
       {screen === "search" && (
         <PageFrame eyebrow="Plan your journey" title="Where are you headed?" description={isMock ? "Add your start and destination. Mock mode uses fixed demo routes." : "Add your start and destination to compare walking routes."}>
@@ -226,23 +231,37 @@ export function ShePathApp() {
       {screen === "results" && (
         <div className="mx-auto max-w-[1500px] px-4 py-6 sm:px-8">
           <div className="mb-5 grid grid-cols-[minmax(0,1fr)_auto] items-end gap-4">
-            <div className="min-w-0"><p className="text-xs font-extrabold uppercase tracking-[0.16em] text-primary">{loading ? "Finding routes..." : `${routes.length} ${isMock ? "illustrative mock" : "available"} route${routes.length === 1 ? "" : "s"}`}</p><h1 className="mt-1 truncate font-display text-2xl font-black sm:text-3xl">{from} <span className="text-muted-foreground">to</span> {to}</h1></div>
+            <div className="min-w-0"><p className="text-xs font-extrabold uppercase tracking-[0.16em] text-primary">{loading ? "Finding routes..." : `${routes.length} ${isMock ? "illustrative mock" : "available"} route${routes.length === 1 ? "" : "s"}`}</p><h1 id="journey-heading" tabIndex={-1} className="mt-1 break-words font-display text-2xl font-black sm:text-3xl">{from} <span className="text-muted-foreground">to</span> {to}</h1></div>
             <Button variant="outline" size="sm" onClick={() => setScreen("search")}>Edit</Button>
           </div>
-          <div className="grid min-h-[calc(100vh-9rem)] overflow-hidden rounded-3xl border border-border bg-card app-shadow lg:grid-cols-[390px_minmax(0,1fr)]">
-            <aside className="order-2 border-t border-border p-4 lg:order-1 lg:border-r lg:border-t-0 lg:p-5 lg:max-h-[calc(100vh-10rem)] lg:overflow-y-auto">
+          <div className="grid items-start rounded-3xl border border-border bg-card app-shadow lg:grid-cols-[390px_minmax(0,1fr)]">
+            <aside className="min-w-0 border-b border-border p-4 lg:border-r lg:border-b-0 lg:p-5">
               <div className="flex items-start gap-3 rounded-2xl bg-secondary p-4"><Sparkles className="mt-0.5 size-5 shrink-0 text-primary"/><p className="text-sm leading-5 text-secondary-foreground">{isMock ? <><b>Mock route comparison.</b> Fixed Ranchi demo paths for any inputs; not verified walking routes. All times and distances are illustrative.</> : <><b>Walking-route comparison.</b> Backend travel estimates with historical mapped evidence where covered; no personal-safety assessment.</>}</p></div>
               <p className="mt-3 text-xs leading-5 text-muted-foreground">The first returned route is selected initially for viewing, not as a recommendation. Routes are not ranked by safety.</p>
+              {!isMock && routes.length > 0 && <p className="mt-3 text-sm leading-6 text-muted-foreground">Evidence is processed one route at a time. {routes.filter(route => evidence[route.id]?.status === "complete" || evidence[route.id]?.status === "error").length} of {routes.length} routes have finished an attempt. Waiting or retries can take time; you can select a route and continue without evidence.</p>}
               <div className="mt-4 space-y-3">{loading && <p role="status">Finding your routes...</p>}{error && <div role="alert" className="rounded-2xl border border-border p-4"><p>{error}</p><Button className="mt-3" variant="outline" onClick={findRoutes}>Try again</Button></div>}
-                {routeOptions.map(route => <div key={route.id}><RouteOption route={route} selected={selected === route.id} onSelect={() => setSelected(route.id)} />{!isMock && <RouteEvidencePanel headingLevel={3} name={route.name} state={evidence[route.id]} />}</div>)}
+                {routeOptions.map(route => <div key={route.id} data-route-card={route.id}><RouteOption route={route} selected={selected === route.id} onSelect={() => setSelected(route.id)} />{!isMock && <RouteEvidencePanel compact headingLevel={3} name={route.name} state={evidence[route.id]} />}</div>)}
               </div>
-              <Button className="mt-5 w-full" size="lg" disabled={!selectedRoute || loading} onClick={() => setScreen("details")}>View route overview <ChevronRight className="size-4" /></Button>
+
             </aside>
-            <section className="relative order-1 min-h-[52vh] overflow-hidden bg-muted lg:order-2 lg:min-h-full">
+            <ResultsMapPanel>
+            <section aria-label="Route comparison map" className="results-map-frame relative min-w-0 overflow-hidden bg-muted lg:rounded-tr-3xl">
               <ShePathMap routes={routes} selected={selected} mock={isMock} />
               {selectedRoute && <div className="absolute left-4 top-4 z-[500] flex items-center gap-2 rounded-full bg-card/95 px-4 py-2 text-xs font-bold text-foreground shadow-lg backdrop-blur"><span className={cn("size-2.5 rounded-full route-pulse", selectedRoute.color)} />{selectedRoute.name} · {selectedRoute.time}</div>}
-              {routeOptions.length > 0 && <div className="absolute bottom-5 left-1/2 z-[500] flex max-w-full -translate-x-1/2 flex-wrap gap-3 rounded-full bg-card/95 px-4 py-2 text-[11px] font-semibold shadow-lg">{routeOptions.map(route => <span key={route.id} className="flex items-center gap-1.5"><span className={cn("size-2 rounded-full", route.color)} />{route.name}</span>)}</div>}
+
             </section>
+              {routeOptions.length > 0 && <div aria-label="Route colors" className="flex flex-wrap gap-3 border-t border-border bg-card px-4 py-3 text-sm font-semibold">{routeOptions.map(route => <span key={route.id} className="flex items-center gap-1.5"><span className={cn("size-2 rounded-full", route.color)} />{route.name}</span>)}</div>}
+          <section aria-label="Selected route actions" className="results-actions flex flex-wrap items-center justify-between gap-3 rounded-b-3xl border-t border-border bg-card p-4 pb-[max(1rem,env(safe-area-inset-bottom))]">
+            <div className="min-w-0 text-sm"><p className="font-bold">{selectedRoute ? `Selected: ${selectedRoute.name}` : "Select a route to continue"}</p>{selectedRoute && <p>{selectedRoute.time} · {selectedRoute.distanceKm}{isMock && " · illustrative"}</p>}</div>
+            <div className="flex flex-wrap gap-2">
+              {selectedRoute && <Button variant="outline" onClick={() => {
+                const card = Array.from(document.querySelectorAll<HTMLElement>("[data-route-card]")).find(element => element.dataset["routeCard"] === selected);
+                focusContent(card?.querySelector<HTMLElement>("button") ?? null);
+              }}>Locate selected route</Button>}
+              <Button disabled={!selectedRoute || loading} onClick={() => setScreen("details")}>View route overview <ChevronRight className="size-4" /></Button>
+            </div>
+          </section>
+            </ResultsMapPanel>
           </div>
         </div>
       )}
@@ -252,7 +271,7 @@ export function ShePathApp() {
           <div className="mx-auto grid max-w-5xl gap-6 lg:grid-cols-[1fr_0.8fr]">
             <div className="overflow-hidden rounded-3xl border border-border bg-card app-shadow">
               <div className="h-[360px]" data-testid="overview-map-frame"><ShePathMap routes={routes} selected={selected} mock={isMock} /></div>
-              <div className="p-6"><div className="grid grid-cols-3 gap-4 text-center"><Stat label="Estimated time" value={selectedRoute.time} /><Stat label="Distance" value={selectedRoute.distanceKm} /><Stat label="Mode" value="Walking" /></div></div>
+              <div className="p-6"><div className="grid grid-cols-1 gap-4 text-center sm:grid-cols-3"><Stat label="Estimated time" value={selectedRoute.time} /><Stat label="Distance" value={selectedRoute.distanceKm} /><Stat label="Mode" value="Walking" /></div></div>
             </div>
             <div className="rounded-3xl border border-border bg-card p-6 app-shadow">
               <h2 className="font-display text-xl font-black">{isMock ? "Illustrative route" : "About this route"}</h2>
@@ -277,12 +296,12 @@ export function ShePathApp() {
 }
 
 function PageFrame({ eyebrow, title, description, children }: { eyebrow: string; title: string; description: string; children: ReactNode }) {
-  return <div className="px-4 py-10 sm:px-8 sm:py-14"><div className="mx-auto mb-9 max-w-3xl text-center"><p className="text-xs font-extrabold uppercase tracking-[0.16em] text-primary">{eyebrow}</p><h1 className="mt-3 font-display text-3xl font-black sm:text-5xl">{title}</h1><p className="mx-auto mt-4 max-w-2xl text-sm leading-6 text-muted-foreground sm:text-base">{description}</p></div>{children}</div>;
+  return <div className="px-4 py-10 sm:px-8 sm:py-14"><div className="mx-auto mb-9 max-w-3xl text-center"><p className="text-xs font-extrabold uppercase tracking-[0.16em] text-primary">{eyebrow}</p><h1 id="journey-heading" tabIndex={-1} className="mt-3 font-display text-3xl font-black sm:text-5xl">{title}</h1><p className="mx-auto mt-4 max-w-2xl text-sm leading-6 text-muted-foreground sm:text-base">{description}</p></div>{children}</div>;
 }
 
 function LocationField({ label, value, onChange, dot, error }: { label: string; value: string; onChange: (value: string) => void; dot: string; error: string | undefined }) {
   const id = useId();
-  return <div><label htmlFor={id} className="grid grid-cols-[auto_1fr] gap-4 rounded-2xl border border-input bg-background p-4 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/10"><span className={cn("mt-4 size-3 rounded-full ring-4 ring-card", dot)} /><span className="min-w-0"><span className="block text-[10px] font-bold uppercase tracking-[0.13em] text-muted-foreground">{label}</span><input id={id} aria-invalid={!!error} aria-describedby={error ? `${id}-error` : undefined} className="mt-1 w-full bg-transparent text-base font-bold text-foreground outline-none placeholder:text-muted-foreground" value={value} onChange={event => onChange(event.target.value)} placeholder="Enter a place" /></span></label>{error && <p id={`${id}-error`} role="alert" className="mt-2 text-sm font-semibold text-foreground">{error}</p>}</div>;
+  return <div><label htmlFor={id} className="grid grid-cols-[auto_1fr] gap-4 rounded-2xl border border-input bg-background p-4 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/10"><span className={cn("mt-4 size-3 rounded-full ring-4 ring-card", dot)} /><span className="min-w-0"><span className="block text-xs font-bold uppercase tracking-[0.13em] text-muted-foreground">{label}</span><input id={id} aria-invalid={!!error} aria-describedby={error ? `${id}-error` : undefined} className="mt-1 w-full bg-transparent text-base font-bold text-foreground outline-none placeholder:text-muted-foreground" value={value} onChange={event => onChange(event.target.value)} placeholder="Enter a place" /></span></label>{error && <p id={`${id}-error`} role="alert" className="mt-2 text-sm font-semibold text-foreground">{error}</p>}</div>;
 }
 
 function RouteOption({ route, selected, onSelect }: { route: RouteOptionData; selected: boolean; onSelect: () => void }) {
@@ -294,4 +313,8 @@ function RouteOption({ route, selected, onSelect }: { route: RouteOptionData; se
   </button></div>;
 }
 
-function Stat({ label, value }: { label: string; value: string }) { return <div><div className="font-display text-lg font-black sm:text-xl">{value}</div><div className="mt-1 text-[10px] font-bold uppercase text-muted-foreground">{label}</div></div>; }
+function Stat({ label, value }: { label: string; value: string }) { return <div><div className="font-display text-lg font-black sm:text-xl">{value}</div><div className="mt-1 text-xs font-bold uppercase text-muted-foreground">{label}</div></div>; }
+
+function SkipToContent() {
+  return <a href="#journey-heading" className="journey-skip" onClick={event => { event.preventDefault(); focusContent(document.getElementById("journey-heading")); }}>Skip to content</a>;
+}

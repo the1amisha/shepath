@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { ArrowLeft } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { focusContent } from "@/hooks/useJourneyFocus";
 import { fetchSavedPilot, type SavedPilot } from "@/lib/routing/savedPilot";
 
 const label = (value: string) => value.replaceAll("_", " ");
@@ -44,6 +45,7 @@ export function SavedRanchiPilot({ onBack }: { onBack: () => void }) {
 
   return (
     <main className="min-h-screen bg-background">
+      <a href="#journey-heading" className="journey-skip" onClick={event => { event.preventDefault(); focusContent(document.getElementById("journey-heading")); }}>Skip to content</a>
       <header className="border-b border-border bg-card">
         <div className="mx-auto flex max-w-7xl items-center gap-4 px-4 py-5 sm:px-8">
           <Button variant="ghost" size="icon" aria-label="Back to journey" onClick={onBack}>
@@ -60,7 +62,7 @@ export function SavedRanchiPilot({ onBack }: { onBack: () => void }) {
           <p className="text-xs font-extrabold uppercase tracking-[0.16em] text-primary">
             Fixed walking journey
           </p>
-          <h1 className="mt-2 font-display text-3xl font-black">Saved Ranchi Pilot Comparison</h1>
+          <h1 id="journey-heading" tabIndex={-1} className="mt-2 font-display text-3xl font-black">Saved Ranchi Pilot Comparison</h1>
           <p className="mt-2 text-muted-foreground">
             Albert Ekka Chowk → Doranda, Ranchi · Walking
           </p>

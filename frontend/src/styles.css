@@ -64,7 +64,7 @@
 
 @layer base {
   * { border-color: var(--color-border); }
-  html { scroll-behavior: smooth; }
+  html { scroll-behavior: auto; }
   body {
     margin: 0;
     background-color: var(--color-background);
@@ -113,4 +113,28 @@
 
 @media (prefers-reduced-motion: no-preference) {
   .route-pulse { animation: route-pulse 2.2s ease-in-out infinite; }
+}
+
+#journey-heading { scroll-margin-top: 7rem; }
+#journey-heading:focus-visible { outline: 2px solid var(--ring); outline-offset: 4px; }
+.journey-skip { position: fixed; top: .5rem; left: .5rem; z-index: 2000; transform: translateY(-200%); padding: .75rem 1rem; border-radius: 1rem; background: var(--card); color: var(--foreground); }
+.journey-skip:focus { transform: none; outline: 2px solid var(--ring); }
+
+/* The 360px floor matches ShePathMap's existing minimum. Larger maps scale with
+   the viewport; controls and actions occupy separate rows, never an overlay. */
+.results-map-frame { height: max(360px, 50vh); height: max(360px, 50dvh); }
+.results-map-panel { align-self: start; }
+@media (min-width: 1024px) and (min-height: 501px) {
+  .results-map-panel[data-sticky-fits="true"] { position: sticky; top: var(--results-panel-top); }
+}
+
+/* Leave room for content on short/zoomed viewports and with an on-screen keyboard. */
+@media (max-height: 500px) {
+  [data-journey-header] { position: static; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto !important; }
+  button, a, summary, .route-pulse { transition: none !important; animation: none !important; }
+  button:hover { transform: none !important; translate: none !important; }
 }
