@@ -10,9 +10,9 @@ import { ShePathApp } from "@/routes/index";
 const route = { id: "heigit-foot-walking-route-1", distanceMeters: 1411.6, durationSeconds: 1016.4, coordinates: [[23.37, 85.32], [23.35, 85.33]], startPoint: [23.37, 85.32], endPoint: [23.35, 85.33] };
 function start() {
   render(<ShePathApp />);
-  fireEvent.click(screen.getByRole("button", { name: /Plan a safer route/ }));
-  fireEvent.click(screen.getByRole("button", { name: /Choose safety preferences/ }));
-  fireEvent.click(screen.getByRole("button", { name: /Find my routes/ }));
+  fireEvent.click(screen.getByRole("button", { name: /Compare walking routes/ }));
+  fireEvent.click(screen.getByRole("button", { name: /Continue to preference preview/ }));
+  fireEvent.click(screen.getByRole("button", { name: /Continue to routes/ }));
 }
 afterEach(cleanup);
 beforeEach(() => { getRoutes.mockReset(); fetchEvidence.mockReset().mockRejectedValue(new Error("Evidence unavailable")); });
@@ -24,7 +24,7 @@ describe("Real routing journey", () => {
     getRoutes.mockResolvedValue([route, other]); fetchEvidence.mockResolvedValueOnce(firstEvidence).mockResolvedValueOnce(secondEvidence);
     start(); await screen.findByText("9 mapped records");
     fireEvent.click(screen.getByRole("button", { name: /Fastest/ }));
-    fireEvent.click(screen.getByRole("button", { name: /View route details/ }));
+    fireEvent.click(screen.getByRole("button", { name: /View route overview/ }));
     expect(screen.getByText("9 mapped records")).toBeInTheDocument();
     expect(screen.queryByText("7 mapped records")).not.toBeInTheDocument();
     expect(screen.getByTestId("map")).toHaveAttribute("data-selected", "other");
@@ -35,8 +35,8 @@ describe("Real routing journey", () => {
     await screen.findByText("7 mapped records");
     expect(fetchEvidence.mock.calls[0]![0]).toEqual(route);
     expect(screen.getByTestId("map")).toHaveAttribute("data-routes", JSON.stringify([route]));
-    expect(screen.getByRole("button", { name: /View route details/ })).toBeEnabled();
-    fireEvent.click(screen.getByRole("button", { name: /View route details/ }));
+    expect(screen.getByRole("button", { name: /View route overview/ })).toBeEnabled();
+    fireEvent.click(screen.getByRole("button", { name: /View route overview/ }));
     expect(screen.getByText("7 mapped records")).toBeInTheDocument();
     expect(fetchEvidence).toHaveBeenCalledOnce();
   });
@@ -44,7 +44,7 @@ describe("Real routing journey", () => {
     getRoutes.mockResolvedValue([route]); start();
     await screen.findByText("Evidence unavailable");
     expect(screen.getByTestId("map")).toHaveAttribute("data-routes", JSON.stringify([route]));
-    expect(screen.getByRole("button", { name: /View route details/ })).toBeEnabled();
+    expect(screen.getByRole("button", { name: /View route overview/ })).toBeEnabled();
   });
   it("does not analyze a late routing response after editing the journey", async () => {
     let finish!: (routes: typeof route[]) => void;
@@ -61,11 +61,11 @@ describe("Real routing journey", () => {
     expect(screen.getByTestId("map")).toHaveAttribute("data-routes", JSON.stringify([route]));
     expect(screen.getByTestId("map")).toHaveAttribute("data-selected", route.id);
     expect(screen.queryByText(/mock safety/i)).not.toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: /View route details/ }));
+    fireEvent.click(screen.getByRole("button", { name: /View route overview/ }));
     expect(screen.getByText("1.4 km")).toBeInTheDocument();
     expect(screen.getByTestId("map")).toHaveAttribute("data-routes", JSON.stringify([route]));
-    fireEvent.click(screen.getByRole("button", { name: /View full safety report/ }));
-    expect(screen.getByRole("heading", { name: "Safety analysis not available yet" })).toBeInTheDocument();
+    fireEvent.click(screen.getByRole("button", { name: /View geographic evidence/ }));
+    expect(screen.getByRole("heading", { name: "Geographic evidence" })).toBeInTheDocument();
     expect(screen.queryByText("94")).not.toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: /Go back/ }));
     fireEvent.click(screen.getByRole("button", { name: /Go back/ }));
@@ -83,14 +83,14 @@ describe("Real routing journey", () => {
   it("does not request routes on Welcome or while typing", () => {
     render(<ShePathApp />);
     expect(getRoutes).not.toHaveBeenCalled();
-    fireEvent.click(screen.getByRole("button", { name: /Plan a safer route/ }));
+    fireEvent.click(screen.getByRole("button", { name: /Compare walking routes/ }));
     fireEvent.change(screen.getByRole("textbox", { name: /Starting from/ }), { target: { value: "New origin" } });
     expect(getRoutes).not.toHaveBeenCalled();
   });
   it("shows loading with no fake routes", () => {
     getRoutes.mockImplementation(() => new Promise(() => {})); start();
     expect(screen.getByRole("status")).toHaveTextContent("Finding your routes");
-    expect(screen.getByRole("button", { name: /View route details/ })).toBeDisabled();
+    expect(screen.getByRole("button", { name: /View route overview/ })).toBeDisabled();
     expect(screen.getByTestId("map")).toHaveAttribute("data-routes", "[]");
   });
   it("shows backend errors with no fake routes", async () => {

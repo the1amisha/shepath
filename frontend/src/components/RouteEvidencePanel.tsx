@@ -1,12 +1,13 @@
 import { useId } from "react";
 import type { EvidenceState } from "@/hooks/useRouteEvidence";
 
-export function RouteEvidencePanel({ state, name }: { state: EvidenceState | undefined; name: string }) {
+export function RouteEvidencePanel({ state, name, headingLevel = 2 }: { state: EvidenceState | undefined; name: string; headingLevel?: 2 | 3 }) {
   const heading = useId();
+  const Heading = headingLevel === 2 ? "h2" : "h3";
   const evidence = state?.status === "complete" ? state.evidence : null;
   const context = evidence?.status === "available" ? evidence.route_context : null;
   return <section aria-labelledby={heading} className="mt-2 rounded-2xl border border-border bg-background p-4 text-xs leading-5">
-    <h4 id={heading} className="font-bold text-foreground">Mapped geographic evidence · {name}</h4>
+    <Heading id={heading} className="font-bold text-foreground">Mapped geographic evidence · {name}</Heading>
     <p role="status" aria-live="polite" className="mt-2 text-muted-foreground">
       {!state || state.status === "queued" ? "Waiting for analysis…" : state.status === "loading" ? "Analyzing mapped context… The route remains usable." :
         state.status === "error" ? state.message : evidence?.status === "coverage_unavailable" ?

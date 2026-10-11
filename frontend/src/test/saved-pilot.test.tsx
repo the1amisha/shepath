@@ -168,12 +168,12 @@ describe("Saved pilot view", () => {
     respond();
     render(<ShePathApp />);
     expect(fetch).not.toHaveBeenCalled();
-    fireEvent.click(screen.getByRole("button", { name: /Plan a safer route/ }));
+    fireEvent.click(screen.getByRole("button", { name: /Compare walking routes/ }));
     fireEvent.change(screen.getByLabelText(/Going to/), {
       target: { value: fixture.journey.destination },
     });
-    fireEvent.click(screen.getByRole("button", { name: /Choose safety preferences/ }));
-    fireEvent.click(screen.getByRole("button", { name: /Find my routes/ }));
+    fireEvent.click(screen.getByRole("button", { name: /Continue to preference preview/ }));
+    fireEvent.click(screen.getByRole("button", { name: /Continue to routes/ }));
     await screen.findByRole("button", { name: /Fastest/ });
     fireEvent.click(screen.getByRole("button", { name: "Saved Ranchi Pilot Comparison" }));
     await screen.findByRole("region", { name: "Three saved routes" });
@@ -183,7 +183,7 @@ describe("Saved pilot view", () => {
     fireEvent.click(screen.getByRole("button", { name: "Back to journey" }));
     expect(screen.getByTestId("map")).toHaveAttribute("data-routes", JSON.stringify([live]));
     expect(screen.queryByText(/Mapped proximity observations/)).not.toBeInTheDocument();
-    expect(screen.getByText("Safety analysis not available yet.")).toBeInTheDocument();
+    expect(screen.getByText("Walking-route comparison.")).toBeInTheDocument();
     expect(getRoutes).toHaveBeenCalledOnce();
   });
 });

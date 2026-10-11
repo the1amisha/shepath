@@ -79,7 +79,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
       { title: "SHEPATH" },
-      { name: "description", content: "Safety-aware navigation, designed around you." },
+      { name: "description", content: "Compare walking routes and explore historical mapped geographic evidence in the bounded Ranchi pilot. No personal-safety assessment." },
       { name: "author", content: "She Builds" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
