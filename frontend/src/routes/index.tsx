@@ -79,23 +79,31 @@ function Brand() {
 export function ShePathApp() {
   const [showSavedPilot, setShowSavedPilot] = useState(false);
   const [screen, setScreen] = useState<Screen>("welcome");
-  const { savedTrigger, openSaved } = useJourneyFocus(screen, showSavedPilot, () => setShowSavedPilot(true));
+  const { savedTrigger, openSaved } = useJourneyFocus(screen, showSavedPilot, () => {
+    interruptRouteRequest();
+    setShowSavedPilot(true);
+  });
   const [selected, setSelected] = useState<RouteKey>("");
   const [preferences, setPreferences] = useState<string[]>([]);
   const [from, setFrom] = useState("Albert Ekka Chowk, Ranchi");
   const [to, setTo] = useState("Ranchi Railway Station, Ranchi");
   const [routes, setRoutes] = useState<RouteData[]>([]);
+  const [interrupted, setInterrupted] = useState(false);
   const [loading, setLoading] = useState(false);
   const [searchSubmitted, setSearchSubmitted] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const inFlight = useRef(false);
   const requestGeneration = useRef(0);
+  function interruptRouteRequest() {
+    requestGeneration.current++;
+    if (inFlight.current) setInterrupted(true);
+    inFlight.current = false;
+    setLoading(false);
+  }
   const liveJourneyVisible = !showSavedPilot && ["results", "details", "report"].includes(screen);
   useEffect(() => {
     if (!liveJourneyVisible) {
-      requestGeneration.current++;
-      inFlight.current = false;
-      setLoading(false);
+      interruptRouteRequest();
     }
   }, [from, to, liveJourneyVisible]);
   useEffect(() => () => { requestGeneration.current++; }, []);
@@ -108,11 +116,11 @@ export function ShePathApp() {
     if (inFlight.current) return;
     inFlight.current = true;
     const generation = ++requestGeneration.current;
-    setLoading(true); setError(null); setRoutes([]); setSelected(""); setScreen("results");
+    setLoading(true); setInterrupted(false); setError(null); setRoutes([]); setSelected(""); setScreen("results");
     try {
       const data = await routingService.getRoutes({origin: from.trim(), destination: to.trim(), travelMode: "walk"});
       if (generation !== requestGeneration.current) return;
-      if (!data.length) throw new Error("No routes were returned. Check the locations and try again.");
+      if (!data.length) return;
       setRoutes(data); setSelected(data[0]!.id);
     } catch (cause) { if (generation === requestGeneration.current) setError(cause instanceof Error ? cause.message : "Unable to fetch routes. Please try again."); }
     finally { if (generation === requestGeneration.current) { inFlight.current = false; setLoading(false); } }
@@ -239,6 +247,10 @@ export function ShePathApp() {
               <div className="flex items-start gap-3 rounded-2xl bg-secondary p-4"><Sparkles className="mt-0.5 size-5 shrink-0 text-primary"/><p className="text-sm leading-5 text-secondary-foreground">{isMock ? <><b>Mock route comparison.</b> Fixed Ranchi demo paths for any inputs; not verified walking routes. All times and distances are illustrative.</> : <><b>Walking-route comparison.</b> Backend travel estimates with historical mapped evidence where covered; no personal-safety assessment.</>}</p></div>
               <p className="mt-3 text-xs leading-5 text-muted-foreground">The first returned route is selected initially for viewing, not as a recommendation. Routes are not ranked by safety.</p>
               {!isMock && routes.length > 0 && <p className="mt-3 text-sm leading-6 text-muted-foreground">Evidence is processed one route at a time. {routes.filter(route => evidence[route.id]?.status === "complete" || evidence[route.id]?.status === "error").length} of {routes.length} routes have finished an attempt. Waiting or retries can take time; you can select a route and continue without evidence.</p>}
+              {!loading && !error && !routes.length && <section aria-label="Route recovery" className="mt-4 rounded-2xl border border-border p-4">
+                <p role="status">{interrupted ? "Route request interrupted when you left the journey. No routes from that request will be used." : "No routes are available for this journey. Check the locations or retry."}</p>
+                <div className="mt-3 flex flex-wrap gap-2"><Button onClick={findRoutes}>Retry route</Button><Button variant="outline" onClick={() => setScreen("search")}>Edit journey</Button></div>
+              </section>}
               <div className="mt-4 space-y-3">{loading && <p role="status">Finding your routes...</p>}{error && <div role="alert" className="rounded-2xl border border-border p-4"><p>{error}</p><Button className="mt-3" variant="outline" onClick={findRoutes}>Try again</Button></div>}
                 {routeOptions.map(route => <div key={route.id} data-route-card={route.id}><RouteOption route={route} selected={selected === route.id} onSelect={() => setSelected(route.id)} />{!isMock && <RouteEvidencePanel compact headingLevel={3} name={route.name} state={evidence[route.id]} />}</div>)}
               </div>
@@ -247,7 +259,6 @@ export function ShePathApp() {
             <ResultsMapPanel>
             <section aria-label="Route comparison map" className="results-map-frame relative min-w-0 overflow-hidden bg-muted lg:rounded-tr-3xl">
               <ShePathMap routes={routes} selected={selected} mock={isMock} />
-              {selectedRoute && <div className="absolute left-4 top-4 z-[500] flex items-center gap-2 rounded-full bg-card/95 px-4 py-2 text-xs font-bold text-foreground shadow-lg backdrop-blur"><span className={cn("size-2.5 rounded-full route-pulse", selectedRoute.color)} />{selectedRoute.name} · {selectedRoute.time}</div>}
 
             </section>
               {routeOptions.length > 0 && <div aria-label="Route colors" className="flex flex-wrap gap-3 border-t border-border bg-card px-4 py-3 text-sm font-semibold">{routeOptions.map(route => <span key={route.id} className="flex items-center gap-1.5"><span className={cn("size-2 rounded-full", route.color)} />{route.name}</span>)}</div>}

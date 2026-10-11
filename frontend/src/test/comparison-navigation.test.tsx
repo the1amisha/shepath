@@ -24,6 +24,62 @@ function start() {
   fireEvent.click(screen.getByRole("button", { name: "Continue to routes" }));
 }
 
+it("recovers an interrupted request after saved view and ignores its late response during retry", async () => {
+  let finishOld!: (value: typeof evidenceRoute[]) => void;
+  let finishRetry!: (value: typeof evidenceRoute[]) => void;
+  getRoutes.mockImplementationOnce(() => new Promise(resolve => { finishOld = resolve; }))
+    .mockImplementationOnce(() => new Promise(resolve => { finishRetry = resolve; }));
+  start();
+  expect(screen.getByText("Finding your routes...")).toBeVisible();
+  expect(screen.queryByRole("button", { name: "Retry route" })).not.toBeInTheDocument();
+  fireEvent.click(screen.getByRole("button", { name: "Saved Ranchi Pilot Comparison" }));
+  fireEvent.click(screen.getByRole("button", { name: "Back to journey" }));
+  expect(screen.getByRole("region", { name: "Route recovery" })).toHaveTextContent("Route request interrupted");
+  expect(screen.getByRole("button", { name: "Edit journey" })).toBeEnabled();
+  expect(screen.getByRole("button", { name: "View route overview" })).toBeDisabled();
+  expect(fetchEvidence).not.toHaveBeenCalled();
+  fireEvent.click(screen.getByRole("button", { name: "Retry route" }));
+  expect(getRoutes).toHaveBeenLastCalledWith({ origin: "Albert Ekka Chowk, Ranchi", destination: "Ranchi Railway Station, Ranchi", travelMode: "walk" });
+  await act(async () => finishOld([{ ...evidenceRoute, id: "stale-route" }]));
+  expect(screen.getByText("Finding your routes...")).toBeVisible();
+  expect(fetchEvidence).not.toHaveBeenCalled();
+  expect(screen.getByTestId("map")).toHaveAttribute("data-selected", "");
+  await act(async () => finishRetry([evidenceRoute]));
+  await screen.findByText("7 mapped records");
+  expect(fetchEvidence).toHaveBeenCalledOnce();
+  expect(fetchEvidence.mock.calls[0]![0]).toEqual(evidenceRoute);
+  expect(screen.getByTestId("map")).toHaveAttribute("data-selected", evidenceRoute.id);
+});
+
+it("keeps interruption visible after a late failure and edits then retries the current trimmed inputs", async () => {
+  let rejectOld!: (reason: Error) => void;
+  getRoutes.mockImplementationOnce(() => new Promise((_resolve, reject) => { rejectOld = reject; }));
+  start();
+  fireEvent.click(screen.getByRole("button", { name: "Saved Ranchi Pilot Comparison" }));
+  await act(async () => rejectOld(new Error("Obsolete request failed")));
+  fireEvent.click(screen.getByRole("button", { name: "Back to journey" }));
+  expect(screen.queryByText("Obsolete request failed")).not.toBeInTheDocument();
+  fireEvent.click(screen.getByRole("button", { name: "Edit journey" }));
+  fireEvent.change(screen.getByRole("textbox", { name: /Starting from/ }), { target: { value: "   New origin   " } });
+  fireEvent.change(screen.getByRole("textbox", { name: /Going to/ }), { target: { value: "   New destination   " } });
+  fireEvent.click(screen.getByRole("button", { name: "Continue to preference preview" }));
+  fireEvent.click(screen.getByRole("button", { name: "Continue to routes" }));
+  await screen.findByText("7 mapped records");
+  expect(getRoutes).toHaveBeenLastCalledWith({ origin: "New origin", destination: "New destination", travelMode: "walk" });
+});
+
+it("distinguishes ordinary empty results from interruption and routing errors", async () => {
+  getRoutes.mockResolvedValueOnce([]).mockRejectedValueOnce(new Error("Routing service unavailable"));
+  start();
+  expect(await screen.findByRole("region", { name: "Route recovery" })).toHaveTextContent("No routes are available for this journey");
+  expect(screen.queryByText(/Route request interrupted/)).not.toBeInTheDocument();
+  fireEvent.click(screen.getByRole("button", { name: "Retry route" }));
+  expect(await screen.findByRole("alert")).toHaveTextContent("Routing service unavailable");
+  expect(screen.queryByRole("region", { name: "Route recovery" })).not.toBeInTheDocument();
+  expect(fetchEvidence).not.toHaveBeenCalled();
+  expect(screen.getByTestId("map")).toHaveAttribute("data-selected", "");
+});
+
 it("places legend and selected actions after the map in the same column, outside its control area", async () => {
   start();
   await screen.findByText("7 mapped records");
