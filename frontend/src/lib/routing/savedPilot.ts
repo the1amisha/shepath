@@ -1,5 +1,7 @@
 import { z } from "zod";
 
+import { apiBaseUrl } from "./apiBaseUrl";
+
 // OpenAPI fixes the envelope; nested artifact dictionaries are extensible.
 // Only fields consumed by the UI are narrowed, while other evidence is retained.
 const dictionary = z.record(z.unknown());
@@ -172,8 +174,7 @@ export function parseSavedPilot(body: unknown): SavedPilot {
 // fingerprints but no geometry, and POST /route has no saved-snapshot identity.
 // IDs/place names cannot verify either snapshot or ordered geometry identity.
 export async function fetchSavedPilot(signal?: AbortSignal): Promise<SavedPilot> {
-  const baseUrl = import.meta.env["VITE_API_BASE_URL"]?.trim();
-  if (!baseUrl) throw new Error("Set VITE_API_BASE_URL to load the saved pilot comparison.");
+  const baseUrl = apiBaseUrl();
   let response: Response;
   try {
     response = await fetch(`${baseUrl.replace(/\/+$/, "")}/pilot/ranchi/comparison`, {

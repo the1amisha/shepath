@@ -1,8 +1,10 @@
 ﻿import { afterEach, describe, expect, it, vi } from "vitest";
 import { ApiRoutingService } from "./apiRoutingService";
+import { beforeEach } from "vitest";
 const route = { id: "heigit-foot-walking-route-1", distanceMeters: 1411.6, durationSeconds: 1016.4, coordinates: [[23.37, 85.32], [23.35, 85.33]], startPoint: [23.37, 85.32], endPoint: [23.35, 85.33] };
 const request = { origin: "Albert Ekka Chowk, Ranchi", destination: "Ranchi Railway Station, Ranchi", travelMode: "walk" as const };
-afterEach(() => vi.unstubAllGlobals());
+beforeEach(() => vi.stubEnv("VITE_API_BASE_URL", "http://127.0.0.1:8011"));
+afterEach(() => { vi.unstubAllGlobals(); vi.unstubAllEnvs(); });
 describe("ApiRoutingService", () => {
   it.each(["cycle", "drive"] as const)("preserves %s routing without calling evidence", async travelMode => {
     const fetch = vi.fn().mockResolvedValue(new Response(JSON.stringify({ routes: [route] })));

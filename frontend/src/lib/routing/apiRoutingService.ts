@@ -13,12 +13,14 @@ const responseSchema = z.object({ routes: z.array(z.object({
 })).min(1) });
 
 export class ApiRoutingService implements RoutingService {
-  constructor(private readonly baseUrl = apiBaseUrl()) {}
+  constructor(private readonly baseUrl?: string) {}
 
   async getRoutes(request: RouteRequest): Promise<RouteData[]> {
+    // Resolve at request time so configuration errors use the journey's error UI.
+    const baseUrl = this.baseUrl ?? apiBaseUrl();
     let response: Response;
     try {
-      response = await fetch(`${this.baseUrl.replace(/\/+$/, "")}/route`, {
+      response = await fetch(`${baseUrl.replace(/\/+$/, "")}/route`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(request),

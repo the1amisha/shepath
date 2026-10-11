@@ -47,6 +47,7 @@ function delay(ms: number, signal: AbortSignal) {
 }
 
 async function requestEvidence(route: RouteData, signal: AbortSignal): Promise<RouteEvidence> {
+  const baseUrl = apiBaseUrl();
   if (route.coordinates.length < 2) throw new EvidenceError("invalid", "This route has insufficient geometry for evidence analysis.");
   const controller = new AbortController();
   const cancel = () => controller.abort(signal.reason);
@@ -54,7 +55,7 @@ async function requestEvidence(route: RouteData, signal: AbortSignal): Promise<R
   const timer = setTimeout(() => controller.abort(new Error("Evidence deadline")), 75000);
   try {
     aborted(signal);
-    const response = await fetch(`${apiBaseUrl()}/pilot/ranchi/route-evidence`, {
+    const response = await fetch(`${baseUrl}/pilot/ranchi/route-evidence`, {
       method: "POST", headers: { "Content-Type": "application/json" }, signal: controller.signal,
       body: JSON.stringify({ route_id: route.id, coordinates: route.coordinates,
         distance_metres: route.distanceMeters, duration_seconds: route.durationSeconds }),

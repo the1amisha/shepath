@@ -1,6 +1,6 @@
 # ShePath
 
-Implement exactly the screenshot and nothing else
+Five-step walking-route comparison prototype with historical mapped geographic evidence. No personal-safety assessment.
 
 This project was built with [Lovable](https://lovable.dev).
 
@@ -14,14 +14,9 @@ Continue developing this project in the [Lovable editor](https://lovable.dev/pro
 
 ## Development
 
-Prefer working locally? You need Node.js and npm — [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating).
+Use the authoritative [Windows startup guide](../docs/WINDOWS_STARTUP.md) for installation and private backend configuration. In this directory, copy `.env.example` to `.env.local` only if it does not exist; keep `VITE_API_BASE_URL=http://127.0.0.1:8011` and `VITE_ROUTING_PROVIDER=api` for the local demo. No API URL fallback is used. Restart Vite after configuration changes.
 
-```sh
-git clone <this-repository-url>
-cd <repository-name>
-npm i
-npm run dev
-```
+With dependencies installed, run `npm.cmd run dev -- --host 127.0.0.1 --port 8080 --strictPort`. The guide documents the tested Node/npm versions, fresh-clone limitations and capability checks. Do not reinstall dependencies into a working environment merely to rehearse.
 
 ## Saved Ranchi pilot comparison
 

@@ -8,3 +8,6 @@ __pycache__/
 *.py[cod]
 .pytest_cache/
 .audit_work/
+!/backend/.env.example
+!/frontend/.env.example
+/backend/.venv-demo/
