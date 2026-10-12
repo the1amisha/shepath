@@ -209,8 +209,18 @@ class RealPilotTests(unittest.TestCase):
                     elapsed = time.perf_counter() - started
                     self.assertEqual(response.status_code, 200, response.text)
                     artifact = json.loads((api.DATA_ROOT / 'dynamic_validation' / (route['id'] + '.json')).read_text(encoding='utf-8'))
+                    # Historical bytes stay pinned. Only the edited verifier's code
+                    # provenance and the resulting evidence identity may differ.
+                    artifact['source_provenance']['code_sha256']['verify_post_extraction.py'] = (
+                        engine.verify.extract.sha(Path(engine.verify.__file__)))
+                    artifact['evidence_identity_sha256'] = engine.digest({
+                        'geometry_sha256': artifact['route']['geometry_sha256'],
+                        'analysis': artifact['analysis'], 'schema_version': artifact['schema_version'],
+                        'source': artifact['source_provenance']})
                     self.assertEqual(response.json(), artifact)
-                    observations.append({'route_id': route['id'], 'http_seconds': elapsed, 'stage1_exact_match': True})
+                    observations.append({'route_id': route['id'], 'http_seconds': elapsed,
+                                         'historical_parity_except_verifier_provenance': True,
+                                         'evidence_identity_sha256': response.json()['evidence_identity_sha256']})
                 self.assertEqual(load.call_count, 1)
                 outside = client.post(api.PATH, json={**PAYLOAD, 'coordinates': [[0, 0], [1, 1]]})
                 self.assertEqual(outside.status_code, 200)

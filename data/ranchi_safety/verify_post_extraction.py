@@ -3,7 +3,7 @@ from collections import Counter
 from datetime import datetime, timezone
 import json
 import math
-from pathlib import Path
+from pathlib import Path, PureWindowsPath
 
 import osmium
 from shapely.geometry import LineString, Point, box, shape
@@ -40,10 +40,20 @@ def unique_records(records):
     return result
 
 
+def artifact_parts(relative):
+    """Interpret historical separators without rewriting manifest/provenance bytes."""
+    require(isinstance(relative, str) and bool(relative), "Invalid artifact path")
+    path = PureWindowsPath(relative)  # Understand both slash styles on every host.
+    require(not path.drive and not path.root and bool(path.parts)
+            and all(part != ".." and ":" not in part and "\0" not in part for part in path.parts),
+            "Artifact path must be relative and cannot escape extraction run")
+    return path.parts
+
+
 def checked_artifacts(run, manifest):
     paths = []
     for relative, digest in manifest["artifacts"].items():
-        path = (run / relative).resolve()
+        path = run.joinpath(*artifact_parts(relative)).resolve()
         require(path.is_relative_to(run.resolve()), "Artifact path escapes extraction run")
         require(path.is_file() and extract.sha(path) == digest, f"Artifact missing or hash mismatch: {relative}")
         paths.append(path)
