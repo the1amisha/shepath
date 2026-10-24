@@ -13,7 +13,7 @@ afterEach(cleanup);
 beforeEach(() => { getRoutes.mockReset().mockResolvedValue([route]); fetchEvidence.mockReset().mockResolvedValue(evidenceFixture()); });
 function search() {
   render(<ShePathApp />);
-  fireEvent.click(screen.getByRole("button", { name: "Compare walking routes" }));
+  fireEvent.click(screen.getByRole("button", { name: "Plan my walk" }));
 }
 function preferences() {
   search();
@@ -22,8 +22,8 @@ function preferences() {
 
 it("uses responsible landing and page/social metadata without mock scores", async () => {
   render(<ShePathApp />);
-  expect(screen.getByText(/historical mapped geographic evidence within/)).toBeInTheDocument();
-  expect(screen.getByText("Illustrative route preview")).toBeInTheDocument();
+  expect(screen.getByText(/historical mapped context where covered/)).toBeInTheDocument();
+  expect(screen.getByRole("img", { name: "Illustration of a woman walking along a leafy path" })).toBeInTheDocument();
   expect(document.body.textContent).not.toMatch(/92|86%|best balance|safer route|safety score/i);
   for (const configuredRoute of [Route, RootRoute]) {
     const head = await configuredRoute.options.head?.({} as never);
@@ -129,3 +129,4 @@ it("preserves selected evidence through overview and report with heading first a
   expect(fetchEvidence).toHaveBeenCalledTimes(2);
   expect(fetchEvidence.mock.calls.map(call => call[0])).toEqual([route, other]);
 });
+

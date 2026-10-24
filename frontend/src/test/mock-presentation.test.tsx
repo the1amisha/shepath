@@ -15,7 +15,7 @@ it.each(["Continue to routes", "Skip preference preview"])("keeps the five-step 
   fetchEvidence.mockClear();
   render(<ShePathApp />); noScores();
   expect(screen.getByText(/Mock mode: fixed illustrative/)).toBeInTheDocument();
-  fireEvent.click(screen.getByRole("button", { name: "Compare walking routes" }));
+  fireEvent.click(screen.getByRole("button", { name: "Plan my walk" }));
   expect(screen.getByText("Step 1 of 5")).toBeInTheDocument();
   fireEvent.click(screen.getByRole("button", { name: "Continue to preference preview" }));
   expect(screen.getByText("Step 2 of 5")).toBeInTheDocument();
@@ -37,3 +37,4 @@ it.each(["Continue to routes", "Skip preference preview"])("keeps the five-step 
   expect(screen.getByRole("heading", { level: 2, name: "No evidence for illustrative routes" })).toBeInTheDocument();
   expect(fetchEvidence).not.toHaveBeenCalled();
 });
+

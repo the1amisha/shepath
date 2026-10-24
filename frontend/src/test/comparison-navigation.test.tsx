@@ -19,7 +19,7 @@ beforeEach(() => {
 afterEach(() => { cleanup(); vi.restoreAllMocks(); });
 function start() {
   render(<ShePathApp />);
-  fireEvent.click(screen.getByRole("button", { name: "Compare walking routes" }));
+  fireEvent.click(screen.getByRole("button", { name: "Plan my walk" }));
   fireEvent.click(screen.getByRole("button", { name: "Continue to preference preview" }));
   fireEvent.click(screen.getByRole("button", { name: "Continue to routes" }));
 }
@@ -157,7 +157,7 @@ it("focuses all five screens without history changes or stealing focus on eviden
   const push = vi.spyOn(window.history, "pushState");
   const replace = vi.spyOn(window.history, "replaceState");
   render(<ShePathApp />);
-  for (const label of ["Compare walking routes", "Continue to preference preview", "Continue to routes"]) {
+  for (const label of ["Plan my walk", "Continue to preference preview", "Continue to routes"]) {
     fireEvent.click(screen.getByRole("button", { name: label }));
     expect(screen.getByRole("heading", { level: 1 })).toHaveFocus();
   }
@@ -195,3 +195,4 @@ it("scrolls focus below the measured header with instant movement", () => {
   expect(heading).toHaveFocus();
   expect(window.scrollTo).toHaveBeenLastCalledWith({ top: 264, behavior: "instant" });
 });
+

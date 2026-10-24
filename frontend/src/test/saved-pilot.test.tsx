@@ -168,7 +168,7 @@ describe("Saved pilot view", () => {
     respond();
     render(<ShePathApp />);
     expect(fetch).not.toHaveBeenCalled();
-    fireEvent.click(screen.getByRole("button", { name: /Compare walking routes/ }));
+    fireEvent.click(screen.getByRole("button", { name: /Plan my walk/ }));
     fireEvent.change(screen.getByLabelText(/Going to/), {
       target: { value: fixture.journey.destination },
     });
@@ -187,3 +187,4 @@ describe("Saved pilot view", () => {
     expect(getRoutes).toHaveBeenCalledOnce();
   });
 });
+

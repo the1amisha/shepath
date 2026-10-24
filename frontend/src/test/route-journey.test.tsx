@@ -10,7 +10,7 @@ import { ShePathApp } from "@/routes/index";
 const route = { id: "heigit-foot-walking-route-1", distanceMeters: 1411.6, durationSeconds: 1016.4, coordinates: [[23.37, 85.32], [23.35, 85.33]], startPoint: [23.37, 85.32], endPoint: [23.35, 85.33] };
 function start() {
   render(<ShePathApp />);
-  fireEvent.click(screen.getByRole("button", { name: /Compare walking routes/ }));
+  fireEvent.click(screen.getByRole("button", { name: /Plan my walk/ }));
   fireEvent.click(screen.getByRole("button", { name: /Continue to preference preview/ }));
   fireEvent.click(screen.getByRole("button", { name: /Continue to routes/ }));
 }
@@ -83,7 +83,7 @@ describe("Real routing journey", () => {
   it("does not request routes on Welcome or while typing", () => {
     render(<ShePathApp />);
     expect(getRoutes).not.toHaveBeenCalled();
-    fireEvent.click(screen.getByRole("button", { name: /Compare walking routes/ }));
+    fireEvent.click(screen.getByRole("button", { name: /Plan my walk/ }));
     fireEvent.change(screen.getByRole("textbox", { name: /Starting from/ }), { target: { value: "New origin" } });
     expect(getRoutes).not.toHaveBeenCalled();
   });
@@ -99,3 +99,4 @@ describe("Real routing journey", () => {
     expect(screen.getByTestId("map")).toHaveAttribute("data-routes", "[]");
   });
 });
+
