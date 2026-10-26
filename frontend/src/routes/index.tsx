@@ -194,9 +194,9 @@ export function ShePathApp() {
           </div>
           <div className="welcome-illustration">
             <img
-              src="/images/ranchi-walk.svg"
-              width="315"
-              height="355"
+              src="/images/ranchi-walk-v2.webp"
+              width="1131"
+              height="1391"
               alt="Illustration of a woman walking along a leafy path"
             />
           </div>
@@ -661,7 +661,7 @@ export function ShePathApp() {
             </div>
             <div className="rounded-3xl bg-card p-6 app-shadow">
               <div className="overview-identity">
-                <img src="/images/ranchi-walk.svg" width="94" height="106" alt="" />
+                <img src="/images/ranchi-walk-v2.webp" width="94" height="106" alt="" />
                 <div>
                   <p className="text-xs font-bold uppercase text-muted-foreground">Walking route</p>
                   <p className="font-display text-2xl font-black">{selectedRoute.name}</p>
