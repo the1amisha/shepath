@@ -167,6 +167,10 @@
   background: var(--card);
   color: var(--foreground);
 }
+.journey-skip:not(:focus) {
+  clip-path: inset(50%);
+  pointer-events: none;
+}
 .journey-skip:focus {
   transform: none;
   outline: 2px solid var(--ring);
@@ -429,5 +433,31 @@
   }
   .welcome-copy h1 {
     font-size: 26px;
+  }
+}
+
+/* Evidence stays with the selected route instead of repeating in every card. */
+.evidence-panel {
+  padding: clamp(16px, 3vw, 28px);
+  background: white;
+  border-radius: 24px;
+}
+.evidence-metrics > div {
+  padding: 16px;
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  background: var(--secondary);
+}
+.evidence-metrics dd {
+  margin-top: 6px;
+  font-size: 1.15rem;
+  color: var(--foreground);
+}
+@media (max-width: 480px) {
+  .evidence-metrics {
+    grid-template-columns: 1fr;
+  }
+  .selected-evidence {
+    padding: 12px;
   }
 }

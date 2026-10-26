@@ -19,7 +19,7 @@ import { Button } from "@/components/ui/button";
 import { ResultsMapPanel } from "@/components/ResultsMapPanel";
 import { ShePathMap } from "@/components/ShePathMap";
 import { SavedRanchiPilot } from "@/components/SavedRanchiPilot";
-import { RouteEvidencePanel } from "@/components/RouteEvidencePanel";
+import { EvidenceStatus, RouteEvidencePanel } from "@/components/RouteEvidencePanel";
 import { useRouteEvidence } from "@/hooks/useRouteEvidence";
 import { useJourneyFocus, focusContent } from "@/hooks/useJourneyFocus";
 import { cn } from "@/lib/utils";
@@ -558,13 +558,13 @@ export function ShePathApp() {
                       selected={selected === route.id}
                       onSelect={() => setSelected(route.id)}
                     />
-                    {!isMock && (
-                      <RouteEvidencePanel
-                        compact
-                        headingLevel={3}
-                        name={route.name}
-                        state={evidence[route.id]}
-                      />
+                    {!isMock && route.id !== selected && (
+                      <p
+                        className="px-3 pt-2 text-xs leading-5 text-muted-foreground"
+                        role="status"
+                      >
+                        <EvidenceStatus name={route.name} state={evidence[route.id]} />
+                      </p>
                     )}
                   </div>
                 ))}
@@ -627,6 +627,15 @@ export function ShePathApp() {
                 </div>
               </section>
             </ResultsMapPanel>
+            {!isMock && selectedRoute && (
+              <div className="selected-evidence w-full lg:col-span-2">
+                <RouteEvidencePanel
+                  key={selectedRoute.id}
+                  name={selectedRoute.name}
+                  state={evidence[selectedRoute.id]}
+                />
+              </div>
+            )}
           </div>
         </div>
       )}
