@@ -1,11 +1,46 @@
 # SHEPATH
 
-Walking-route comparison with historical mapped geographic evidence for a bounded Ranchi pilot. No personal-safety assessment.
+SHEPATH helps users compare walking routes in Ranchi using journey estimates and historical OpenStreetMap evidence. It shows what is mapped nearby and where information is missing. It does not assess or guarantee personal safety.
 
-Start here: [Windows 11 startup and demo guide](docs/WINDOWS_STARTUP.md). It covers dependency installation, private configuration, ports 8011/8080, bounded preflight and manual acceptance. Fresh-clone installation is not yet verified.
+## Current features
 
-- Frontend: React/TanStack Start, Vite and Leaflet; five-step workflow.
-- Backend: FastAPI, live HeiGIT routing, separate saved comparison and local dynamic geographic evidence.
-- Data: preserve tracked pilot artifacts and provenance; no new extraction is needed for the demo.
+- A responsive five-step journey: search, preferences preview, route comparison, overview and evidence.
+- Live walking routes with distance, duration and an interactive map.
+- Route-specific mapped businesses, healthcare, police and pedestrian infrastructure within a 100 m buffer.
+- Lighting, sidewalk and opening-hours tag availability, with unknown data shown explicitly.
+- A separate saved Albert Ekka Chowk → Doranda pilot comparison.
+- Source provenance and geometry identity checks for geographic evidence.
 
-See [Phase 7C Stage 2A report](PHASE_7C_STAGE_2A_REPORT.md) for changes and validation limits. Earlier phase reports record historical results. Linux portability and production deployment are separate work.
+Preferences currently provide a preview; they do not rerank live routes. Mapped facilities and tags are historical records, not verified street conditions.
+
+## Run locally
+
+Follow the [Windows startup guide](docs/WINDOWS_STARTUP.md) for dependencies, private configuration and startup commands.
+
+| Component | Stack | Local address |
+| --- | --- | --- |
+| Frontend | React, TypeScript, TanStack Start, Vite, Tailwind CSS, Leaflet | http://127.0.0.1:8080 |
+| Backend | Python, FastAPI, HeiGIT routing | http://127.0.0.1:8011 |
+| Geographic evidence | Local OSM artifacts, Shapely and pyproj | Served by the backend |
+
+Keep API credentials in the local backend environment. The committed example files contain configuration templates only.
+
+## Repository layout
+
+- `frontend/` — interface, map components and frontend tests.
+- `backend/` — API, routing integration and backend tests.
+- `data/ranchi_safety/` — pinned pilot data, extraction scripts and provenance records.
+- `scripts/` — local capability checks.
+- `docs/` — setup, specifications and documentation index.
+
+## Development
+
+See the [frontend guide](frontend/README.md), [contribution guide](CONTRIBUTING.md) and [documentation index](docs/README.md).
+
+The UI has been reviewed on Windows with live routing and in responsive browser layouts. Fresh-clone installation, Linux startup, production deployment and a full accessibility review remain separate validation tasks. Historical validation reports document their own scope and limitations.
+
+## Data and limitations
+
+OpenStreetMap data is © OpenStreetMap contributors and subject to the ODbL; see [OpenStreetMap copyright](https://www.openstreetmap.org/copyright). Preserve the tracked data, source dates, hashes and attribution.
+
+Missing information means unknown. Record counts do not establish continuous footpaths, working lights, open businesses or personal safety. Segment-level evidence, preference reranking, departure-time analysis and community reports are planned work.

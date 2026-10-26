@@ -2,16 +2,6 @@
 
 Five-step walking-route comparison prototype with historical mapped geographic evidence. No personal-safety assessment.
 
-This project was built with [Lovable](https://lovable.dev).
-
-## Build with Lovable
-
-Continue developing this project in the [Lovable editor](https://lovable.dev/projects/5fa3b929-7af6-4a26-93ad-86edf149fb16).
-
-- **Ship faster**: describe what you want to build and Lovable handles the code.
-- **Stay in sync**: every change made in Lovable is committed straight to this repository.
-- **Full ownership**: this code is yours. Push to `main` on GitHub and your changes sync back into Lovable, ready for your next prompt.
-
 ## Development
 
 Use the authoritative [Windows startup guide](../docs/WINDOWS_STARTUP.md) for installation and private backend configuration. In this directory, copy `.env.example` to `.env.local` only if it does not exist; keep `VITE_API_BASE_URL=http://127.0.0.1:8011` and `VITE_ROUTING_PROVIDER=api` for the local demo. No API URL fallback is used. Restart Vite after configuration changes.

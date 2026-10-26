@@ -1,13 +1,8 @@
-<!-- LOVABLE:BEGIN -->
-> [!IMPORTANT]
-> This project is connected to [Lovable](https://lovable.dev). Avoid rewriting
-> published git history — force pushing, or rebasing/amending/squashing commits
-> that are already pushed — as it rewrites history on Lovable's side and the
-> user will likely lose their project history.
->
-> Commits you push to the connected branch sync back to Lovable and show up in
-> the editor, so keep the branch in a working state.
-<!-- LOVABLE:END -->
+# Frontend contribution guidance
 
-- Keep SHEPATH frontend-only with local mock data because this prototype intentionally excludes backend architecture.
-- Load Leaflet inside the map component effect because browser-only map code must stay outside SSR evaluation.
+- Preserve published Git history. Use new commits rather than force-pushing, rebasing or squashing already published commits.
+- Keep the frontend compatible with the FastAPI backend and preserve the explicit live/mock distinction.
+- Load Leaflet inside the map component effect so browser-only map code stays outside SSR evaluation.
+- Preserve route identity, evidence provenance, unknown-data labels and failure handling.
+- Use task-based branch names such as `feat/segment-evidence`, `fix/map-layout` or `chore/repository-cleanup`.
+- See [CONTRIBUTING.md](../CONTRIBUTING.md) for validation and data-handling rules.
