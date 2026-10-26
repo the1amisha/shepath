@@ -24,7 +24,7 @@ Reviewed documents:
 
 - [Phase 7C Stage 1 startup audit](PHASE_7C_STAGE_1_STARTUP_AUDIT.md)
 - [Phase 7C Stage 2A report](PHASE_7C_STAGE_2A_REPORT.md)
-- [Windows startup guide](docs/WINDOWS_STARTUP.md)
+- [Windows startup guide](../WINDOWS_STARTUP.md)
 
 No independent inspection of the isolated server process environment, resolved dependency inventory or package import paths was performed. Its use as a separate Python 3.11.9 environment is recorded from the user's account, rather than certified by a new process inspection.
 
