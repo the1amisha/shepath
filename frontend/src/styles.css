@@ -185,11 +185,10 @@
 .results-map-panel {
   align-self: start;
 }
-@media (min-width: 1024px) and (min-height: 501px) {
-  .results-map-panel[data-sticky-fits="true"] {
-    position: sticky;
-    top: var(--results-panel-top);
-  }
+/* The evidence spans a second grid row. Keep the map in normal flow so it
+   cannot remain pinned over that row while the page scrolls. */
+.results-map-panel {
+  position: static;
 }
 
 /* Leave room for content on short/zoomed viewports and with an on-screen keyboard. */
