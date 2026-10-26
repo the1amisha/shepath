@@ -18,7 +18,7 @@ The demonstrated capability is **walking-route comparison with historical mapped
 
 | Evidence class | Source | What it establishes |
 |---|---|---|
-| Prior automated results | [Phase 5D report](PHASE_5D_FINAL_VALIDATION_REPORT.md), [Phase 6 Stage 4B report](frontend/PHASE_6_STAGE_4B_REPORT.md), [Phase 7A audit](PHASE_7A_READINESS_AUDIT.md) | Recorded test/static/build results and their stated limits. These suites were **not rerun** while preparing this report. |
+| Prior automated results | [Phase 5D report](PHASE_5D_FINAL_VALIDATION_REPORT.md), [Phase 6 Stage 4B report](PHASE_6_STAGE_4B_REPORT.md), [Phase 7A audit](PHASE_7A_READINESS_AUDIT.md) | Recorded test/static/build results and their stated limits. These suites were **not rerun** while preparing this report. |
 | Manual backend verification | User-supplied October 11, 2026 results reproduced in section 4 | Successful checks against the stated local backend, including live routing and Route 1 dynamic evidence. No new HTTP/provider requests were issued for this report. |
 | Manual desktop observations | User-supplied complete walkthrough reproduced in section 5 | Successful demonstrated desktop flow, Route 2 selection and preservation, evidence values and restart. These observations were not independently replayed by the report author. |
 | Current repository inspection | Source files, prior reports and existing `dynamic_validation` JSON artifacts | Implementation agrees with the described behavior and stored measurements. Reading artifacts is not a new runtime test or integrity-verifier execution. |

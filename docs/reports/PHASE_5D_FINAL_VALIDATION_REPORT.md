@@ -233,8 +233,8 @@ traffic and cross-user queuing require further work before scaling.
   also lag the explicitly authorized integrated architecture; they were not rewritten.
 
 Startup and manual steps remain in
-[backend API documentation](backend/docs/RANCHI_ROUTE_EVIDENCE_API.md) and
-[frontend integration documentation](frontend/DYNAMIC_ROUTE_EVIDENCE_INTEGRATION.md).
+[backend API documentation](../../backend/docs/RANCHI_ROUTE_EVIDENCE_API.md) and
+[frontend integration documentation](../../frontend/DYNAMIC_ROUTE_EVIDENCE_INTEGRATION.md).
 
 ## Readiness and next stage
 

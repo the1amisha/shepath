@@ -20,6 +20,6 @@
 
 ## Validation history
 
-The `PHASE_*.md` files in the repository root and frontend directory record checks at specific development stages. Data reports and logs in `data/ranchi_safety/` preserve extraction and integrity evidence. Their original locations are retained to keep existing references usable.
+The [validation report archive](reports/README.md) contains the phase audits and implementation reports. Data reports and logs remain in `data/ranchi_safety/` alongside the artifacts they validate.
 
 Historical test results apply to the recorded revision and environment, not automatically to every later change. The [Windows startup guide](WINDOWS_STARTUP.md) is the operational entry point.
