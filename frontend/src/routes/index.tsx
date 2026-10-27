@@ -575,7 +575,12 @@ export function ShePathApp() {
                 aria-label="Route comparison map"
                 className="results-map-frame relative min-w-0 overflow-hidden bg-muted lg:rounded-tr-3xl"
               >
-                <ShePathMap routes={routes} selected={selected} mock={isMock} />
+                <ShePathMap
+                  routes={routes}
+                  selected={selected}
+                  mock={isMock}
+                  evidenceState={evidence[selected]}
+                />
               </section>
               {routeOptions.length > 0 && (
                 <div
@@ -648,8 +653,13 @@ export function ShePathApp() {
         >
           <div className="mx-auto grid max-w-5xl gap-6 lg:grid-cols-[1fr_0.8fr]">
             <div className="overflow-hidden rounded-3xl border border-border bg-card app-shadow">
-              <div className="h-[360px]" data-testid="overview-map-frame">
-                <ShePathMap routes={routes} selected={selected} mock={isMock} />
+              <div className="min-h-[360px]" data-testid="overview-map-frame">
+                <ShePathMap
+                  routes={routes}
+                  selected={selected}
+                  mock={isMock}
+                  evidenceState={evidence[selected]}
+                />
               </div>
               <div className="p-6">
                 <div className="grid grid-cols-1 gap-4 text-center sm:grid-cols-3">

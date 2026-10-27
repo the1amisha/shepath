@@ -1,4 +1,5 @@
 import { useId } from "react";
+import { SegmentEvidencePanel } from "./SegmentEvidencePanel";
 import type { EvidenceState } from "@/hooks/useRouteEvidence";
 
 export function RouteEvidencePanel({
@@ -37,6 +38,7 @@ export function RouteEvidencePanel({
           conditions on the walked street remain unverified.
         </p>
       )}
+      {context?.segment_evidence && <SegmentEvidencePanel evidence={context.segment_evidence} />}
       {context && (
         <details open={compact ? undefined : true} className="mt-3">
           <summary className="cursor-pointer rounded-lg py-2 font-semibold focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
