@@ -172,7 +172,7 @@ describe("Saved pilot view", () => {
     fireEvent.change(screen.getByLabelText(/Going to/), {
       target: { value: fixture.journey.destination },
     });
-    fireEvent.click(screen.getByRole("button", { name: /Continue to preference preview/ }));
+    fireEvent.click(screen.getByRole("button", { name: /Continue to preferences/ }));
     fireEvent.click(screen.getByRole("button", { name: /Continue to routes/ }));
     await screen.findByRole("button", { name: /Fastest/ });
     fireEvent.click(screen.getByRole("button", { name: "Saved Ranchi Pilot Comparison" }));

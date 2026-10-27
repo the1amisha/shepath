@@ -11,16 +11,16 @@ import { ShePathApp } from "@/routes/index";
 afterEach(cleanup);
 const noScores = () => expect(document.body.textContent).not.toMatch(/\b(92|94|91|88|90|84|78)\b|86%|best balance|safest|step by step|full safety report|14 open businesses|9:30 PM|\/\s*100/i);
 
-it.each(["Continue to routes", "Skip preference preview"])("keeps the five-step mock journey honest via %s", async action => {
+it.each(["Continue to routes", "Skip preferences"])("keeps the five-step mock journey honest via %s", async action => {
   fetchEvidence.mockClear();
   render(<ShePathApp />); noScores();
   expect(screen.getByText(/Mock mode: fixed illustrative/)).toBeInTheDocument();
   fireEvent.click(screen.getByRole("button", { name: "Plan my walk" }));
   expect(screen.getByText("Step 1 of 5")).toBeInTheDocument();
-  fireEvent.click(screen.getByRole("button", { name: "Continue to preference preview" }));
+  fireEvent.click(screen.getByRole("button", { name: "Continue to preferences" }));
   expect(screen.getByText("Step 2 of 5")).toBeInTheDocument();
-  expect(screen.getByText(/They do not affect routing/)).toBeInTheDocument();
-  fireEvent.click(screen.getByRole("button", { name: /^Lighting/ }));
+  expect(screen.getByText(/They do not change the paths/)).toBeInTheDocument();
+  fireEvent.change(screen.getByRole("slider", { name: /^Lighting/ }), { target: { value: "50" } });
   fireEvent.click(screen.getByRole("button", { name: action }));
   const first = await screen.findByRole("button", { name: /Demo route 1 Selected/ });
   expect(first).toHaveTextContent("1.7 km");

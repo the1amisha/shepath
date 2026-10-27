@@ -4,7 +4,7 @@ SHEPATH helps users compare walking routes in Ranchi using journey estimates and
 
 ## Current features
 
-- A responsive five-step journey: search, preferences preview, route comparison, overview and evidence.
+- A responsive five-step journey: search, evidence preferences, route comparison, overview and evidence.
 - Live walking routes with distance, duration and an interactive map.
 - [Segment-level evidence](docs/SEGMENT_EVIDENCE.md): roughly 150 m stretches, nearby facility coverage, longest facility gap and missing-tag percentages.
 - Route-specific mapped businesses, healthcare, police and pedestrian infrastructure within a 100 m buffer.
@@ -12,7 +12,7 @@ SHEPATH helps users compare walking routes in Ranchi using journey estimates and
 - A separate saved Albert Ekka Chowk → Doranda pilot comparison.
 - Source provenance and geometry identity checks for geographic evidence.
 
-Preferences currently provide a preview; they do not rerank live routes. Mapped facilities and tags are historical records, not verified street conditions.
+[Evidence-match weights](docs/EVIDENCE_MATCH.md) reorder supported live routes using tag coverage and mapped business density, with contribution explanations and sensitivity examples. Street activity is unavailable and excluded. Mapped facilities and tags are historical records, not verified street conditions.
 
 ## Run locally
 
@@ -44,4 +44,5 @@ The UI has been reviewed on Windows with live routing and in responsive browser 
 
 OpenStreetMap data is © OpenStreetMap contributors and subject to the ODbL; see [OpenStreetMap copyright](https://www.openstreetmap.org/copyright). Preserve the tracked data, source dates, hashes and attribution.
 
-Missing information means unknown. Record counts do not establish continuous footpaths, working lights, open businesses or personal safety. Preference reranking, departure-time analysis and community reports are planned work.
+Missing information means unknown. Record counts do not establish continuous footpaths, working lights, open businesses or personal safety. Departure-time analysis, measured street activity and community reports are planned work.
+
