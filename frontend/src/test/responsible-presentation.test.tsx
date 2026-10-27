@@ -160,7 +160,7 @@ it("preserves selected evidence through overview and report with heading first a
   fireEvent.click(screen.getByRole("button", { name: /Route 2 Not selected/ }));
   fireEvent.click(screen.getByRole("button", { name: "View route overview" }));
   expect(screen.getByText("Step 4 of 5")).toBeInTheDocument();
-  expect(screen.getByTestId("overview-map-frame")).toHaveClass("h-[360px]");
+  expect(screen.getByTestId("overview-map-frame")).toHaveClass("min-h-[360px]");
   expect(screen.getByTestId("map")).toHaveAttribute("data-routes", JSON.stringify([route, other]));
   expect(screen.getByText("9 mapped records")).toBeInTheDocument();
   expect(screen.queryByText("7 mapped records")).not.toBeInTheDocument();

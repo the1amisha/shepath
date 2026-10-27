@@ -17,6 +17,7 @@ from shapely.geometry import LineString, Polygon, box, shape
 from shapely.ops import transform, unary_union
 
 import route_feature_metrics as metrics
+import segment_evidence
 import verify_post_extraction as verify
 
 ROOT = Path(__file__).resolve().parent
@@ -99,7 +100,7 @@ class PilotDataset:
         self._metric_boundary = transform(verify.coverage.TO_METRES.transform, Polygon(ring))
         self._provenance['dataset_content_sha256'] = digest({'bbox': bbox, 'features': self._features, 'pairs': pairs})
         self._provenance['code_sha256'] = {p.name: verify.extract.sha(p) for p in
-            (Path(__file__), Path(metrics.__file__), Path(verify.__file__),
+            (Path(__file__), Path(segment_evidence.__file__), Path(metrics.__file__), Path(verify.__file__),
              Path(verify.coverage.__file__), Path(verify.extract.__file__))}
         self._provenance['versions'] = {p: importlib.metadata.version(p) for p in ('shapely', 'pyproj', 'osmium')}
 
@@ -160,7 +161,8 @@ def analyze_route(route_id, coordinates, distance_metres=None, duration_seconds=
         raise ValueError('Analysis buffer must be finite and in (0, 1000] metres')
     data = default_dataset() if dataset is None else dataset
     geometry_hash = geometry_identity(coords)
-    analysis = {'buffer_metres': float(buffer_metres), 'metric_crs': 'EPSG:32645',
+    analysis = {'segment_evidence_version': 'SHEPATH.segment_evidence.v1',
+                'segment_target_metres': 150, 'buffer_metres': float(buffer_metres), 'metric_crs': 'EPSG:32645',
                 'route_densification_max_metres': 25, 'buffer_quadrant_segments': 64,
                 'coverage_boundary_guard_metres': 0.01,
                 'coverage_buffer_radius_metres': buffer_metres / math.cos(math.pi / 256) + 0.01,
@@ -200,6 +202,8 @@ def analyze_route(route_id, coordinates, distance_metres=None, duration_seconds=
     context = deepcopy(metrics.engineer_metric_route(line, data._projected, data._pairs, buffer_metres))
     context['route_length_geodesic_metres'] = verify.coverage.clipped_lengths(dense, data._boundary)[0]
     selected = {row['osm_id'] for row in context['nearby_evidence']}
+    context['segment_evidence'] = segment_evidence.summarize_segments(
+        line, [(f, g) for f, g in data._projected if f['id'] in selected], buffer_metres)
     context['source_features'] = deepcopy([f for f, g in data._projected if f['id'] in selected])
     context['duplicate_pairs'] = deepcopy([p for p in data._pairs if p['first'] in selected or p['second'] in selected])
     context['opening_hours']['all_selected_recorded_tags'] = [

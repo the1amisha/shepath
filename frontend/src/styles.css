@@ -176,11 +176,10 @@
   outline: 2px solid var(--ring);
 }
 
-/* The 360px floor matches ShePathMap's existing minimum. Larger maps scale with
-   the viewport; controls and actions occupy separate rows, never an overlay. */
+/* Let legends and status messages expand the frame without squeezing the map.
+   Controls and actions occupy separate rows, never an overlay. */
 .results-map-frame {
-  height: max(360px, 50vh);
-  height: max(360px, 50dvh);
+  min-height: 360px;
 }
 .results-map-panel {
   align-self: start;
@@ -319,7 +318,7 @@
 }
 .results-map-frame {
   border-radius: 32px 32px 0 0;
-  height: max(400px, 55dvh);
+  min-height: 400px;
 }
 .results-actions {
   border-radius: 0 0 32px 32px;
