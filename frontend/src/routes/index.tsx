@@ -17,6 +17,8 @@ import { SavedRanchiPilot } from "@/components/SavedRanchiPilot";
 import { EvidenceStatus, RouteEvidencePanel } from "@/components/RouteEvidencePanel";
 import { useRouteEvidence } from "@/hooks/useRouteEvidence";
 import { useJourneyFocus, focusContent } from "@/hooks/useJourneyFocus";
+import { DepartureControl, DepartureTimePanel } from "@/components/DepartureTimePanel";
+import { istInputValue } from "@/lib/routing/departureTime";
 import { EvidencePreferences } from "@/components/EvidencePreferences";
 import {
   criteria,
@@ -107,6 +109,10 @@ export function ShePathApp() {
     setShowSavedPilot(true);
   });
   const [selected, setSelected] = useState<RouteKey>("");
+  const [departure, setDeparture] = useState("");
+  useEffect(() => {
+    setDeparture(istInputValue(new Date()));
+  }, []);
   const [weights, setWeights] = useState<Weights>({ ...emptyWeights });
   const [from, setFrom] = useState("Albert Ekka Chowk, Ranchi");
   const [to, setTo] = useState("Ranchi Railway Station, Ranchi");
@@ -365,6 +371,11 @@ export function ShePathApp() {
                 </Button>
               ))}
             </div>
+            {!isMock && (
+              <div className="mt-6">
+                <DepartureControl value={departure} onChange={setDeparture} />
+              </div>
+            )}
             <Button type="submit" className="mt-8 w-full" size="lg">
               Continue to preferences <ArrowRight className="size-4" />
             </Button>
@@ -627,6 +638,13 @@ export function ShePathApp() {
             </ResultsMapPanel>
             {!isMock && selectedRoute && (
               <div className="selected-evidence w-full lg:col-span-2">
+                <DepartureTimePanel
+                  route={routes.find((r) => r.id === selected)}
+                  name={selectedRoute.name}
+                  state={evidence[selected]}
+                  departure={departure}
+                  onChange={setDeparture}
+                />
                 <RouteEvidencePanel
                   key={selectedRoute.id}
                   name={selectedRoute.name}
@@ -685,6 +703,13 @@ export function ShePathApp() {
           </div>
           {!isMock && (
             <div className="mx-auto mt-6 max-w-4xl">
+              <DepartureTimePanel
+                route={routes.find((r) => r.id === selected)}
+                name={selectedRoute.name}
+                state={evidence[selected]}
+                departure={departure}
+                onChange={setDeparture}
+              />
               <RouteEvidencePanel name={selectedRoute.name} state={evidence[selectedRoute.id]} />
             </div>
           )}

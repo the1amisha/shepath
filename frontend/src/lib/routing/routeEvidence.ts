@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { facilityHoursSchema } from "./facilityHours";
 import { segmentEvidenceSchema } from "./segmentEvidence";
 import { apiBaseUrl } from "./apiBaseUrl";
 import type { RouteData } from "./types";
@@ -36,6 +37,7 @@ const schema = z.object({
   route_context: z
     .object({
       segment_evidence: segmentEvidenceSchema.optional(),
+      facility_hours: facilityHoursSchema.optional(),
       categories: z.object({
         shops_and_businesses: category,
         healthcare_facilities: category,
@@ -162,6 +164,19 @@ async function requestEvidence(route: RouteData, signal: AbortSignal): Promise<R
         "Evidence does not match this route geometry or coverage state.",
       );
     }
+    const facilities = value.route_context?.facility_hours;
+    if (
+      facilities &&
+      value.route_context &&
+      (facilities.records.filter((r) => r.business).length !==
+        value.route_context.categories.shops_and_businesses.count ||
+        facilities.records.filter((r) => r.healthcare).length !==
+          value.route_context.categories.healthcare_facilities.count)
+    )
+      throw new EvidenceError(
+        "response",
+        "Facility hours do not match this route's mapped inventory.",
+      );
     const { coordinates: _coordinates, ...identity } = value.route;
     return { ...value, route: identity };
   } catch (cause) {

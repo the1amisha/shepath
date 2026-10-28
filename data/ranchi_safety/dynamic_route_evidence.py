@@ -18,6 +18,7 @@ from shapely.ops import transform, unary_union
 
 import route_feature_metrics as metrics
 import segment_evidence
+import facility_hours
 import verify_post_extraction as verify
 
 ROOT = Path(__file__).resolve().parent
@@ -100,7 +101,7 @@ class PilotDataset:
         self._metric_boundary = transform(verify.coverage.TO_METRES.transform, Polygon(ring))
         self._provenance['dataset_content_sha256'] = digest({'bbox': bbox, 'features': self._features, 'pairs': pairs})
         self._provenance['code_sha256'] = {p.name: verify.extract.sha(p) for p in
-            (Path(__file__), Path(segment_evidence.__file__), Path(metrics.__file__), Path(verify.__file__),
+            (Path(__file__), Path(facility_hours.__file__), Path(segment_evidence.__file__), Path(metrics.__file__), Path(verify.__file__),
              Path(verify.coverage.__file__), Path(verify.extract.__file__))}
         self._provenance['versions'] = {p: importlib.metadata.version(p) for p in ('shapely', 'pyproj', 'osmium')}
 
@@ -161,7 +162,8 @@ def analyze_route(route_id, coordinates, distance_metres=None, duration_seconds=
         raise ValueError('Analysis buffer must be finite and in (0, 1000] metres')
     data = default_dataset() if dataset is None else dataset
     geometry_hash = geometry_identity(coords)
-    analysis = {'segment_evidence_version': 'SHEPATH.segment_evidence.v1',
+    analysis = {'facility_hours_version': facility_hours.SCHEMA_VERSION,
+                'segment_evidence_version': 'SHEPATH.segment_evidence.v1',
                 'segment_target_metres': 150, 'buffer_metres': float(buffer_metres), 'metric_crs': 'EPSG:32645',
                 'route_densification_max_metres': 25, 'buffer_quadrant_segments': 64,
                 'coverage_boundary_guard_metres': 0.01,
@@ -205,6 +207,7 @@ def analyze_route(route_id, coordinates, distance_metres=None, duration_seconds=
     context['segment_evidence'] = segment_evidence.summarize_segments(
         line, [(f, g) for f, g in data._projected if f['id'] in selected], buffer_metres)
     context['source_features'] = deepcopy([f for f, g in data._projected if f['id'] in selected])
+    context['facility_hours'] = facility_hours.facility_hours(context['source_features'])
     context['duplicate_pairs'] = deepcopy([p for p in data._pairs if p['first'] in selected or p['second'] in selected])
     context['opening_hours']['all_selected_recorded_tags'] = [
         {'osm_id': f['id'], 'value': f['properties']['tags']['opening_hours']}
@@ -232,3 +235,4 @@ def analyze_route(route_id, coordinates, distance_metres=None, duration_seconds=
     if context['duplicate_pairs']:
         result['uncertainty_flags'].append('ambiguous_facility_duplicates_retained')
     return result
+

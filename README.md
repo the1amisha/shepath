@@ -11,6 +11,7 @@ SHEPATH helps users compare walking routes in Ranchi using journey estimates and
 - Lighting, sidewalk and opening-hours tag availability, with unknown data shown explicitly.
 - A separate saved Albert Ekka Chowk → Doranda pilot comparison.
 - Source provenance and geometry identity checks for geographic evidence.
+- [Departure-time awareness](docs/DEPARTURE_TIME.md): IST departure controls, supported opening-hours schedules with unknowns separate, and offline sunrise/sunset walking estimates.
 
 [Evidence-match weights](docs/EVIDENCE_MATCH.md) reorder supported live routes using tag coverage and mapped business density, with contribution explanations and sensitivity examples. Street activity is unavailable and excluded. Mapped facilities and tags are historical records, not verified street conditions.
 
@@ -44,5 +45,6 @@ The UI has been reviewed on Windows with live routing and in responsive browser 
 
 OpenStreetMap data is © OpenStreetMap contributors and subject to the ODbL; see [OpenStreetMap copyright](https://www.openstreetmap.org/copyright). Preserve the tracked data, source dates, hashes and attribution.
 
-Missing information means unknown. Record counts do not establish continuous footpaths, working lights, open businesses or personal safety. Departure-time analysis, measured street activity and community reports are planned work.
+Missing information means unknown. Record counts do not establish continuous footpaths, working lights, open businesses or personal safety. Measured street activity and community reports are planned work. Opening-hours evaluation supports a documented weekly subset; complex schedules remain unknown.
+
 
