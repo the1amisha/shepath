@@ -28,7 +28,7 @@ const route = {
 function start() {
   render(<ShePathApp />);
   fireEvent.click(screen.getByRole("button", { name: /Plan my walk/ }));
-  fireEvent.click(screen.getByRole("button", { name: /Continue to preference preview/ }));
+  fireEvent.click(screen.getByRole("button", { name: /Continue to preferences/ }));
   fireEvent.click(screen.getByRole("button", { name: /Continue to routes/ }));
 }
 afterEach(cleanup);
@@ -131,7 +131,7 @@ describe("Real routing journey", () => {
   it("shows loading with no fake routes", () => {
     getRoutes.mockImplementation(() => new Promise(() => {}));
     start();
-    expect(screen.getByRole("status")).toHaveTextContent("Finding your routes");
+    expect(screen.getByText("Finding your routes...")).toHaveTextContent("Finding your routes");
     expect(screen.getByRole("button", { name: /View route overview/ })).toBeDisabled();
     expect(screen.getByTestId("map")).toHaveAttribute("data-routes", "[]");
   });

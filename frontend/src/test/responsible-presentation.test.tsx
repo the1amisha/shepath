@@ -37,7 +37,7 @@ function search() {
 }
 function preferences() {
   search();
-  fireEvent.click(screen.getByRole("button", { name: "Continue to preference preview" }));
+  fireEvent.click(screen.getByRole("button", { name: "Continue to preferences" }));
 }
 
 it("uses responsible landing and page/social metadata without mock scores", async () => {
@@ -61,7 +61,7 @@ it("rejects whitespace with associated errors and submits trimmed locations thro
   const destination = screen.getByRole("textbox", { name: "Going to" });
   fireEvent.change(origin, { target: { value: "   " } });
   fireEvent.change(destination, { target: { value: "\t " } });
-  const submit = screen.getByRole("button", { name: "Continue to preference preview" });
+  const submit = screen.getByRole("button", { name: "Continue to preferences" });
   expect(submit).toHaveAttribute("type", "submit");
   expect(origin.closest("form")).toBe(destination.closest("form"));
   fireEvent.submit(origin.closest("form")!);
@@ -72,7 +72,7 @@ it("rejects whitespace with associated errors and submits trimmed locations thro
   fireEvent.change(origin, { target: { value: "  Origin  " } });
   fireEvent.change(destination, { target: { value: "  Destination  " } });
   fireEvent.submit(origin.closest("form")!);
-  fireEvent.click(screen.getByRole("button", { name: "Skip preference preview" }));
+  fireEvent.click(screen.getByRole("button", { name: "Skip preferences" }));
   await screen.findByRole("button", { name: /Route 1 Selected/ });
   expect(getRoutes).toHaveBeenCalledWith({
     origin: "Origin",
@@ -92,19 +92,14 @@ it("explains the buffer before generation and destination presets do not submit"
   expect(getRoutes).not.toHaveBeenCalled();
 });
 
-it("exposes optional preference toggles without adding preferences to routing", async () => {
+it("exposes evidence weights without changing the routing request", async () => {
   preferences();
-  expect(screen.getByText(/They do not affect routing/)).toBeInTheDocument();
-  const lighting = screen.getByRole("button", { name: /^Lighting/ });
-  expect(lighting).toHaveAttribute("aria-pressed", "false");
+  const lighting = screen.getByRole("slider", { name: /^Lighting/ });
+  expect(lighting).toHaveValue("0");
   lighting.focus();
   expect(lighting).toHaveFocus();
-  fireEvent.click(lighting);
-  expect(lighting).toHaveAttribute("aria-pressed", "true");
-  expect(within(lighting).getByText("Selected")).toBeInTheDocument();
-  fireEvent.click(lighting);
-  expect(lighting).toHaveAttribute("aria-pressed", "false");
-  fireEvent.click(lighting);
+  fireEvent.change(lighting, { target: { value: "50" } });
+  expect(lighting).toHaveValue("50");
   fireEvent.click(screen.getByRole("button", { name: "Continue to routes" }));
   await screen.findByText("7 mapped records");
   expect(getRoutes.mock.calls[0]![0]).toEqual({
@@ -122,7 +117,7 @@ it("keeps tied options unique, distance visible, and selection separate from fas
     { ...route, id: "third", durationSeconds: 30 },
   ]);
   preferences();
-  fireEvent.click(screen.getByRole("button", { name: "Skip preference preview" }));
+  fireEvent.click(screen.getByRole("button", { name: "Skip preferences" }));
   const first = await screen.findByRole("button", { name: /Route 1 Selected/ });
   const second = screen.getByRole("button", { name: /Route 2 Not selected/ });
   expect(first).toHaveAttribute("aria-pressed", "true");

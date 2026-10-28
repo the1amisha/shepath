@@ -4,16 +4,11 @@ import { routingService, routingProvider, type RouteData } from "@/lib/routing";
 import {
   ArrowLeft,
   ArrowRight,
-  BadgeCheck,
   ChevronRight,
   Clock3,
-  Footprints,
   MapPin,
   Navigation,
   Sparkles,
-  Store,
-  Sun,
-  Users,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ResultsMapPanel } from "@/components/ResultsMapPanel";
@@ -22,6 +17,16 @@ import { SavedRanchiPilot } from "@/components/SavedRanchiPilot";
 import { EvidenceStatus, RouteEvidencePanel } from "@/components/RouteEvidencePanel";
 import { useRouteEvidence } from "@/hooks/useRouteEvidence";
 import { useJourneyFocus, focusContent } from "@/hooks/useJourneyFocus";
+import { EvidencePreferences } from "@/components/EvidencePreferences";
+import {
+  criteria,
+  criterionLabels,
+  emptyWeights,
+  normalizedWeights,
+  evidenceMatch,
+  sensitivity,
+  type Weights,
+} from "@/lib/routing/evidenceMatch";
 import { cn } from "@/lib/utils";
 
 export const Route = createFileRoute("/")({
@@ -102,7 +107,7 @@ export function ShePathApp() {
     setShowSavedPilot(true);
   });
   const [selected, setSelected] = useState<RouteKey>("");
-  const [preferences, setPreferences] = useState<string[]>([]);
+  const [weights, setWeights] = useState<Weights>({ ...emptyWeights });
   const [from, setFrom] = useState("Albert Ekka Chowk, Ranchi");
   const [to, setTo] = useState("Ranchi Railway Station, Ranchi");
   const [routes, setRoutes] = useState<RouteData[]>([]);
@@ -137,6 +142,12 @@ export function ShePathApp() {
     JSON.stringify([from, to]),
     !isMock && liveJourneyVisible,
   );
+  const match = evidenceMatch(routes, evidence, weights, isMock);
+  const effectiveWeights = normalizedWeights(weights);
+  const orderedOptions = match.active
+    ? match.rows.map((row) => routeOptions.find((route) => route.id === row.id)!)
+    : routeOptions;
+  const sensitivityNote = sensitivity(match.rows, weights);
   const currentIndex = steps.indexOf(screen);
   const findRoutes = async () => {
     if (!from.trim() || !to.trim()) {
@@ -278,7 +289,7 @@ export function ShePathApp() {
               {
                 {
                   search: "Plan journey",
-                  preferences: "Preference preview",
+                  preferences: "Evidence preferences",
                   results: "Compare routes",
                   details: "Route overview",
                   report: "Geographic evidence",
@@ -355,7 +366,7 @@ export function ShePathApp() {
               ))}
             </div>
             <Button type="submit" className="mt-8 w-full" size="lg">
-              Continue to preference preview <ArrowRight className="size-4" />
+              Continue to preferences <ArrowRight className="size-4" />
             </Button>
           </form>
         </PageFrame>
@@ -363,85 +374,12 @@ export function ShePathApp() {
 
       {screen === "preferences" && (
         <PageFrame
-          eyebrow="Prototype preferences"
-          title="Preview your interests"
-          description="These optional choices are a prototype preview only. They do not affect routing, route order or geographic evidence in either live or mock mode."
+          eyebrow="Evidence preferences"
+          title="Choose what matters to you"
+          description="Set optional weights for the mapped evidence you want to compare. All weights start at zero; you can change them again beside the results."
         >
-          <div className="mx-auto grid max-w-3xl gap-3 sm:grid-cols-2">
-            {(
-              [
-                [
-                  "Lighting",
-                  Sun,
-                  "Interest in mapped lighting tags; actual lighting is unverified",
-                ],
-                [
-                  "Street activity",
-                  Users,
-                  "Interest in activity context; pedestrian activity is not observed",
-                ],
-                [
-                  "Nearby businesses",
-                  Store,
-                  "Interest in mapped businesses; current operation is unknown",
-                ],
-                [
-                  "Walking infrastructure",
-                  Footprints,
-                  "Interest in mapped sidewalk tags; continuity is unverified",
-                ],
-              ] as const
-            ).map(([label, Icon, copy]) => {
-              const active = preferences.includes(label);
-              return (
-                <button
-                  type="button"
-                  aria-pressed={active}
-                  key={label}
-                  onClick={() =>
-                    setPreferences(
-                      active ? preferences.filter((p) => p !== label) : [...preferences, label],
-                    )
-                  }
-                  className={cn(
-                    "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring grid min-h-36 grid-cols-[auto_1fr_auto] items-start gap-4 rounded-2xl border bg-card p-5 text-left transition-all",
-                    active
-                      ? "border-primary shadow-md ring-2 ring-primary/10"
-                      : "border-border hover:border-primary/40",
-                  )}
-                >
-                  <span
-                    className={cn(
-                      "grid size-11 place-items-center rounded-2xl",
-                      active
-                        ? "bg-primary text-primary-foreground"
-                        : "bg-secondary text-secondary-foreground",
-                    )}
-                  >
-                    <Icon className="size-5" />
-                  </span>
-                  <span className="min-w-0">
-                    <b className="font-display text-base font-black">{label}</b>
-                    <span className="mt-2 block text-sm leading-5 text-muted-foreground">
-                      {copy}
-                    </span>
-                    <span className="mt-2 block text-xs font-bold">
-                      {active ? "Selected" : "Not selected"}
-                    </span>
-                  </span>
-                  <span
-                    className={cn(
-                      "grid size-6 place-items-center rounded-full border",
-                      active
-                        ? "border-primary bg-primary text-primary-foreground"
-                        : "border-border",
-                    )}
-                  >
-                    <BadgeCheck className={cn("size-4", !active && "opacity-0")} />
-                  </span>
-                </button>
-              );
-            })}
+          <div className="mx-auto max-w-3xl">
+            <EvidencePreferences weights={weights} onChange={setWeights} />
           </div>
           <div className="mx-auto mt-8 max-w-3xl">
             <Button
@@ -455,10 +393,13 @@ export function ShePathApp() {
             <Button
               variant="outline"
               className="mt-3 w-full"
-              onClick={findRoutes}
+              onClick={() => {
+                setWeights({ ...emptyWeights });
+                void findRoutes();
+              }}
               disabled={loading}
             >
-              Skip preference preview
+              Skip preferences
             </Button>
           </div>
         </PageFrame>
@@ -541,6 +482,26 @@ export function ShePathApp() {
                   </div>
                 </section>
               )}
+              <div className="mt-4">
+                <details>
+                  <summary className="cursor-pointer font-bold mb-3">
+                    Adjust evidence preferences
+                  </summary>
+                  <EvidencePreferences weights={weights} onChange={setWeights} />
+                </details>
+                <p role="status" className="mt-3 text-sm">
+                  {match.message}
+                </p>
+                {sensitivityNote && (
+                  <p className="mt-3 text-xs leading-5">
+                    Sensitivity example:{" "}
+                    {routeOptions.find((r) => r.id === sensitivityNote.id)?.name} would rank first
+                    with {criterionLabels[sensitivityNote.criterion].toLowerCase()} at{" "}
+                    {sensitivityNote.percent}% of total weight, keeping the other weights in their
+                    current ratio.
+                  </p>
+                )}
+              </div>
               <div className="mt-4 space-y-3">
                 {loading && <p role="status">Finding your routes...</p>}
                 {error && (
@@ -551,13 +512,45 @@ export function ShePathApp() {
                     </Button>
                   </div>
                 )}
-                {routeOptions.map((route) => (
+                {orderedOptions.map((route) => (
                   <div key={route.id} data-route-card={route.id}>
                     <RouteOption
                       route={route}
                       selected={selected === route.id}
                       onSelect={() => setSelected(route.id)}
                     />
+                    {match.active &&
+                      (() => {
+                        const row = match.rows.find((r) => r.id === route.id)!;
+                        return (
+                          <details className="px-3 py-2 text-xs leading-5">
+                            <summary className="cursor-pointer font-bold">
+                              Evidence match {row.score.toFixed(1)} / 100 · Why this order?
+                            </summary>
+                            <p>
+                              This is a weighted evidence index, not a probability or safety score.
+                            </p>
+                            {criteria.map((key) => (
+                              <p key={key}>
+                                {criterionLabels[key]}: {row.values[key].toFixed(1)} ×{" "}
+                                {(effectiveWeights[key] * 100).toFixed(1)}% ={" "}
+                                {row.contributions[key].toFixed(1)} points.
+                              </p>
+                            ))}
+                            <p>
+                              Mapped businesses: {row.businessesPerKm.toFixed(2)} records/km.
+                              Unknown nearby lighting tags: {(100 - row.values.lighting).toFixed(1)}
+                              %; unknown sidewalk tags:{" "}
+                              {(100 - row.values.infrastructure).toFixed(1)}%.
+                            </p>
+                            <p>
+                              Nearby tags may belong to other streets. A recorded “no” counts as
+                              documented evidence. Zero mapped businesses does not establish
+                              physical absence.
+                            </p>
+                          </details>
+                        );
+                      })()}
                     {!isMock && route.id !== selected && (
                       <p
                         className="px-3 pt-2 text-xs leading-5 text-muted-foreground"
@@ -587,7 +580,7 @@ export function ShePathApp() {
                   aria-label="Route colors"
                   className="flex flex-wrap gap-3 border-t border-border bg-card px-4 py-3 text-sm font-semibold"
                 >
-                  {routeOptions.map((route) => (
+                  {orderedOptions.map((route) => (
                     <span key={route.id} className="flex items-center gap-1.5">
                       <span className={cn("size-2 rounded-full", route.color)} />
                       {route.name}

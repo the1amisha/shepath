@@ -82,7 +82,7 @@ it.each(["initialization", "tiles"])("retains route cards, evidence and navigati
   render(<ShePathApp />);
   fireEvent.click(screen.getByRole("button", { name: "Plan my walk" }));
   if (failure === "initialization") mocks.map.mockImplementation(() => { throw new Error("Initialization failed"); });
-  fireEvent.click(screen.getByRole("button", { name: "Continue to preference preview" }));
+  fireEvent.click(screen.getByRole("button", { name: "Continue to preferences" }));
   fireEvent.click(screen.getByRole("button", { name: "Continue to routes" }));
   await screen.findByText("7 mapped records");
   if (failure === "tiles") {
