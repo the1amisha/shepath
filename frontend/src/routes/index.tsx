@@ -1,3 +1,4 @@
+import { TripPlanPanel } from "@/components/TripPlanPanel";
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useId, useRef, useState, type ReactNode } from "react";
 import { routingService, routingProvider, type RouteData } from "@/lib/routing";
@@ -736,6 +737,18 @@ export function ShePathApp() {
                 route={routes.find((r) => r.id === selected)}
                 name={selectedRoute.name}
                 state={evidence[selectedRoute.id]}
+              />
+            </div>
+          )}
+          {!isMock && (
+            <div className="mx-auto max-w-4xl">
+              <TripPlanPanel
+                routes={routes}
+                selected={selected}
+                states={evidence}
+                from={from}
+                to={to}
+                departure={departure}
               />
             </div>
           )}
