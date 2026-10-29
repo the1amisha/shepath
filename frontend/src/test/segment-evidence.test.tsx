@@ -1,4 +1,4 @@
-import { cleanup, render, screen } from "@testing-library/react";
+import { cleanup, render, screen, within } from "@testing-library/react";
 import { afterEach, expect, it, vi } from "vitest";
 import { SegmentEvidencePanel } from "@/components/SegmentEvidencePanel";
 import { segmentEvidenceSchema } from "@/lib/routing/segmentEvidence";
@@ -16,7 +16,11 @@ it("explains the gap, missing tags and per-stretch counts without relying on col
   render(<SegmentEvidencePanel evidence={segmentFixture()} />);
   expect(screen.getByText("150 m")).toBeVisible();
   expect(screen.getByText("50.0%")).toBeVisible();
-  expect(screen.getByText(/Stretch 2: 150–300 m/)).toBeInTheDocument();
+  expect(
+    within(screen.getByText("Read evidence for each stretch").closest("details")!).getByText(
+      /Stretch 2: 150–300 m/,
+    ),
+  ).toBeInTheDocument();
   expect(screen.getByText(/not the conditions on the street/)).toBeVisible();
   expect(screen.getByText(/do not add these counts together/)).toBeInTheDocument();
 });

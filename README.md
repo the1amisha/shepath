@@ -10,6 +10,7 @@ SHEPATH helps users compare walking routes in Ranchi using journey estimates and
 - Route-specific mapped businesses, healthcare, police and pedestrian infrastructure within a 100 m buffer.
 - Lighting, sidewalk and opening-hours tag availability, with unknown data shown explicitly.
 - A separate saved Albert Ekka Chowk → Doranda pilot comparison.
+- [Fix the map](docs/FIX_THE_MAP.md): review stretches with unknown tag coverage and open their area in OpenStreetMap.
 - [Static trip sharing](docs/TRIP_SHARING.md): WhatsApp text and a printable plan that can be saved as PDF.
 - [Evidence verification](docs/EVIDENCE_VERIFICATION.md): inspect source and geometry identifiers and recheck displayed evidence against the service.
 - [Plain-language route summaries](docs/ROUTE_SUMMARY.md): travel-time differences, mapped facility counts and longest gaps, with a choice of comparison route.
