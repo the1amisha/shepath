@@ -10,6 +10,7 @@ export function TripPlanPanel({
   from,
   to,
   departure,
+  via = "",
 }: {
   routes: RouteData[];
   selected: string;
@@ -17,10 +18,11 @@ export function TripPlanPanel({
   from: string;
   to: string;
   departure: string;
+  via?: string;
 }) {
   const id = useId();
   const [error, setError] = useState("");
-  const text = tripPlanText(routes, selected, states, from, to, departure);
+  const text = tripPlanText(routes, selected, states, from, to, departure, via);
   if (!text) return null;
   return (
     <section
@@ -32,8 +34,8 @@ export function TripPlanPanel({
       </h2>
       <p className="mt-2 text-sm text-muted-foreground">
         A static summary of your selected route and departure time. Review the text before sharing;
-        it includes your start and destination. WhatsApp lets you choose the recipient and send it
-        yourself.
+        it includes your start, destination and any via location. WhatsApp lets you choose the
+        recipient and send it yourself.
       </p>
       <details className="mt-4">
         <summary className="cursor-pointer font-semibold">Preview shared text</summary>

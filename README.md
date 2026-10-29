@@ -6,6 +6,7 @@ SHEPATH helps users compare walking routes in Ranchi using journey estimates and
 
 - A responsive five-step journey: search, evidence preferences, route comparison, overview and evidence.
 - Live walking routes with distance, duration and an interactive map.
+- [Route through an optional via location](docs/VIA_LOCATION.md) in live walking requests.
 - [Segment-level evidence](docs/SEGMENT_EVIDENCE.md): roughly 150 m stretches, nearby facility coverage, longest facility gap and missing-tag percentages.
 - Route-specific mapped businesses, healthcare, police and pedestrian infrastructure within a 100 m buffer.
 - Lighting, sidewalk and opening-hours tag availability, with unknown data shown explicitly.
@@ -49,5 +50,3 @@ The UI has been reviewed on Windows with live routing and in responsive browser 
 OpenStreetMap data is © OpenStreetMap contributors and subject to the ODbL; see [OpenStreetMap copyright](https://www.openstreetmap.org/copyright). Preserve the tracked data, source dates, hashes and attribution.
 
 Missing information means unknown. Record counts do not establish continuous footpaths, working lights, open businesses or personal safety. Measured street activity and community reports are planned work. Opening-hours evaluation supports a documented weekly subset; complex schedules remain unknown.
-
-

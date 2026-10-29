@@ -61,7 +61,17 @@ Coordinate = tuple[float, float]
 class RouteRequest(BaseModel):
     origin: str
     destination: str
+    via: str | None = None
     travelMode: Literal["walk", "cycle", "drive"]
+
+    @field_validator("via")
+    @classmethod
+    def normalize_via(cls, value: str | None) -> str | None:
+        if value is None or not value.strip():
+            return None
+        if len(value.strip()) > 300:
+            raise ValueError("via must be at most 300 characters")
+        return value.strip()
 
     @field_validator("origin", "destination")
     @classmethod
@@ -408,17 +418,19 @@ async def fetch_directions(
     start_point: Coordinate,
     end_point: Coordinate,
     request_alternatives: bool = True,
+    via_point: Coordinate | None = None,
 ) -> dict[str, Any]:
     # Directions request asks HeiGIT/openrouteservice for GeoJSON route geometry.
     request_body = {
         "coordinates": [
             to_directions_coordinate(start_point),
+            *([to_directions_coordinate(via_point)] if via_point is not None else []),
             to_directions_coordinate(end_point),
         ],
         "instructions": False,
     }
 
-    if request_alternatives:
+    if request_alternatives and via_point is None:
         request_body["alternative_routes"] = {
             "target_count": 3,
             "share_factor": 0.6,
@@ -545,12 +557,21 @@ async def create_route(route_request: RouteRequest) -> RouteResponse:
             route_request.destination,
             straight_line_distance_meters,
         )
+        via_point = None
+        if route_request.via:
+            via_point = await geocode_location(client, api_key, route_request.via, "Via location")
+            for label, point in ((route_request.origin, start_point), (route_request.destination, end_point)):
+                reject_implausible_same_city_geocoding(
+                    label, route_request.via, calculate_straight_line_distance_meters(point, via_point)
+                )
         directions = await fetch_directions(
             client,
             api_key,
             profile,
             start_point,
             end_point,
+            **({"via_point": via_point, "request_alternatives": False} if via_point is not None else {}),
         )
 
     return map_directions_response(directions, profile, start_point, end_point)
+
