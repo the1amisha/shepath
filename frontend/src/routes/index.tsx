@@ -17,6 +17,7 @@ import { SavedRanchiPilot } from "@/components/SavedRanchiPilot";
 import { EvidenceStatus, RouteEvidencePanel } from "@/components/RouteEvidencePanel";
 import { useRouteEvidence } from "@/hooks/useRouteEvidence";
 import { useJourneyFocus, focusContent } from "@/hooks/useJourneyFocus";
+import { RouteSummaryPanel } from "@/components/RouteSummaryPanel";
 import { DepartureControl, DepartureTimePanel } from "@/components/DepartureTimePanel";
 import { istInputValue } from "@/lib/routing/departureTime";
 import { EvidencePreferences } from "@/components/EvidencePreferences";
@@ -109,6 +110,7 @@ export function ShePathApp() {
     setShowSavedPilot(true);
   });
   const [selected, setSelected] = useState<RouteKey>("");
+  const [summaryComparison, setSummaryComparison] = useState("");
   const [departure, setDeparture] = useState("");
   useEffect(() => {
     setDeparture(istInputValue(new Date()));
@@ -169,6 +171,7 @@ export function ShePathApp() {
     setError(null);
     setRoutes([]);
     setSelected("");
+    setSummaryComparison("");
     setScreen("results");
     try {
       const data = await routingService.getRoutes({
@@ -437,6 +440,14 @@ export function ShePathApp() {
               Edit
             </Button>
           </div>
+          <RouteSummaryPanel
+            routes={routes}
+            selected={selected}
+            states={evidence}
+            comparisonId={summaryComparison}
+            onComparisonChange={setSummaryComparison}
+            mock={isMock}
+          />
           <div className="route-layout grid items-start rounded-3xl bg-card app-shadow lg:grid-cols-[390px_minmax(0,1fr)]">
             <aside className="route-options-sheet min-w-0 p-5 lg:p-6">
               <div className="sheet-handle" aria-hidden="true" />
@@ -662,6 +673,16 @@ export function ShePathApp() {
           title={`${selectedRoute.name} overview`}
           description={`${isMock ? "Illustrative" : "Estimated"} ${selectedRoute.time} walk from ${from} to ${to}. ${isMock ? "Fixed demo geometry." : "No personal-safety assessment."}`}
         >
+          <div className="mx-auto max-w-5xl">
+            <RouteSummaryPanel
+              routes={routes}
+              selected={selected}
+              states={evidence}
+              comparisonId={summaryComparison}
+              onComparisonChange={setSummaryComparison}
+              mock={isMock}
+            />
+          </div>
           <div className="mx-auto grid max-w-5xl gap-6 lg:grid-cols-[1fr_0.8fr]">
             <div className="overflow-hidden rounded-3xl border border-border bg-card app-shadow">
               <div className="min-h-[360px]" data-testid="overview-map-frame">
