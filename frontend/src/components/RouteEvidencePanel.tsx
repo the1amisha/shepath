@@ -1,14 +1,18 @@
+import { EvidenceVerification } from "./EvidenceVerification";
+import type { RouteData } from "@/lib/routing/types";
 import { useId } from "react";
 import { SegmentEvidencePanel } from "./SegmentEvidencePanel";
 import type { EvidenceState } from "@/hooks/useRouteEvidence";
 
 export function RouteEvidencePanel({
   state,
+  route,
   name,
   headingLevel = 2,
   compact = false,
 }: {
   state: EvidenceState | undefined;
+  route?: RouteData | undefined;
   name: string;
   headingLevel?: 2 | 3;
   compact?: boolean;
@@ -99,6 +103,7 @@ export function RouteEvidencePanel({
           completeness is unknown.
         </p>
       )}
+      {evidence && <EvidenceVerification evidence={evidence} route={route} />}
     </section>
   );
 }

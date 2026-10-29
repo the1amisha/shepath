@@ -657,6 +657,7 @@ export function ShePathApp() {
                   onChange={setDeparture}
                 />
                 <RouteEvidencePanel
+                  route={routes.find((r) => r.id === selected)}
                   key={selectedRoute.id}
                   name={selectedRoute.name}
                   state={evidence[selectedRoute.id]}
@@ -731,7 +732,11 @@ export function ShePathApp() {
                 departure={departure}
                 onChange={setDeparture}
               />
-              <RouteEvidencePanel name={selectedRoute.name} state={evidence[selectedRoute.id]} />
+              <RouteEvidencePanel
+                route={routes.find((r) => r.id === selected)}
+                name={selectedRoute.name}
+                state={evidence[selectedRoute.id]}
+              />
             </div>
           )}
           <div className="mx-auto mt-7 max-w-4xl">
@@ -765,7 +770,11 @@ export function ShePathApp() {
                 </p>
               </div>
             ) : (
-              <RouteEvidencePanel name={selectedRoute.name} state={evidence[selectedRoute.id]} />
+              <RouteEvidencePanel
+                route={routes.find((r) => r.id === selected)}
+                name={selectedRoute.name}
+                state={evidence[selectedRoute.id]}
+              />
             )}
           </div>
           <div className="mx-auto mt-6 flex max-w-4xl justify-center">
