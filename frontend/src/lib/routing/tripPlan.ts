@@ -11,6 +11,7 @@ export function tripPlanText(
   from: string,
   to: string,
   departure: string,
+  via = "",
 ): string | null {
   const route = routes.find((r) => r.id === selected);
   const summary = summarizeRoute(routes, selected, states);
@@ -20,6 +21,11 @@ export function tripPlanText(
     "SHEPATH · Walking trip plan",
     `From: ${from}`,
     `To: ${to}`,
+    ...(via.trim()
+      ? [
+          `Via: ${via.trim()} (requested location; route uses a nearby routable point). Stop time is not included.`,
+        ]
+      : []),
     `Selected: ${summary.name}`,
     instant
       ? `Departure: ${departure.replace("T", " ")} IST (UTC+05:30)`

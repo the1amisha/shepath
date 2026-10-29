@@ -119,6 +119,7 @@ export function ShePathApp() {
   const [weights, setWeights] = useState<Weights>({ ...emptyWeights });
   const [from, setFrom] = useState("Albert Ekka Chowk, Ranchi");
   const [to, setTo] = useState("Ranchi Railway Station, Ranchi");
+  const [via, setVia] = useState("");
   const [routes, setRoutes] = useState<RouteData[]>([]);
   const [interrupted, setInterrupted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -137,7 +138,7 @@ export function ShePathApp() {
     if (!liveJourneyVisible) {
       interruptRouteRequest();
     }
-  }, [from, to, liveJourneyVisible]);
+  }, [from, to, via, liveJourneyVisible]);
   useEffect(
     () => () => {
       requestGeneration.current++;
@@ -148,7 +149,7 @@ export function ShePathApp() {
   const evidence = useRouteEvidence(
     routes,
     "walk",
-    JSON.stringify([from, to]),
+    JSON.stringify([from, to, via]),
     !isMock && liveJourneyVisible,
   );
   const match = evidenceMatch(routes, evidence, weights, isMock);
@@ -178,6 +179,7 @@ export function ShePathApp() {
       const data = await routingService.getRoutes({
         origin: from.trim(),
         destination: to.trim(),
+        ...(!isMock && via.trim() ? { via: via.trim() } : {}),
         travelMode: "walk",
       });
       if (generation !== requestGeneration.current) return;
@@ -361,6 +363,27 @@ export function ShePathApp() {
                 error={searchSubmitted && !to.trim() ? "Enter a destination." : undefined}
               />
             </div>
+            {!isMock && (
+              <div className="mt-5 space-y-2">
+                <LocationField
+                  label="Via (optional)"
+                  error={undefined}
+                  value={via}
+                  onChange={setVia}
+                  dot="bg-warning"
+                />
+                <p className="text-sm text-muted-foreground">
+                  Enter a specific place and city, such as Sadar Hospital, Ranchi. Leave blank to
+                  compare alternatives. A via location requests one walking route through a nearby
+                  routable point; check the path on the map. Stop time is not included.
+                </p>
+                {via && (
+                  <Button type="button" variant="outline" size="sm" onClick={() => setVia("")}>
+                    Remove via location
+                  </Button>
+                )}
+              </div>
+            )}
             <div className="mt-5 flex flex-wrap gap-2">
               {["Lalpur, Ranchi", "Morabadi, Ranchi", "Doranda, Ranchi"].map((place) => (
                 <Button
@@ -436,6 +459,11 @@ export function ShePathApp() {
               >
                 {from} <span className="text-muted-foreground">to</span> {to}
               </h1>
+              {!isMock && via.trim() && (
+                <p className="mt-2 break-words text-sm">
+                  Via: {via.trim()} · One route requested; stop time excluded.
+                </p>
+              )}
             </div>
             <Button variant="outline" size="sm" onClick={() => setScreen("search")}>
               Edit
@@ -673,7 +701,7 @@ export function ShePathApp() {
         <PageFrame
           eyebrow="Route overview"
           title={`${selectedRoute.name} overview`}
-          description={`${isMock ? "Illustrative" : "Estimated"} ${selectedRoute.time} walk from ${from} to ${to}. ${isMock ? "Fixed demo geometry." : "No personal-safety assessment."}`}
+          description={`${isMock ? "Illustrative" : "Estimated"} ${selectedRoute.time} walk from ${from} to ${to}${!isMock && via.trim() ? ` via ${via.trim()}` : ""}. ${isMock ? "Fixed demo geometry." : "No personal-safety assessment."}`}
         >
           <div className="mx-auto max-w-5xl">
             <RouteSummaryPanel
@@ -748,6 +776,7 @@ export function ShePathApp() {
                 states={evidence}
                 from={from}
                 to={to}
+                via={via.trim()}
                 departure={departure}
               />
             </div>
