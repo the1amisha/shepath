@@ -1,3 +1,4 @@
+import { FixMapPanel } from "./FixMapPanel";
 import type { SegmentEvidence } from "@/lib/routing/segmentEvidence";
 import { segmentColors, segmentLabels } from "@/lib/routing/segmentEvidence";
 
@@ -74,6 +75,7 @@ export function SegmentEvidencePanel({ evidence }: { evidence: SegmentEvidence }
           ))}
         </ol>
       </details>
+      <FixMapPanel evidence={evidence} />
     </section>
   );
 }
