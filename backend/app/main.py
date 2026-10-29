@@ -61,8 +61,23 @@ Coordinate = tuple[float, float]
 class RouteRequest(BaseModel):
     origin: str
     destination: str
+    originPoint: Coordinate | None = None
+    destinationPoint: Coordinate | None = None
     via: str | None = None
     travelMode: Literal["walk", "cycle", "drive"]
+
+    @field_validator("originPoint", "destinationPoint", mode="before")
+    @classmethod
+    def validate_point(cls, value: Any) -> Any:
+        if value is None:
+            return None
+        if not isinstance(value, (list, tuple)) or len(value) != 2:
+            raise ValueError("point must be [latitude, longitude]")
+        if any(isinstance(v, bool) or not isinstance(v, (int, float)) or not math.isfinite(v) for v in value):
+            raise ValueError("point coordinates must be finite numbers")
+        if not -90 <= value[0] <= 90 or not -180 <= value[1] <= 180:
+            raise ValueError("point coordinates are out of range")
+        return value
 
     @field_validator("via")
     @classmethod
@@ -536,13 +551,13 @@ async def create_route(route_request: RouteRequest) -> RouteResponse:
     profile = TRAVEL_MODE_PROFILES[route_request.travelMode]
 
     async with httpx.AsyncClient(timeout=REQUEST_TIMEOUT_SECONDS) as client:
-        start_point = await geocode_location(
+        start_point = route_request.originPoint or await geocode_location(
             client,
             api_key,
             route_request.origin,
             "Origin",
         )
-        end_point = await geocode_location(
+        end_point = route_request.destinationPoint or await geocode_location(
             client,
             api_key,
             route_request.destination,
@@ -553,14 +568,14 @@ async def create_route(route_request: RouteRequest) -> RouteResponse:
             end_point,
         )
         reject_implausible_same_city_geocoding(
-            route_request.origin,
-            route_request.destination,
+            "" if route_request.originPoint else route_request.origin,
+            "" if route_request.destinationPoint else route_request.destination,
             straight_line_distance_meters,
         )
         via_point = None
         if route_request.via:
             via_point = await geocode_location(client, api_key, route_request.via, "Via location")
-            for label, point in ((route_request.origin, start_point), (route_request.destination, end_point)):
+            for label, point in (("" if route_request.originPoint else route_request.origin, start_point), ("" if route_request.destinationPoint else route_request.destination, end_point)):
                 reject_implausible_same_city_geocoding(
                     label, route_request.via, calculate_straight_line_distance_meters(point, via_point)
                 )

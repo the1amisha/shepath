@@ -1,7 +1,8 @@
+import { LocationPicker } from "@/components/LocationPicker";
 import { TripPlanPanel } from "@/components/TripPlanPanel";
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useId, useRef, useState, type ReactNode } from "react";
-import { routingService, routingProvider, type RouteData } from "@/lib/routing";
+import { routingService, routingProvider, type RouteData, type LatLng } from "@/lib/routing";
 import {
   ArrowLeft,
   ArrowRight,
@@ -119,6 +120,8 @@ export function ShePathApp() {
   const [weights, setWeights] = useState<Weights>({ ...emptyWeights });
   const [from, setFrom] = useState("Albert Ekka Chowk, Ranchi");
   const [to, setTo] = useState("Ranchi Railway Station, Ranchi");
+  const [originPoint, setOriginPoint] = useState<LatLng | null>(null);
+  const [destinationPoint, setDestinationPoint] = useState<LatLng | null>(null);
   const [via, setVia] = useState("");
   const [routes, setRoutes] = useState<RouteData[]>([]);
   const [interrupted, setInterrupted] = useState(false);
@@ -149,7 +152,7 @@ export function ShePathApp() {
   const evidence = useRouteEvidence(
     routes,
     "walk",
-    JSON.stringify([from, to, via]),
+    JSON.stringify([from, to, via, originPoint, destinationPoint]),
     !isMock && liveJourneyVisible,
   );
   const match = evidenceMatch(routes, evidence, weights, isMock);
@@ -178,6 +181,8 @@ export function ShePathApp() {
     try {
       const data = await routingService.getRoutes({
         origin: from.trim(),
+        ...(!isMock && originPoint ? { originPoint } : {}),
+        ...(!isMock && destinationPoint ? { destinationPoint } : {}),
         destination: to.trim(),
         ...(!isMock && via.trim() ? { via: via.trim() } : {}),
         travelMode: "walk",
@@ -351,18 +356,40 @@ export function ShePathApp() {
               <LocationField
                 label="Starting from"
                 value={from}
-                onChange={setFrom}
+                onChange={(value) => {
+                  setFrom(value);
+                  setOriginPoint(null);
+                }}
                 dot="bg-primary"
                 error={searchSubmitted && !from.trim() ? "Enter a starting place." : undefined}
               />
               <LocationField
                 label="Going to"
                 value={to}
-                onChange={setTo}
+                onChange={(value) => {
+                  setTo(value);
+                  setDestinationPoint(null);
+                }}
                 dot="bg-foreground"
                 error={searchSubmitted && !to.trim() ? "Enter a destination." : undefined}
               />
             </div>
+            {!isMock && (
+              <LocationPicker
+                locationNames={JSON.stringify([from, to])}
+                origin={originPoint}
+                destination={destinationPoint}
+                onPick={(target, point, label) => {
+                  if (target === "origin") {
+                    setOriginPoint(point);
+                    setFrom(label);
+                  } else {
+                    setDestinationPoint(point);
+                    setTo(label);
+                  }
+                }}
+              />
+            )}
             {!isMock && (
               <div className="mt-5 space-y-2">
                 <LocationField
@@ -391,7 +418,10 @@ export function ShePathApp() {
                   key={place}
                   variant="secondary"
                   size="sm"
-                  onClick={() => setTo(place)}
+                  onClick={() => {
+                    setTo(place);
+                    setDestinationPoint(null);
+                  }}
                 >
                   <MapPin className="size-3.5" />
                   {place}
