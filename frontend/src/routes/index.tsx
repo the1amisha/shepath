@@ -406,6 +406,21 @@ export function ShePathApp() {
               />
             )}
             <div className="mt-5 flex flex-wrap gap-2">
+              {!isMock && (
+                <Button
+                  type="button"
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => {
+                    setTo("Sarala Birla University, Ara, Mahilong, Ranchi");
+                    // Campus listing pin supplied by the user; not a verified entrance.
+                    setDestinationPoint([23.3473466, 85.4174703]);
+                  }}
+                >
+                  <MapPin className="size-3.5" />
+                  Sarala Birla University
+                </Button>
+              )}
               {["Lalpur, Ranchi", "Morabadi, Ranchi", "Doranda, Ranchi"].map((place) => (
                 <Button
                   type="button"
