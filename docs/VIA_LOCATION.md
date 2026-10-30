@@ -1,3 +1,5 @@
+> Historical implementation note: the via option has been removed from the app journey and trip summaries. The backend retains support for older clients.
+
 # Route through a chosen location
 
 In live routing, the search screen accepts one optional **Via** place name. Use a specific name and city, then inspect the returned path. Remove the value to return to ordinary alternative-route requests. Mock and saved comparisons remain fixed demonstrations.

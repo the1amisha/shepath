@@ -14,9 +14,10 @@ export type TravelMode = "walk" | "cycle" | "drive";
 
 export interface RouteRequest {
   origin: string;
+  originPoint?: LatLng;
+  destinationPoint?: LatLng;
   destination: string;
   /** Optional intermediate place; supported by the live provider. */
-  via?: string;
   travelMode: TravelMode;
 }
 

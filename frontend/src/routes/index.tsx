@@ -1,7 +1,9 @@
+import { PlaceField as LocationField } from "@/components/PlaceField";
+import { LocationPicker } from "@/components/LocationPicker";
 import { TripPlanPanel } from "@/components/TripPlanPanel";
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useId, useRef, useState, type ReactNode } from "react";
-import { routingService, routingProvider, type RouteData } from "@/lib/routing";
+import { useEffect, useRef, useState, type ReactNode } from "react";
+import { routingService, routingProvider, type RouteData, type LatLng } from "@/lib/routing";
 import {
   ArrowLeft,
   ArrowRight,
@@ -119,7 +121,9 @@ export function ShePathApp() {
   const [weights, setWeights] = useState<Weights>({ ...emptyWeights });
   const [from, setFrom] = useState("Albert Ekka Chowk, Ranchi");
   const [to, setTo] = useState("Ranchi Railway Station, Ranchi");
-  const [via, setVia] = useState("");
+  const [originPoint, setOriginPoint] = useState<LatLng | null>(null);
+  const [shortcutTarget, setShortcutTarget] = useState<"origin" | "destination">("destination");
+  const [destinationPoint, setDestinationPoint] = useState<LatLng | null>(null);
   const [routes, setRoutes] = useState<RouteData[]>([]);
   const [interrupted, setInterrupted] = useState(false);
   const [loading, setLoading] = useState(false);
@@ -138,7 +142,7 @@ export function ShePathApp() {
     if (!liveJourneyVisible) {
       interruptRouteRequest();
     }
-  }, [from, to, via, liveJourneyVisible]);
+  }, [from, to, liveJourneyVisible]);
   useEffect(
     () => () => {
       requestGeneration.current++;
@@ -149,7 +153,7 @@ export function ShePathApp() {
   const evidence = useRouteEvidence(
     routes,
     "walk",
-    JSON.stringify([from, to, via]),
+    JSON.stringify([from, to, originPoint, destinationPoint]),
     !isMock && liveJourneyVisible,
   );
   const match = evidenceMatch(routes, evidence, weights, isMock);
@@ -178,8 +182,9 @@ export function ShePathApp() {
     try {
       const data = await routingService.getRoutes({
         origin: from.trim(),
+        ...(!isMock && originPoint ? { originPoint } : {}),
+        ...(!isMock && destinationPoint ? { destinationPoint } : {}),
         destination: to.trim(),
-        ...(!isMock && via.trim() ? { via: via.trim() } : {}),
         travelMode: "walk",
       });
       if (generation !== requestGeneration.current) return;
@@ -349,49 +354,108 @@ export function ShePathApp() {
             </p>
             <div className="relative space-y-4 before:absolute before:left-[1.35rem] before:top-12 before:h-16 before:border-l-2 before:border-dashed before:border-primary/40">
               <LocationField
+                onSelect={
+                  !isMock
+                    ? (place) => {
+                        setFrom(place.label);
+                        setOriginPoint(place.point);
+                      }
+                    : undefined
+                }
                 label="Starting from"
                 value={from}
-                onChange={setFrom}
+                onChange={(value) => {
+                  setFrom(value);
+                  setOriginPoint(null);
+                }}
                 dot="bg-primary"
                 error={searchSubmitted && !from.trim() ? "Enter a starting place." : undefined}
               />
               <LocationField
+                onSelect={
+                  !isMock
+                    ? (place) => {
+                        setTo(place.label);
+                        setDestinationPoint(place.point);
+                      }
+                    : undefined
+                }
                 label="Going to"
                 value={to}
-                onChange={setTo}
+                onChange={(value) => {
+                  setTo(value);
+                  setDestinationPoint(null);
+                }}
                 dot="bg-foreground"
                 error={searchSubmitted && !to.trim() ? "Enter a destination." : undefined}
               />
             </div>
             {!isMock && (
-              <div className="mt-5 space-y-2">
-                <LocationField
-                  label="Via (optional)"
-                  error={undefined}
-                  value={via}
-                  onChange={setVia}
-                  dot="bg-warning"
-                />
-                <p className="text-sm text-muted-foreground">
-                  Enter a specific place and city, such as Sadar Hospital, Ranchi. Leave blank to
-                  compare alternatives. A via location requests one walking route through a nearby
-                  routable point; check the path on the map. Stop time is not included.
-                </p>
-                {via && (
-                  <Button type="button" variant="outline" size="sm" onClick={() => setVia("")}>
-                    Remove via location
-                  </Button>
-                )}
-              </div>
+              <LocationPicker
+                locationNames={JSON.stringify([from, to])}
+                origin={originPoint}
+                destination={destinationPoint}
+                onPick={(target, point, label) => {
+                  if (target === "origin") {
+                    setOriginPoint(point);
+                    setFrom(label);
+                  } else {
+                    setDestinationPoint(point);
+                    setTo(label);
+                  }
+                }}
+              />
             )}
-            <div className="mt-5 flex flex-wrap gap-2">
+            <label className="mt-5 flex items-center gap-3 text-sm">
+              Use shortcuts for
+              <select
+                aria-label="Use shortcuts for"
+                className="rounded-full border border-border bg-background px-3 py-2"
+                value={shortcutTarget}
+                onChange={(event) =>
+                  setShortcutTarget(event.target.value === "origin" ? "origin" : "destination")
+                }
+              >
+                <option value="origin">Starting point</option>
+                <option value="destination">Destination</option>
+              </select>
+            </label>
+            <div className="mt-3 flex flex-wrap gap-2">
+              {!isMock && (
+                <Button
+                  type="button"
+                  variant="secondary"
+                  size="sm"
+                  onClick={() => {
+                    // Campus listing pin supplied by the user; not a verified entrance.
+                    if (shortcutTarget === "origin") {
+                      setFrom("Sarala Birla University, Ara, Mahilong, Ranchi");
+                      setOriginPoint([23.3473466, 85.4174703]);
+                    } else {
+                      setTo("Sarala Birla University, Ara, Mahilong, Ranchi");
+                      setDestinationPoint([23.3473466, 85.4174703]);
+                    }
+                  }}
+                >
+                  <MapPin className="size-3.5" />
+                  Sarala Birla University
+                </Button>
+              )}
               {["Lalpur, Ranchi", "Morabadi, Ranchi", "Doranda, Ranchi"].map((place) => (
                 <Button
                   type="button"
                   key={place}
                   variant="secondary"
                   size="sm"
-                  onClick={() => setTo(place)}
+                  onClick={() => {
+                    if (shortcutTarget === "origin") {
+                      setFrom(place);
+                      setOriginPoint(null);
+                    } else {
+                      setTo(place);
+                      setDestinationPoint(null);
+                    }
+                  }}
                 >
                   <MapPin className="size-3.5" />
                   {place}
@@ -459,11 +523,6 @@ export function ShePathApp() {
               >
                 {from} <span className="text-muted-foreground">to</span> {to}
               </h1>
-              {!isMock && via.trim() && (
-                <p className="mt-2 break-words text-sm">
-                  Via: {via.trim()} · One route requested; stop time excluded.
-                </p>
-              )}
             </div>
             <Button variant="outline" size="sm" onClick={() => setScreen("search")}>
               Edit
@@ -701,7 +760,7 @@ export function ShePathApp() {
         <PageFrame
           eyebrow="Route overview"
           title={`${selectedRoute.name} overview`}
-          description={`${isMock ? "Illustrative" : "Estimated"} ${selectedRoute.time} walk from ${from} to ${to}${!isMock && via.trim() ? ` via ${via.trim()}` : ""}. ${isMock ? "Fixed demo geometry." : "No personal-safety assessment."}`}
+          description={`${isMock ? "Illustrative" : "Estimated"} ${selectedRoute.time} walk from ${from} to ${to}. ${isMock ? "Fixed demo geometry." : "No personal-safety assessment."}`}
         >
           <div className="mx-auto max-w-5xl">
             <RouteSummaryPanel
@@ -776,7 +835,6 @@ export function ShePathApp() {
                 states={evidence}
                 from={from}
                 to={to}
-                via={via.trim()}
                 departure={departure}
               />
             </div>
@@ -857,51 +915,6 @@ function PageFrame({
         </p>
       </div>
       {children}
-    </div>
-  );
-}
-
-function LocationField({
-  label,
-  value,
-  onChange,
-  dot,
-  error,
-}: {
-  label: string;
-  value: string;
-  onChange: (value: string) => void;
-  dot: string;
-  error: string | undefined;
-}) {
-  const id = useId();
-  return (
-    <div>
-      <label
-        htmlFor={id}
-        className="grid grid-cols-[auto_1fr] gap-4 rounded-2xl border border-input bg-background p-4 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/10"
-      >
-        <span className={cn("mt-4 size-3 rounded-full ring-4 ring-card", dot)} />
-        <span className="min-w-0">
-          <span className="block text-xs font-bold uppercase tracking-[0.13em] text-muted-foreground">
-            {label}
-          </span>
-          <input
-            id={id}
-            aria-invalid={!!error}
-            aria-describedby={error ? `${id}-error` : undefined}
-            className="mt-1 w-full bg-transparent text-base font-bold text-foreground outline-none placeholder:text-muted-foreground"
-            value={value}
-            onChange={(event) => onChange(event.target.value)}
-            placeholder="Enter a place"
-          />
-        </span>
-      </label>
-      {error && (
-        <p id={`${id}-error`} role="alert" className="mt-2 text-sm font-semibold text-foreground">
-          {error}
-        </p>
-      )}
     </div>
   );
 }
