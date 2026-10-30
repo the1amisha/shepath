@@ -122,6 +122,7 @@ export function ShePathApp() {
   const [from, setFrom] = useState("Albert Ekka Chowk, Ranchi");
   const [to, setTo] = useState("Ranchi Railway Station, Ranchi");
   const [originPoint, setOriginPoint] = useState<LatLng | null>(null);
+  const [shortcutTarget, setShortcutTarget] = useState<"origin" | "destination">("destination");
   const [destinationPoint, setDestinationPoint] = useState<LatLng | null>(null);
   const [routes, setRoutes] = useState<RouteData[]>([]);
   const [interrupted, setInterrupted] = useState(false);
@@ -405,16 +406,35 @@ export function ShePathApp() {
                 }}
               />
             )}
-            <div className="mt-5 flex flex-wrap gap-2">
+            <label className="mt-5 flex items-center gap-3 text-sm">
+              Use shortcuts for
+              <select
+                aria-label="Use shortcuts for"
+                className="rounded-full border border-border bg-background px-3 py-2"
+                value={shortcutTarget}
+                onChange={(event) =>
+                  setShortcutTarget(event.target.value === "origin" ? "origin" : "destination")
+                }
+              >
+                <option value="origin">Starting point</option>
+                <option value="destination">Destination</option>
+              </select>
+            </label>
+            <div className="mt-3 flex flex-wrap gap-2">
               {!isMock && (
                 <Button
                   type="button"
                   variant="secondary"
                   size="sm"
                   onClick={() => {
-                    setTo("Sarala Birla University, Ara, Mahilong, Ranchi");
                     // Campus listing pin supplied by the user; not a verified entrance.
-                    setDestinationPoint([23.3473466, 85.4174703]);
+                    if (shortcutTarget === "origin") {
+                      setFrom("Sarala Birla University, Ara, Mahilong, Ranchi");
+                      setOriginPoint([23.3473466, 85.4174703]);
+                    } else {
+                      setTo("Sarala Birla University, Ara, Mahilong, Ranchi");
+                      setDestinationPoint([23.3473466, 85.4174703]);
+                    }
                   }}
                 >
                   <MapPin className="size-3.5" />
@@ -428,8 +448,13 @@ export function ShePathApp() {
                   variant="secondary"
                   size="sm"
                   onClick={() => {
-                    setTo(place);
-                    setDestinationPoint(null);
+                    if (shortcutTarget === "origin") {
+                      setFrom(place);
+                      setOriginPoint(null);
+                    } else {
+                      setTo(place);
+                      setDestinationPoint(null);
+                    }
                   }}
                 >
                   <MapPin className="size-3.5" />

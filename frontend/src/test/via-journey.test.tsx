@@ -41,3 +41,22 @@ it("routes the campus shortcut using its selected coordinates", async () => {
     destinationPoint: [23.3473466, 85.4174703],
   });
 });
+it("uses the campus as start without replacing the destination", async () => {
+  getRoutes.mockResolvedValue([evidenceRoute]);
+  render(<ShePathApp />);
+  fireEvent.click(screen.getByRole("button", { name: "Plan my walk" }));
+  fireEvent.change(screen.getByLabelText("Use shortcuts for"), { target: { value: "origin" } });
+  fireEvent.click(screen.getByRole("button", { name: "Sarala Birla University" }));
+  expect(screen.getByLabelText("Starting from")).toHaveValue(
+    "Sarala Birla University, Ara, Mahilong, Ranchi",
+  );
+  expect(screen.getByLabelText("Going to")).toHaveValue("Ranchi Railway Station, Ranchi");
+  for (const name of ["Continue to preferences", "Skip preferences"])
+    fireEvent.click(screen.getByRole("button", { name }));
+  await screen.findByRole("button", { name: "View route overview" });
+  expect(getRoutes.mock.calls[0]![0]).toMatchObject({
+    origin: "Sarala Birla University, Ara, Mahilong, Ranchi",
+    originPoint: [23.3473466, 85.4174703],
+    destination: "Ranchi Railway Station, Ranchi",
+  });
+});
