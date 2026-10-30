@@ -6,6 +6,10 @@ Selected map/GPS coordinates are sent as optional `originPoint` and `destination
 
 Browser geolocation is user initiated, uses one reading with a 15-second timeout, and displays the reported accuracy. There is no location watch or live tracking. Denial, cancellation and late responses are handled. Geolocation requires browser permission and a supported secure context (localhost works for development). Map tiles come from OpenStreetMap; selected coordinates are sent for routing when the route request is made. No new service or API key is required.
 
-This change does not add Google Maps or place-name autocomplete. Selected points use coordinate labels in the overview and shared plan. A geocoding suggestion picker can be added separately.
+Start and destination now offer place suggestions after three characters and a 500 ms pause while editing. Up to five labels from HeiGIT Pelias autocomplete are shown, restricted to India with a Ranchi focus. Select with a click or arrow keys and Enter; Escape dismisses. Initial/default labels and selected suggestions do not trigger lookups. Old requests are cancelled and stale responses ignored. Typed searches are sent to the backend and provider using the existing server-side API key and quota. Provider coverage differs from Google Maps: no match is not proof a place does not exist. Type a fuller address or use the map when suggestions fail.
+
+Selected suggestion coordinates bypass a second lookup, just like map/GPS points. Editing their labels clears stored coordinates. Map/GPS points retain coordinate labels in overview/shared text; suggestions retain the provider label. Via remains a typed field. No Google Maps API or additional key is introduced.
+
+Autocomplete protocol: https://github.com/pelias/documentation/blob/master/autocomplete.md
 
 Validation includes selected-point bypass, malformed coordinate rejection, stale point clearing after edits, location cancellation/denial and browser map interaction. External routing is mocked in automated tests.

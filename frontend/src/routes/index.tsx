@@ -1,7 +1,8 @@
+import { PlaceField as LocationField } from "@/components/PlaceField";
 import { LocationPicker } from "@/components/LocationPicker";
 import { TripPlanPanel } from "@/components/TripPlanPanel";
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useId, useRef, useState, type ReactNode } from "react";
+import { useEffect, useRef, useState, type ReactNode } from "react";
 import { routingService, routingProvider, type RouteData, type LatLng } from "@/lib/routing";
 import {
   ArrowLeft,
@@ -354,6 +355,14 @@ export function ShePathApp() {
             </p>
             <div className="relative space-y-4 before:absolute before:left-[1.35rem] before:top-12 before:h-16 before:border-l-2 before:border-dashed before:border-primary/40">
               <LocationField
+                onSelect={
+                  !isMock
+                    ? (place) => {
+                        setFrom(place.label);
+                        setOriginPoint(place.point);
+                      }
+                    : undefined
+                }
                 label="Starting from"
                 value={from}
                 onChange={(value) => {
@@ -364,6 +373,14 @@ export function ShePathApp() {
                 error={searchSubmitted && !from.trim() ? "Enter a starting place." : undefined}
               />
               <LocationField
+                onSelect={
+                  !isMock
+                    ? (place) => {
+                        setTo(place.label);
+                        setDestinationPoint(place.point);
+                      }
+                    : undefined
+                }
                 label="Going to"
                 value={to}
                 onChange={(value) => {
@@ -887,51 +904,6 @@ function PageFrame({
         </p>
       </div>
       {children}
-    </div>
-  );
-}
-
-function LocationField({
-  label,
-  value,
-  onChange,
-  dot,
-  error,
-}: {
-  label: string;
-  value: string;
-  onChange: (value: string) => void;
-  dot: string;
-  error: string | undefined;
-}) {
-  const id = useId();
-  return (
-    <div>
-      <label
-        htmlFor={id}
-        className="grid grid-cols-[auto_1fr] gap-4 rounded-2xl border border-input bg-background p-4 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/10"
-      >
-        <span className={cn("mt-4 size-3 rounded-full ring-4 ring-card", dot)} />
-        <span className="min-w-0">
-          <span className="block text-xs font-bold uppercase tracking-[0.13em] text-muted-foreground">
-            {label}
-          </span>
-          <input
-            id={id}
-            aria-invalid={!!error}
-            aria-describedby={error ? `${id}-error` : undefined}
-            className="mt-1 w-full bg-transparent text-base font-bold text-foreground outline-none placeholder:text-muted-foreground"
-            value={value}
-            onChange={(event) => onChange(event.target.value)}
-            placeholder="Enter a place"
-          />
-        </span>
-      </label>
-      {error && (
-        <p id={`${id}-error`} role="alert" className="mt-2 text-sm font-semibold text-foreground">
-          {error}
-        </p>
-      )}
     </div>
   );
 }

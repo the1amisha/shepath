@@ -590,3 +590,63 @@ async def create_route(route_request: RouteRequest) -> RouteResponse:
 
     return map_directions_response(directions, profile, start_point, end_point)
 
+
+
+class PlaceSearch(BaseModel):
+    text: str
+
+    @field_validator("text")
+    @classmethod
+    def validate_text(cls, value: str) -> str:
+        value = value.strip()
+        if not 3 <= len(value) <= 200:
+            raise ValueError("Enter between 3 and 200 characters")
+        return value
+
+
+@app.post("/places/suggest")
+async def suggest_places(search: PlaceSearch):
+    api_key = get_heigit_api_key()
+    try:
+        async with httpx.AsyncClient(timeout=10) as client:
+            response = await client.get(
+                "https://api.heigit.org/pelias/v1/autocomplete",
+                params={"text": search.text, "size": 5, "boundary.country": "IND",
+                        "focus.point.lat": 23.36, "focus.point.lon": 85.33},
+                headers={"Authorization": api_key},
+            )
+            response.raise_for_status()
+            body = response.json()
+    except (httpx.HTTPError, ValueError):
+        raise HTTPException(502, "Place suggestions are unavailable. Type a full address or choose on the map.") from None
+    features = body.get("features") if isinstance(body, dict) else None
+    if not isinstance(features, list):
+        raise HTTPException(502, "Place suggestions returned an invalid response.")
+    places = []
+    seen = set()
+    for feature in features[:20]:
+        if not isinstance(feature, dict):
+            continue
+        props = feature.get("properties")
+        geometry = feature.get("geometry")
+        if not isinstance(props, dict) or not isinstance(geometry, dict):
+            continue
+        label = props.get("label")
+        coords = geometry.get("coordinates")
+        if not isinstance(label, str) or not label.strip() or len(label) > 500:
+            continue
+        if not isinstance(coords, list) or len(coords) < 2:
+            continue
+        point = [coords[1], coords[0]]
+        try:
+            RouteRequest.validate_point(point)
+        except ValueError:
+            continue
+        key = (label, *point)
+        if key in seen:
+            continue
+        seen.add(key)
+        places.append({"label": label, "point": point})
+        if len(places) == 5:
+            break
+    return {"places": places}
