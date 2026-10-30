@@ -8,7 +8,7 @@ Browser geolocation is user initiated, uses one reading with a 15-second timeout
 
 Start and destination now offer place suggestions after three characters and a 500 ms pause while editing. Up to five labels from HeiGIT Pelias autocomplete are shown, restricted to India with a Ranchi focus. Select with a click or arrow keys and Enter; Escape dismisses. Initial/default labels and selected suggestions do not trigger lookups. Old requests are cancelled and stale responses ignored. Typed searches are sent to the backend and provider using the existing server-side API key and quota. Provider coverage differs from Google Maps: no match is not proof a place does not exist. Type a fuller address or use the map when suggestions fail.
 
-Selected suggestion coordinates bypass a second lookup, just like map/GPS points. Editing their labels clears stored coordinates. Map/GPS points retain coordinate labels in overview/shared text; suggestions retain the provider label. Via remains a typed field. No Google Maps API or additional key is introduced.
+Selected suggestion coordinates bypass a second lookup, just like map/GPS points. Editing their labels clears stored coordinates. Map/GPS points retain coordinate labels in overview/shared text; suggestions retain the provider label. The journey form uses only start and destination. No Google Maps API or additional key is introduced.
 
 Autocomplete protocol: https://github.com/pelias/documentation/blob/master/autocomplete.md
 

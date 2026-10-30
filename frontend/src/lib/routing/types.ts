@@ -18,7 +18,6 @@ export interface RouteRequest {
   destinationPoint?: LatLng;
   destination: string;
   /** Optional intermediate place; supported by the live provider. */
-  via?: string;
   travelMode: TravelMode;
 }
 
