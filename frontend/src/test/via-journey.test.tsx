@@ -60,3 +60,31 @@ it("uses the campus as start without replacing the destination", async () => {
     destination: "Ranchi Railway Station, Ranchi",
   });
 });
+it("targets shortcuts at the last focused field and preserves campus coordinates", async () => {
+  getRoutes.mockResolvedValue([evidenceRoute]);
+  render(<ShePathApp />);
+  fireEvent.click(screen.getByRole("button", { name: "Plan my walk" }));
+  const origin = screen.getByLabelText("Starting from");
+  const destination = screen.getByLabelText("Going to");
+  fireEvent.focus(origin);
+  expect(screen.getByLabelText("Use shortcuts for")).toHaveValue("origin");
+  fireEvent.blur(origin);
+  fireEvent.click(screen.getByRole("button", { name: "Sarala Birla University" }));
+  expect(origin).toHaveValue("Sarala Birla University, Ara, Mahilong, Ranchi");
+  expect(destination).toHaveValue("Ranchi Railway Station, Ranchi");
+  fireEvent.focus(destination);
+  expect(screen.getByLabelText("Use shortcuts for")).toHaveValue("destination");
+  fireEvent.blur(destination);
+  fireEvent.click(screen.getByRole("button", { name: "Doranda, Ranchi" }));
+  expect(origin).toHaveValue("Sarala Birla University, Ara, Mahilong, Ranchi");
+  expect(destination).toHaveValue("Doranda, Ranchi");
+  for (const name of ["Continue to preferences", "Skip preferences"])
+    fireEvent.click(screen.getByRole("button", { name }));
+  await screen.findByRole("button", { name: "View route overview" });
+  expect(getRoutes.mock.calls[0]![0]).toMatchObject({
+    origin: "Sarala Birla University, Ara, Mahilong, Ranchi",
+    originPoint: [23.3473466, 85.4174703],
+    destination: "Doranda, Ranchi",
+  });
+  expect(getRoutes.mock.calls[0]![0]).not.toHaveProperty("destinationPoint");
+});

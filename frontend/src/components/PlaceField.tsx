@@ -24,6 +24,7 @@ export function PlaceField({
   dot,
   error,
   onSelect,
+  onFocus,
 }: {
   label: string;
   value: string;
@@ -31,6 +32,7 @@ export function PlaceField({
   dot: string;
   error: string | undefined;
   onSelect?: ((place: Place) => void) | undefined;
+  onFocus?: () => void;
 }) {
   const id = useId();
   const [query, setQuery] = useState<string | null>(null);
@@ -110,7 +112,10 @@ export function PlaceField({
             aria-activedescendant={visible && active >= 0 ? `${id}-option-${active}` : undefined}
             aria-invalid={!!error}
             aria-describedby={error ? `${id}-error` : undefined}
-            onFocus={() => setFocused(true)}
+            onFocus={() => {
+              setFocused(true);
+              onFocus?.();
+            }}
             onBlur={() => {
               setFocused(false);
               setPlaces([]);

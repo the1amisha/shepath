@@ -363,6 +363,7 @@ export function ShePathApp() {
                     : undefined
                 }
                 label="Starting from"
+                onFocus={() => setShortcutTarget("origin")}
                 value={from}
                 onChange={(value) => {
                   setFrom(value);
@@ -381,6 +382,7 @@ export function ShePathApp() {
                     : undefined
                 }
                 label="Going to"
+                onFocus={() => setShortcutTarget("destination")}
                 value={to}
                 onChange={(value) => {
                   setTo(value);
