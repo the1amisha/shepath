@@ -178,7 +178,7 @@ export function PlaceField({
           ))}
         </ul>
       )}
-      {enabled && focused && (
+      {enabled && (
         <p className="mt-2 text-xs text-muted-foreground">
           Type at least 3 characters. Suggestions search India, prioritising Ranchi. Typed searches
           are sent to the location service.
