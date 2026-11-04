@@ -82,7 +82,7 @@ describe("Real routing journey", () => {
     );
     start();
     fireEvent.click(screen.getByRole("button", { name: "Edit" }));
-    fireEvent.change(screen.getByRole("textbox", { name: /Starting from/ }), {
+    fireEvent.change(screen.getByRole("combobox", { name: /Starting from/ }), {
       target: { value: "Another journey" },
     });
     await act(async () => finish([route]));
@@ -123,7 +123,7 @@ describe("Real routing journey", () => {
     render(<ShePathApp />);
     expect(getRoutes).not.toHaveBeenCalled();
     fireEvent.click(screen.getByRole("button", { name: /Plan my walk/ }));
-    fireEvent.change(screen.getByRole("textbox", { name: /Starting from/ }), {
+    fireEvent.change(screen.getByRole("combobox", { name: /Starting from/ }), {
       target: { value: "New origin" },
     });
     expect(getRoutes).not.toHaveBeenCalled();

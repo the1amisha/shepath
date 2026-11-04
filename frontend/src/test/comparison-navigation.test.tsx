@@ -101,10 +101,10 @@ it("keeps interruption visible after a late failure and edits then retries the c
   fireEvent.click(screen.getByRole("button", { name: "Back to journey" }));
   expect(screen.queryByText("Obsolete request failed")).not.toBeInTheDocument();
   fireEvent.click(screen.getByRole("button", { name: "Edit journey" }));
-  fireEvent.change(screen.getByRole("textbox", { name: /Starting from/ }), {
+  fireEvent.change(screen.getByRole("combobox", { name: /Starting from/ }), {
     target: { value: "   New origin   " },
   });
-  fireEvent.change(screen.getByRole("textbox", { name: /Going to/ }), {
+  fireEvent.change(screen.getByRole("combobox", { name: /Going to/ }), {
     target: { value: "   New destination   " },
   });
   fireEvent.click(screen.getByRole("button", { name: "Continue to preferences" }));

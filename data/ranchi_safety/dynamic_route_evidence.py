@@ -10,6 +10,7 @@ import hashlib
 import importlib.metadata
 import json
 import math
+import os
 from pathlib import Path
 from typing import Literal, TypedDict
 
@@ -106,19 +107,35 @@ class PilotDataset:
         self._provenance['versions'] = {p: importlib.metadata.version(p) for p in ('shapely', 'pyproj', 'osmium')}
 
     @classmethod
-    def load(cls):
-        """Verify small local exports once; never open regional index/PBF or saved routes."""
-        manifest_path = verify.RUN / 'manifest.json'
-        verify.require(verify.extract.sha(manifest_path) == MANIFEST_SHA256, 'Unrecognized pilot manifest')
+    def load(cls, profile=None):
+        """Verify local exports once; profile defaults to SHEPATH_EVIDENCE_DATASET.
+
+        Accepted profiles: original (default), hatia-mahilong. Never open the
+        regional index/PBF or saved routes. Restart workers to switch datasets.
+        """
+        # Selection is explicit; missing expanded files must never silently fall back.
+        profile = os.environ.get('SHEPATH_EVIDENCE_DATASET', 'original') if profile is None else profile
+        if profile == 'original':
+            run, boundary, manifest_sha = verify.RUN, verify.extract.BOUNDARY, MANIFEST_SHA256
+        elif profile == 'hatia-mahilong':
+            run = ROOT / 'offline_runs/eastern_261008_hatia_mahilong_v1'
+            boundary = ROOT / 'hatia_mahilong_boundary.json'
+            manifest_sha = '62d15935cb85221b1cd20f5cd6a6e9c1f21d739b54b9ba1a70bd3aa569c50295'
+        else:
+            raise ValueError('Unknown SHEPATH_EVIDENCE_DATASET; use original or hatia-mahilong')
+        manifest_path = run / 'manifest.json'
+        verify.require(verify.extract.sha(manifest_path) == manifest_sha, 'Unrecognized pilot manifest')
         manifest = verify.load(manifest_path)
         verify.require(manifest['status'] == 'complete' and manifest['quality']['unresolved_issues'] == 0,
                        'Incomplete pilot extraction')
-        paths = verify.checked_artifacts(verify.RUN, manifest)
+        verify.require(all(manifest['stages'].get(stage) == 'successful'
+                           for stage in ('index', 'selection', 'export')), 'Incomplete extraction stages')
+        paths = verify.checked_artifacts(run, manifest)
         by_name = {p.name: p for p in paths}
         verify.require(by_name['issues.jsonl'].stat().st_size == 0, 'Unresolved extraction issues')
-        verify.require(verify.extract.sha(verify.extract.BOUNDARY) == manifest['fingerprint']['boundary_sha256'],
+        verify.require(verify.extract.sha(boundary) == manifest['fingerprint']['boundary_sha256'],
                        'Boundary hash mismatch')
-        bbox = verify.load(verify.extract.BOUNDARY)['bbox_south_west_north_east']
+        bbox = verify.load(boundary)['bbox_south_west_north_east']
         verify.require(bbox == manifest['bbox_south_west_north_east'], 'Boundary mismatch')
         features = verify.load(by_name['features.geojson'])['features']
         with by_name['objects.jsonl'].open(encoding='utf-8') as stream:
@@ -131,7 +148,7 @@ class PilotDataset:
         verify.require(len(pairs) == manifest['quality']['potential_facility_duplicate_pairs'], 'Duplicate inventory mismatch')
         return cls(bbox, features, pairs, {
             'integrity': 'pinned_manifest_export_hashes_and_reconstructed_geometries_verified',
-            'manifest_sha256': MANIFEST_SHA256, 'source_snapshot_timestamp': manifest['pbf_header']['osmosis_replication_timestamp'],
+            'manifest_sha256': manifest_sha, 'source_snapshot_timestamp': manifest['pbf_header']['osmosis_replication_timestamp'],
             'source_pbf_sha256': manifest['fingerprint']['source_sha256'], 'source_url': manifest['source_url'],
             'boundary_sha256': manifest['fingerprint']['boundary_sha256'], 'artifact_hashes': manifest['artifacts'],
             'geometry_provenance': 'Full original WGS84 feature geometry rebuilt from objects.jsonl node/way/relation references; no centroid substitution or clipping',

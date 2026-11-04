@@ -57,8 +57,8 @@ it("uses responsible landing and page/social metadata without mock scores", asyn
 
 it("rejects whitespace with associated errors and submits trimmed locations through the native form", async () => {
   search();
-  const origin = screen.getByRole("textbox", { name: "Starting from" });
-  const destination = screen.getByRole("textbox", { name: "Going to" });
+  const origin = screen.getByRole("combobox", { name: "Starting from" });
+  const destination = screen.getByRole("combobox", { name: "Going to" });
   fireEvent.change(origin, { target: { value: "   " } });
   fireEvent.change(destination, { target: { value: "\t " } });
   const submit = screen.getByRole("button", { name: "Continue to preferences" });
@@ -87,7 +87,7 @@ it("explains the buffer before generation and destination presets do not submit"
     "a Ranchi place name does not guarantee coverage",
   );
   fireEvent.click(screen.getByRole("button", { name: "Doranda, Ranchi" }));
-  expect(screen.getByRole("textbox", { name: "Going to" })).toHaveValue("Doranda, Ranchi");
+  expect(screen.getByRole("combobox", { name: "Going to" })).toHaveValue("Doranda, Ranchi");
   expect(screen.getByText("Step 1 of 5")).toBeInTheDocument();
   expect(getRoutes).not.toHaveBeenCalled();
 });

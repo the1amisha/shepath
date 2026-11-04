@@ -61,8 +61,23 @@ Coordinate = tuple[float, float]
 class RouteRequest(BaseModel):
     origin: str
     destination: str
+    originPoint: Coordinate | None = None
+    destinationPoint: Coordinate | None = None
     via: str | None = None
     travelMode: Literal["walk", "cycle", "drive"]
+
+    @field_validator("originPoint", "destinationPoint", mode="before")
+    @classmethod
+    def validate_point(cls, value: Any) -> Any:
+        if value is None:
+            return None
+        if not isinstance(value, (list, tuple)) or len(value) != 2:
+            raise ValueError("point must be [latitude, longitude]")
+        if any(isinstance(v, bool) or not isinstance(v, (int, float)) or not math.isfinite(v) for v in value):
+            raise ValueError("point coordinates must be finite numbers")
+        if not -90 <= value[0] <= 90 or not -180 <= value[1] <= 180:
+            raise ValueError("point coordinates are out of range")
+        return value
 
     @field_validator("via")
     @classmethod
@@ -536,13 +551,13 @@ async def create_route(route_request: RouteRequest) -> RouteResponse:
     profile = TRAVEL_MODE_PROFILES[route_request.travelMode]
 
     async with httpx.AsyncClient(timeout=REQUEST_TIMEOUT_SECONDS) as client:
-        start_point = await geocode_location(
+        start_point = route_request.originPoint or await geocode_location(
             client,
             api_key,
             route_request.origin,
             "Origin",
         )
-        end_point = await geocode_location(
+        end_point = route_request.destinationPoint or await geocode_location(
             client,
             api_key,
             route_request.destination,
@@ -553,14 +568,14 @@ async def create_route(route_request: RouteRequest) -> RouteResponse:
             end_point,
         )
         reject_implausible_same_city_geocoding(
-            route_request.origin,
-            route_request.destination,
+            "" if route_request.originPoint else route_request.origin,
+            "" if route_request.destinationPoint else route_request.destination,
             straight_line_distance_meters,
         )
         via_point = None
         if route_request.via:
             via_point = await geocode_location(client, api_key, route_request.via, "Via location")
-            for label, point in ((route_request.origin, start_point), (route_request.destination, end_point)):
+            for label, point in (("" if route_request.originPoint else route_request.origin, start_point), ("" if route_request.destinationPoint else route_request.destination, end_point)):
                 reject_implausible_same_city_geocoding(
                     label, route_request.via, calculate_straight_line_distance_meters(point, via_point)
                 )
@@ -575,3 +590,63 @@ async def create_route(route_request: RouteRequest) -> RouteResponse:
 
     return map_directions_response(directions, profile, start_point, end_point)
 
+
+
+class PlaceSearch(BaseModel):
+    text: str
+
+    @field_validator("text")
+    @classmethod
+    def validate_text(cls, value: str) -> str:
+        value = value.strip()
+        if not 3 <= len(value) <= 200:
+            raise ValueError("Enter between 3 and 200 characters")
+        return value
+
+
+@app.post("/places/suggest")
+async def suggest_places(search: PlaceSearch):
+    api_key = get_heigit_api_key()
+    try:
+        async with httpx.AsyncClient(timeout=10) as client:
+            response = await client.get(
+                "https://api.heigit.org/pelias/v1/autocomplete",
+                params={"text": search.text, "size": 5, "boundary.country": "IND",
+                        "focus.point.lat": 23.36, "focus.point.lon": 85.33},
+                headers={"Authorization": api_key},
+            )
+            response.raise_for_status()
+            body = response.json()
+    except (httpx.HTTPError, ValueError):
+        raise HTTPException(502, "Place suggestions are unavailable. Type a full address or choose on the map.") from None
+    features = body.get("features") if isinstance(body, dict) else None
+    if not isinstance(features, list):
+        raise HTTPException(502, "Place suggestions returned an invalid response.")
+    places = []
+    seen = set()
+    for feature in features[:20]:
+        if not isinstance(feature, dict):
+            continue
+        props = feature.get("properties")
+        geometry = feature.get("geometry")
+        if not isinstance(props, dict) or not isinstance(geometry, dict):
+            continue
+        label = props.get("label")
+        coords = geometry.get("coordinates")
+        if not isinstance(label, str) or not label.strip() or len(label) > 500:
+            continue
+        if not isinstance(coords, list) or len(coords) < 2:
+            continue
+        point = [coords[1], coords[0]]
+        try:
+            RouteRequest.validate_point(point)
+        except ValueError:
+            continue
+        key = (label, *point)
+        if key in seen:
+            continue
+        seen.add(key)
+        places.append({"label": label, "point": point})
+        if len(places) == 5:
+            break
+    return {"places": places}

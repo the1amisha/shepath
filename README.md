@@ -6,7 +6,7 @@ SHEPATH helps users compare walking routes in Ranchi using journey estimates and
 
 - A responsive five-step journey: search, evidence preferences, route comparison, overview and evidence.
 - Live walking routes with distance, duration and an interactive map.
-- [Route through an optional via location](docs/VIA_LOCATION.md) in live walking requests.
+- [Choose start and destination](docs/LOCATION_PICKER.md) from typed place suggestions or the map, or use your current location as the start.
 - [Segment-level evidence](docs/SEGMENT_EVIDENCE.md): roughly 150 m stretches, nearby facility coverage, longest facility gap and missing-tag percentages.
 - Route-specific mapped businesses, healthcare, police and pedestrian infrastructure within a 100 m buffer.
 - Lighting, sidewalk and opening-hours tag availability, with unknown data shown explicitly.
