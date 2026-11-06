@@ -9,6 +9,7 @@ import math
 from pathlib import Path
 import sys
 import threading
+from time import perf_counter
 from typing import Annotated, Any, Literal
 
 from fastapi import APIRouter, Depends, HTTPException, Request, Response
@@ -21,6 +22,13 @@ BODY_TIMEOUT_SECONDS = 10
 ANALYSIS_TIMEOUT_SECONDS = 60
 DATA_ROOT = Path(__file__).resolve().parents[2] / 'data' / 'ranchi_safety'
 logger = logging.getLogger(__name__)
+
+
+def log_elapsed(stage, started):
+    elapsed = perf_counter() - started
+    # Slow stages remain visible with the default Uvicorn logging setup.
+    log = logger.warning if elapsed >= 10 else logger.info
+    log('Ranchi evidence %s completed in %.3f seconds', stage, elapsed)
 
 
 def error(status, code, message):
@@ -159,13 +167,16 @@ class EvidenceService:
         if self.initialization_error:
             raise error(503, 'dataset_unavailable', 'Verified pilot dataset unavailable; repair installation and restart worker.')
         if self.dataset is None:
+            started = perf_counter()
             try:
                 self.engine = self.loader()
                 self.dataset = self.engine.PilotDataset.load()
+                log_elapsed('dataset initialization', started)
             except (Exception, SystemExit):
                 self.initialization_error = True
                 logger.exception('Ranchi evidence dataset initialization failed')
                 raise error(503, 'dataset_unavailable', 'Verified pilot dataset or required dependencies unavailable.') from None
+        started = perf_counter()
         try:
             result = self.engine.analyze_route(**payload.model_dump(), buffer_metres=100, dataset=self.dataset)
         except ValueError as exc:
@@ -176,7 +187,9 @@ class EvidenceService:
         # Keep validation and potentially large response encoding off the event loop too.
         try:
             EvidenceResponse.model_validate(result)
-            return json.dumps(result, ensure_ascii=False, allow_nan=False, separators=(',', ':')).encode('utf-8')
+            encoded = json.dumps(result, ensure_ascii=False, allow_nan=False, separators=(',', ':')).encode('utf-8')
+            log_elapsed('analysis and encoding', started)
+            return encoded
         except Exception:
             logger.exception('Ranchi evidence result encoding failed')
             raise error(503, 'analysis_failed', 'Route evidence result unavailable.') from None

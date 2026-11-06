@@ -10,4 +10,6 @@ The text includes start/destination labels, the selected provider-order route na
 
 Changes to selected route, departure or place labels update the panel. An already opened print tab or WhatsApp draft remains a snapshot; reopen it for an updated plan. Sharing and printing make no additional routing or evidence API requests. Historical mapped evidence is incomplete and is not a personal-safety assessment.
 
+The printable tab uses the device viewport and wraps long identifiers on narrow screens. Print styles use compact spacing and 14 mm margins. A representative campus trip fits on one A4 or Letter page; longer place names or summaries may require more pages. All source identifiers and the final disclaimer remain included.
+
 Validation: automated tests check text/URL fidelity (including Hindi and reserved characters), missing evidence, invalid time, updates, blocked popups and literal rendering of HTML-like text. Browser replay checks the printable tab, Ranchi summary, narrow layouts and absence of extra route/evidence requests. No backend or dependency changes.
