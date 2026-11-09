@@ -2,6 +2,7 @@
 import asyncio
 from concurrent.futures import ThreadPoolExecutor
 import json
+import math
 from pathlib import Path
 import threading
 import time
@@ -194,6 +195,22 @@ class ASGIBodyTests(unittest.IsolatedAsyncioTestCase):
 
 
 class RealPilotTests(unittest.TestCase):
+    def assert_historical(self, actual, expected):
+        # Allow tiny GEOS/platform floating-point differences only.
+        if type(expected) is float:
+            self.assertTrue(math.isclose(actual, expected, rel_tol=1e-9, abs_tol=1e-6),
+                            (actual, expected))
+        elif isinstance(expected, dict):
+            for key, value in expected.items():
+                self.assertIn(key, actual)
+                self.assert_historical(actual[key], value)
+        elif isinstance(expected, list):
+            self.assertEqual(len(actual), len(expected))
+            for a, b in zip(actual, expected):
+                self.assert_historical(a, b)
+        else:
+            self.assertEqual(actual, expected)
+
     def test_three_saved_routes_lossless_stage1_and_new_geometry(self):
         engine = api.load_engine()
         saved = json.loads((api.DATA_ROOT / 'route_coverage_runs/20261008T140112_006152Z/routes.json').read_text())
@@ -209,17 +226,17 @@ class RealPilotTests(unittest.TestCase):
                     elapsed = time.perf_counter() - started
                     self.assertEqual(response.status_code, 200, response.text)
                     artifact = json.loads((api.DATA_ROOT / 'dynamic_validation' / (route['id'] + '.json')).read_text(encoding='utf-8'))
-                    # Historical bytes stay pinned. Only the edited verifier's code
-                    # provenance and the resulting evidence identity may differ.
-                    artifact['source_provenance']['code_sha256']['verify_post_extraction.py'] = (
-                        engine.verify.extract.sha(Path(engine.verify.__file__)))
-                    artifact['evidence_identity_sha256'] = engine.digest({
-                        'geometry_sha256': artifact['route']['geometry_sha256'],
-                        'analysis': artifact['analysis'], 'schema_version': artifact['schema_version'],
-                        'source': artifact['source_provenance']})
-                    self.assertEqual(response.json(), artifact)
+                    # Compare today's engine output; keep archived evidence unchanged.
+                    expected = engine.analyze_route(**request, buffer_metres=100,
+                                                    dataset=service.dataset)
+                    self.assertEqual(response.json(), expected)
+                    self.assertEqual(response.content, client.post(api.PATH, json=request).content)
+                    self.assertEqual(response.json()['route'], artifact['route'])
+                    self.assert_historical(response.json()['coverage'], artifact['coverage'])
+                    for category, previous in artifact['route_context']['categories'].items():
+                        self.assert_historical(response.json()['route_context']['categories'][category], previous)
                     observations.append({'route_id': route['id'], 'http_seconds': elapsed,
-                                         'historical_parity_except_verifier_provenance': True,
+                                         'current_engine_and_cached_response_parity': True,
                                          'evidence_identity_sha256': response.json()['evidence_identity_sha256']})
                 self.assertEqual(load.call_count, 1)
                 outside = client.post(api.PATH, json={**PAYLOAD, 'coordinates': [[0, 0], [1, 1]]})

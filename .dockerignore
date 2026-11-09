@@ -1,0 +1,15 @@
+**/.env
+**/.env.*
+**/.venv*
+**/*_venv
+**/.pbf_venv
+**/.route_coverage_deps
+**/node_modules
+**/__pycache__
+**/*.pyc
+.git
+frontend
+**/*.sqlite*
+**/*.db
+**/*.pbf
+!**/pilot.osm.pbf
