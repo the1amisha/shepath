@@ -21,6 +21,7 @@ import route_feature_metrics as metrics
 import segment_evidence
 import facility_hours
 import verify_post_extraction as verify
+import sys
 
 ROOT = Path(__file__).resolve().parent
 SCHEMA_VERSION = 'SHEPATH.dynamic_route_evidence.v1'
@@ -68,6 +69,16 @@ def validate_coordinates(coordinates):
 def geometry_identity(coordinates):
     return digest([[v.hex() for v in p] for p in validate_coordinates(coordinates)])
 
+def _shared_record_strings(pairs):
+    """Share repeated field names and role values without changing data."""
+    return {
+        sys.intern(k): (
+            sys.intern(v)
+            if k in ("type", "extraction_role") and isinstance(v, str)
+            else v
+        )
+        for k, v in pairs
+    }
 
 class PilotDataset:
     """In-memory immutable-by-convention snapshot; construct production data via load().
@@ -139,8 +150,15 @@ class PilotDataset:
         verify.require(bbox == manifest['bbox_south_west_north_east'], 'Boundary mismatch')
         features = verify.load(by_name['features.geojson'])['features']
         with by_name['objects.jsonl'].open(encoding='utf-8') as stream:
-            records = verify.unique_records(json.loads(row) for row in stream if row.strip())
-        verify.validate_geometries(features, records, box(bbox[1], bbox[0], bbox[3], bbox[2]))
+            records = verify.unique_records(
+                json.loads(row, object_pairs_hook=_shared_record_strings)
+                for row in stream if row.strip()
+            )
+        verify.validate_geometries(
+            features, records, box(bbox[1], bbox[0], bbox[3], bbox[2])
+        )
+        # Release validation records before constructing the runtime dataset.
+        del records
         summary = verify.summarize(features)
         verify.require(summary['unique_features'] == manifest['quality']['unique_features']
                        and summary['category_types'] == manifest['quality']['category_types'], 'Inventory mismatch')
