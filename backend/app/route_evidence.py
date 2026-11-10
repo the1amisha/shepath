@@ -1,5 +1,7 @@
 """Bounded HTTP adapter for the unchanged offline Stage 1 engine."""
 import asyncio
+from collections import OrderedDict
+import hashlib
 from concurrent.futures import ThreadPoolExecutor
 from contextlib import asynccontextmanager
 import importlib
@@ -9,7 +11,7 @@ import math
 from pathlib import Path
 import sys
 import threading
-from time import perf_counter
+from time import monotonic, perf_counter
 from typing import Annotated, Any, Literal
 
 from fastapi import APIRouter, Depends, HTTPException, Request, Response
@@ -155,13 +157,20 @@ def load_engine():
 
 class EvidenceService:
     """One admitted job per worker, no executor backlog. Timeout does not free a busy slot."""
-    def __init__(self, loader=load_engine, timeout=ANALYSIS_TIMEOUT_SECONDS):
+    def __init__(self, loader=load_engine, timeout=ANALYSIS_TIMEOUT_SECONDS, *,
+                 cache_entries=32, cache_bytes=16 * 1024 * 1024, cache_ttl=300):
         self.loader = loader
         self.timeout = timeout
         self.executor = ThreadPoolExecutor(max_workers=1, thread_name_prefix='ranchi-evidence')
         self.gate = threading.Lock()
         self.engine = self.dataset = None
         self.initialization_error = None
+        # Accessed only by the single executor thread; never persisted.
+        self.cache = OrderedDict()
+        self.cache_size = 0
+        self.cache_entries = cache_entries
+        self.cache_bytes = cache_bytes
+        self.cache_ttl = cache_ttl
 
     def _run(self, payload):
         if self.initialization_error:
@@ -176,6 +185,19 @@ class EvidenceService:
                 self.initialization_error = True
                 logger.exception('Ranchi evidence dataset initialization failed')
                 raise error(503, 'dataset_unavailable', 'Verified pilot dataset or required dependencies unavailable.') from None
+        # All validated inputs belong in the key, not just the provider route ID.
+        # Each service owns one immutable verified dataset; restart clears caches.
+        key = hashlib.sha256(json.dumps(payload.model_dump(), sort_keys=True,
+            separators=(',', ':'), allow_nan=False).encode()).digest()
+        now = monotonic()
+        for old_key, (expires, value) in list(self.cache.items()):
+            if expires <= now:
+                self.cache_size -= len(value)
+                del self.cache[old_key]
+        if key in self.cache:
+            self.cache.move_to_end(key)
+            logger.info('Ranchi evidence response cache hit')
+            return self.cache[key][1]
         started = perf_counter()
         try:
             result = self.engine.analyze_route(**payload.model_dump(), buffer_metres=100, dataset=self.dataset)
@@ -189,6 +211,13 @@ class EvidenceService:
             EvidenceResponse.model_validate(result)
             encoded = json.dumps(result, ensure_ascii=False, allow_nan=False, separators=(',', ':')).encode('utf-8')
             log_elapsed('analysis and encoding', started)
+            if self.cache_entries > 0 and self.cache_ttl > 0 and len(encoded) <= self.cache_bytes:
+                while self.cache and (len(self.cache) >= self.cache_entries or
+                                      self.cache_size + len(encoded) > self.cache_bytes):
+                    _, (_, old) = self.cache.popitem(last=False)
+                    self.cache_size -= len(old)
+                self.cache[key] = (monotonic() + self.cache_ttl, encoded)
+                self.cache_size += len(encoded)
             return encoded
         except Exception:
             logger.exception('Ranchi evidence result encoding failed')

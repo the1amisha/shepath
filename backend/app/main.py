@@ -9,6 +9,8 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, field_validator
 
+from .settings import cors_origins
+
 from .pilot_ranchi import router as pilot_ranchi_router
 from .route_evidence import EvidenceBodyLimit, router as route_evidence_router
 
@@ -16,12 +18,7 @@ app = FastAPI()
 app.add_middleware(EvidenceBodyLimit)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=[
-        "http://localhost:8080",
-        "http://localhost:8081",
-        "http://127.0.0.1:8080",
-        "http://127.0.0.1:8081",
-    ],
+    allow_origins=cors_origins(),
     allow_methods=["GET", "POST", "OPTIONS"],
     allow_headers=["*"],
 )
