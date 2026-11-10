@@ -1,0 +1,4 @@
+private_output/
+*.csv
+*.zip
+__pycache__/
