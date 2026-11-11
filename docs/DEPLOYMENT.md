@@ -1,9 +1,7 @@
 # SHEPATH deployment preparation
 
-This package prepares deployment; it does not deploy the service. It is based on
-commit 86642821e98a1b2224f2356e9fe9698f5fd1c30a. Review your local changes before
-applying these files, especially backend/app/main.py. Preserve the local campus
-boundary and offline exports. No frontend files or private environment files are included.
+The backend runs on Render; the frontend is deployed separately. Keep API keys
+in private hosting configuration, never in frontend build variables.
 
 ## Backend
 
@@ -22,16 +20,18 @@ in a file that is not loaded. CORS is not authentication or rate limiting; add
 host-level quota protection before public release.
 
 The container runs as a non-root user with one worker and concurrency limit 32.
-A separate preflight process verifies the selected evidence exports before startup;
-it does not warm the serving worker. The health endpoint is a liveness check.
+Image builds run preflight validation for both bundled evidence profiles. At runtime,
+the worker validates and loads the selected profile on its first evidence request.
+There is no separate runtime preflight process repeating this work before the server
+starts. The health endpoint is a liveness check, not evidence readiness.
 
 The original pilot dataset is the default. The campus profile requires both:
 
 - data/ranchi_safety/hatia_mahilong_boundary.json
 - data/ranchi_safety/offline_runs/eastern_261008_hatia_mahilong_v1/
 
-These campus files were not present in the checked-out repository. Obtain the
-validated copies from the laptop before setting SHEPATH_EVIDENCE_DATASET=hatia-mahilong.
+The validated campus files are bundled in the repository. Set
+SHEPATH_EVIDENCE_DATASET=hatia-mahilong to select them.
 Preserve the manifest, paths and all hashed artifacts, including pilot.osm.pbf.
 Do not include unrelated regional PBFs or local SQLite databases. Run
 `python backend/preflight.py` after selecting the profile; a missing or invalid
@@ -52,6 +52,22 @@ The current build produces .output/server/wrangler.json, .output/server/index.mj
 and .output/public. Treat it as the configured Cloudflare Worker application,
 not a plain static-site folder. The build advertises `npx nitro deploy --prebuilt`;
 run deployment only with the intended account and final URLs configured.
+
+## First evidence request
+
+On the free hosted instance, campus initialization has taken about 154 seconds.
+The backend returns `504 analysis_timeout` after 60 seconds but keeps the job running
+and caches its successful result. The frontend now retries that exact request,
+including `503 analysis_busy` responses, for up to four minutes per route once it
+leaves the serial queue. Requests remain sequential; changing journeys cancels
+waiting and queued work. Each request has a 75-second deadline, capped by the
+remaining recovery budget. Other errors, including network failures and unstructured
+gateway timeouts, are terminal. Routes remain usable while evidence loads.
+
+This recovers from slow initialization; it does not make dataset loading instant.
+After deployment, test a first request after a restart and a second warm request.
+Confirm evidence appears without refreshing and that changing journeys prevents
+stale results. Local automated checks cannot establish hosted startup timing.
 
 ## Evidence cache and checks
 
