@@ -60,7 +60,7 @@ describe("Dynamic evidence client", () => {
       coverage: { full_buffer_covered: false, reason: "centerline_outside_pilot" }, route_context: null })));
     expect((await fetchRouteEvidence(route, new AbortController().signal)).route_context).toBeNull();
   });
-  it.each([[422, "invalid_route_geometry", "invalid"], [503, "dataset_unavailable", "dataset"], [504, "analysis_timeout", "timeout"], [503, "analysis_failed", "service"]])(
+  it.each([[422, "invalid_route_geometry", "invalid"], [503, "dataset_unavailable", "dataset"], [504, "gateway_timeout", "timeout"], [503, "analysis_failed", "service"]])(
     "handles %s/%s without automatic retries", async (status, code, expected) => {
       const fetch = vi.fn().mockResolvedValue(response({ detail: { code } }, Number(status))); vi.stubGlobal("fetch", fetch);
       await expect(fetchRouteEvidence(route, new AbortController().signal)).rejects.toMatchObject({ code: expected });
@@ -83,12 +83,40 @@ describe("Dynamic evidence client", () => {
     vi.stubGlobal("fetch", vi.fn().mockResolvedValue(response(fixture)));
     await expect(fetchRouteEvidence(route, new AbortController().signal)).rejects.toMatchObject({ code: "response" });
   });
-  it("retries busy only twice and never overlaps requests", async () => {
+  it("bounds persistent busy responses to the recovery budget", async () => {
     vi.useFakeTimers();
     const fetch = vi.fn().mockImplementation(async () => response({ detail: { code: "analysis_busy" } }, 503)); vi.stubGlobal("fetch", fetch);
     const pending = expect(fetchRouteEvidence(route, new AbortController().signal)).rejects.toMatchObject({ code: "busy" });
-    await vi.advanceTimersByTimeAsync(10001); await pending;
-    expect(fetch).toHaveBeenCalledTimes(3);
+    await vi.advanceTimersByTimeAsync(240001); await pending;
+    expect(fetch).toHaveBeenCalledTimes(48);
+  });
+  it("recovers automatically after a 154-second dataset initialization", async () => {
+    vi.useFakeTimers();
+    const start = Date.now();
+    const fetch = vi.fn().mockImplementation(async () => {
+      if (Date.now() - start < 60000) {
+        await new Promise(resolve => setTimeout(resolve, 60000));
+        return response({ detail: { code: "analysis_timeout" } }, 504);
+      }
+      if (Date.now() - start < 154000)
+        return response({ detail: { code: "analysis_busy" } }, 503);
+      return response(evidenceFixture());
+    });
+    vi.stubGlobal("fetch", fetch);
+    const pending = fetchRouteEvidence(route, new AbortController().signal);
+    await vi.advanceTimersByTimeAsync(155001);
+    expect((await pending).route.id).toBe(route.id);
+    const payloads = fetch.mock.calls.map(call => call[1].body);
+    expect(new Set(payloads).size).toBe(1);
+  });
+  it("does not reset the deadline after repeated analysis timeouts", async () => {
+    vi.useFakeTimers();
+    const fetch = vi.fn().mockImplementation(async () => response({ detail: { code: "analysis_timeout" } }, 504));
+    vi.stubGlobal("fetch", fetch);
+    const pending = expect(fetchRouteEvidence(route, new AbortController().signal)).rejects.toMatchObject({ code: "timeout" });
+    await vi.advanceTimersByTimeAsync(240001);
+    await pending;
+    expect(fetch).toHaveBeenCalledTimes(48);
   });
   it("serializes calls across consumers", async () => {
     let finish!: (response: Response) => void;
