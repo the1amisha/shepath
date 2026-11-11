@@ -66,6 +66,7 @@ export class EvidenceError extends Error {
     public code: EvidenceErrorCode,
     message: string,
     public retryMs = 5000,
+    public retryable = false,
   ) {
     super(message);
   }
@@ -89,7 +90,7 @@ function delay(ms: number, signal: AbortSignal) {
   });
 }
 
-async function requestEvidence(route: RouteData, signal: AbortSignal): Promise<RouteEvidence> {
+async function requestEvidence(route: RouteData, signal: AbortSignal, remainingMs: number): Promise<RouteEvidence> {
   const baseUrl = apiBaseUrl();
   if (route.coordinates.length < 2)
     throw new EvidenceError(
@@ -99,7 +100,7 @@ async function requestEvidence(route: RouteData, signal: AbortSignal): Promise<R
   const controller = new AbortController();
   const cancel = () => controller.abort(signal.reason);
   signal.addEventListener("abort", cancel, { once: true });
-  const timer = setTimeout(() => controller.abort(new Error("Evidence deadline")), 75000);
+  const timer = setTimeout(() => controller.abort(new Error("Evidence deadline")), Math.min(75000, remainingMs));
   try {
     aborted(signal);
     const response = await fetch(`${baseUrl}/pilot/ranchi/route-evidence`, {
@@ -129,6 +130,7 @@ async function requestEvidence(route: RouteData, signal: AbortSignal): Promise<R
           "busy",
           "Evidence service is busy. Try this journey again later.",
           Number.isFinite(seconds) ? Math.min(15000, Math.max(5000, seconds * 1000)) : 5000,
+          true,
         );
       }
       if (response.status === 503 && code === "dataset_unavailable")
@@ -137,6 +139,8 @@ async function requestEvidence(route: RouteData, signal: AbortSignal): Promise<R
         throw new EvidenceError(
           "timeout",
           "Evidence analysis timed out. Your route is still usable.",
+          5000,
+          code === "analysis_timeout",
         );
       if (response.status === 422)
         throw new EvidenceError(
@@ -197,17 +201,24 @@ async function requestEvidence(route: RouteData, signal: AbortSignal): Promise<R
   }
 }
 
-// One queue across component lifetimes, including busy retries. Aborted queued jobs do no I/O.
+// One queue across component lifetimes, including startup recovery. Aborted queued jobs do no I/O.
 let queue: Promise<unknown> = Promise.resolve();
 export function fetchRouteEvidence(route: RouteData, signal: AbortSignal): Promise<RouteEvidence> {
   const job = queue.then(async () => {
-    for (let attempt = 0; ; attempt++) {
+    // The server keeps timed-out work running and caches the completed result.
+    // Retry that same payload, without extending the total wait on each attempt.
+    const deadline = Date.now() + 240000;
+    for (;;) {
       aborted(signal);
       try {
-        return await requestEvidence(route, signal);
+        return await requestEvidence(route, signal, deadline - Date.now());
       } catch (cause) {
-        if (!(cause instanceof EvidenceError) || cause.code !== "busy" || attempt >= 2) throw cause;
+        if (!(cause instanceof EvidenceError) || !cause.retryable) throw cause;
+        const remainingMs = deadline - Date.now();
+        if (remainingMs <= cause.retryMs) throw cause;
         await delay(cause.retryMs, signal);
+        aborted(signal);
+        if (Date.now() >= deadline) throw cause;
       }
     }
   });
