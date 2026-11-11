@@ -224,8 +224,8 @@ it("names queued and requested routes, preserves sequential processing and selec
     .mockResolvedValueOnce(otherEvidence);
   start();
   const secondButton = await screen.findByRole("button", { name: /Route 2 Not selected/ });
-  expect(await screen.findByText(/Route 1: Analysis requested/)).toHaveTextContent(
-    "bounded retries",
+  expect(await screen.findByText(/Route 1: Loading mapped evidence/)).toHaveTextContent(
+    "retry automatically for up to 4 minutes",
   );
   expect(screen.getByText(/Route 2: Waiting for analysis/)).toBeVisible();
   expect(fetchEvidence).toHaveBeenCalledOnce();
