@@ -12,5 +12,8 @@ COPY backend/preflight.py /app/backend/preflight.py
 COPY data/ranchi_safety /app/data/ranchi_safety
 RUN useradd --uid 10001 --create-home shepath
 USER shepath
+# Validate during the build; the worker also validates once when loading its dataset.
+RUN python backend/preflight.py \
+    && SHEPATH_EVIDENCE_DATASET=hatia-mahilong python backend/preflight.py
 EXPOSE 8011
-CMD ["sh", "-c", "python backend/preflight.py && exec python -m uvicorn app.main:app --app-dir backend --host 0.0.0.0 --port ${PORT} --workers 1 --limit-concurrency 32 --lifespan on"]
+CMD ["sh", "-c", "exec python -m uvicorn app.main:app --app-dir backend --host 0.0.0.0 --port ${PORT} --workers 1 --limit-concurrency 32 --lifespan on"]

@@ -122,7 +122,7 @@ export function EvidenceStatus({
       {!state || state.status === "queued"
         ? "Waiting for analysis. Routes are processed one at a time."
         : state.status === "loading"
-          ? "Analysis requested… This may include service waiting and bounded retries. The route remains usable."
+          ? "Loading mapped evidence… First use can take a few minutes. We retry automatically for up to 4 minutes; you can continue with the route."
           : state.status === "error"
             ? state.message
             : evidence?.status === "coverage_unavailable"
