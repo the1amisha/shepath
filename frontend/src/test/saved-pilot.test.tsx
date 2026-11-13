@@ -183,8 +183,7 @@ describe("Saved pilot view", () => {
     fireEvent.click(screen.getByRole("button", { name: "Back to journey" }));
     expect(screen.getByTestId("map")).toHaveAttribute("data-routes", JSON.stringify([live]));
     expect(screen.queryByText(/Mapped proximity observations/)).not.toBeInTheDocument();
-    expect(screen.getByText("Walking-route comparison.")).toBeInTheDocument();
+    expect(screen.getByText("Compare walking routes")).toBeInTheDocument();
     expect(getRoutes).toHaveBeenCalledOnce();
   });
 });
-

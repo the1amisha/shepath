@@ -240,6 +240,8 @@ it("names queued and requested routes, preserves sequential processing and selec
   ).toBeVisible();
   await act(async () => finish(evidenceFixture() as RouteEvidence));
   await screen.findByText("9 mapped records");
+  if (screen.queryByText("Street evidence & sources"))
+    fireEvent.click(screen.getByText("Street evidence & sources"));
   expect(screen.getByText("9 mapped records")).toBeVisible();
   expect(screen.queryByText("7 mapped records")).not.toBeInTheDocument();
   expect(fetchEvidence.mock.calls.map((call) => call[0])).toEqual([evidenceRoute, second]);
