@@ -52,6 +52,21 @@ class RouteFeatureTests(unittest.TestCase):
         self.assertAlmostEqual(r['lighting']['route_without_usable_tag_within_buffer']['percent'],0)
         self.assertIsNone(r['lighting']['actual_walked_street_coverage'])
 
+    def test_sidewalk_presence_is_conservative_and_additive(self):
+        cases = [({}, 'unknown'), ({'sidewalk': 'no'}, 'no'),
+                 ({'sidewalk': 'both'}, 'yes'), ({'sidewalk:left:surface': 'paved'}, 'unknown'),
+                 ({'sidewalk': 'separate'}, 'unknown'),
+                 ({'sidewalk': 'yes', 'sidewalk:left': 'no'}, 'unknown'),
+                 ({'sidewalk:left': 'yes'}, 'unknown'),
+                 ({'sidewalk:left': 'yes', 'sidewalk:right': 'yes'}, 'yes')]
+        for tags, expected in cases:
+            self.assertEqual(features.sidewalk_presence(tags), expected)
+        items = [self.item(i, 'way', self.route, highway='residential', **tags)
+                 for i, (tags, expected) in enumerate(cases)]
+        proxy = self.run_route(items)['sidewalk']['presence_proxy']
+        self.assertEqual({k: v['numerator'] for k, v in proxy.items()}, {'yes': 2, 'no': 1, 'unknown': 5})
+        self.assertTrue(all(v['denominator'] == 8 for v in proxy.values()))
+
     def test_sidewalk_no_is_available_not_missing(self):
         r=self.run_route([self.item(1,'way',self.route,highway='footway',sidewalk='no'),self.item(2,'way',self.route,highway='footway')])
         self.assertEqual(r['sidewalk']['states']['available']['object_availability']['numerator'],1)

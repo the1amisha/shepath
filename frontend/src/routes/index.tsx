@@ -23,6 +23,8 @@ import { useJourneyFocus, focusContent } from "@/hooks/useJourneyFocus";
 import { RouteSummaryPanel } from "@/components/RouteSummaryPanel";
 import { DepartureControl, DepartureTimePanel } from "@/components/DepartureTimePanel";
 import { istInputValue } from "@/lib/routing/departureTime";
+import { LiveRecommendationPanel } from "@/components/LiveRecommendationPanel";
+import { recommendRoutes, type Observations } from "@/lib/routing/liveRecommendation";
 import { EvidencePreferences } from "@/components/EvidencePreferences";
 import {
   criteria,
@@ -118,6 +120,9 @@ export function ShePathApp() {
   useEffect(() => {
     setDeparture(istInputValue(new Date()));
   }, []);
+  const [mlEnabled, setMlEnabled] = useState(false);
+  const [maxExtra, setMaxExtra] = useState(5);
+  const [observations, setObservations] = useState<Observations>({});
   const [weights, setWeights] = useState<Weights>({ ...emptyWeights });
   const [from, setFrom] = useState("Albert Ekka Chowk, Ranchi");
   const [to, setTo] = useState("Ranchi Railway Station, Ranchi");
@@ -158,7 +163,10 @@ export function ShePathApp() {
   );
   const match = evidenceMatch(routes, evidence, weights, isMock);
   const effectiveWeights = normalizedWeights(weights);
-  const orderedOptions = match.active
+  const ml = recommendRoutes(routes, evidence, departure, observations, maxExtra, isMock);
+  const orderedOptions = mlEnabled
+    ? [...routeOptions].sort((a, b) => Number(b.id === ml.recommendedId) - Number(a.id === ml.recommendedId))
+    : match.active
     ? match.rows.map((row) => routeOptions.find((route) => route.id === row.id)!)
     : routeOptions;
   const sensitivityNote = sensitivity(match.rows, weights);
@@ -176,6 +184,7 @@ export function ShePathApp() {
     setInterrupted(false);
     setError(null);
     setRoutes([]);
+    setObservations({});
     setSelected("");
     setSummaryComparison("");
     setScreen("results");
@@ -541,6 +550,11 @@ export function ShePathApp() {
             onComparisonChange={setSummaryComparison}
             mock={isMock}
           />
+          {!isMock && routes.length > 0 && (
+            <LiveRecommendationPanel routes={routes} result={ml} departure={departure}
+              enabled={mlEnabled} onEnabled={setMlEnabled} maxExtra={maxExtra} onMaxExtra={setMaxExtra}
+              observations={observations} onObservations={setObservations} onSelect={setSelected} />
+          )}
           <div className="route-layout grid items-start rounded-3xl bg-card app-shadow lg:grid-cols-[390px_minmax(0,1fr)]">
             <aside className="route-options-sheet min-w-0 p-5 lg:p-6">
               <div className="sheet-handle" aria-hidden="true" />
@@ -605,9 +619,9 @@ export function ShePathApp() {
                   <EvidencePreferences weights={weights} onChange={setWeights} />
                 </details>
                 <p role="status" className="mt-3 text-sm">
-                  {match.message}
+                  {mlEnabled ? "ML mode is active. Manual evidence weights are paused; turn off ML to use them." : match.message}
                 </p>
-                {sensitivityNote && (
+                {!mlEnabled && sensitivityNote && (
                   <p className="mt-3 text-xs leading-5">
                     Sensitivity example:{" "}
                     {routeOptions.find((r) => r.id === sensitivityNote.id)?.name} would rank first
@@ -629,12 +643,13 @@ export function ShePathApp() {
                 )}
                 {orderedOptions.map((route) => (
                   <div key={route.id} data-route-card={route.id}>
+                    {mlEnabled && ml.recommendedId === route.id && <p className="px-3 py-2 text-sm font-bold text-primary">Experimental ML pick</p>}
                     <RouteOption
                       route={route}
                       selected={selected === route.id}
                       onSelect={() => setSelected(route.id)}
                     />
-                    {match.active &&
+                    {!mlEnabled && match.active &&
                       (() => {
                         const row = match.rows.find((r) => r.id === route.id)!;
                         return (
