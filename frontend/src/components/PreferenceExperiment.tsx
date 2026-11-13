@@ -177,8 +177,8 @@ export function PreferenceExperiment() {
             <p className="mt-3 text-sm leading-6">
               This evaluates new submissions answering the same six scenarios, not unseen routes or
               the wider population. Historical map records and unknown tags are not substituted for
-              survey attributes. The live route comparison uses its existing user-selected evidence
-              weights.
+              survey attributes. The live route comparison offers manual evidence weights and a separate experimental
+              constrained ML recommender. This page retains the original unconstrained model.
             </p>
             <p className="mt-3 text-xs text-muted-foreground">
               Model: regularized logistic regression, C = 1, no intercept. Baseline: smoothed

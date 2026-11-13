@@ -52,6 +52,28 @@ def sidewalk_state(tags):
     return 'available' if any(v.strip() and v.strip().lower()!='unknown' for v in values.values()) else 'unknown'
 
 
+def sidewalk_presence(tags):
+    """Conservative presence tags, not continuity/usability; mixed tags unknown."""
+    general = tags.get('sidewalk', '').strip().lower()
+    both = tags.get('sidewalk:both', '').strip().lower()
+    left = tags.get('sidewalk:left', '').strip().lower()
+    right = tags.get('sidewalk:right', '').strip().lower()
+    values = [v for v in (general, both, left, right) if v]
+    if not values:
+        return 'unknown'
+    if general in {'yes', 'both', 'left', 'right'} and all(v in {'', 'yes'} for v in (both, left, right)):
+        return 'yes'
+    if not general and both == 'yes' and all(v in {'', 'yes'} for v in (left, right)):
+        return 'yes'
+    if not general and not both and left == right == 'yes':
+        return 'yes'
+    if general in {'no', 'none'} and all(v in {'no', 'none'} for v in values):
+        return 'no'
+    if not general and (both == 'no' or left == right == 'no') and all(v == 'no' for v in values):
+        return 'no'
+    return 'unknown'
+
+
 def road_attribute(line, roads, corridor, radius, attribute):
     states = ('yes','no','other_recorded','unknown') if attribute=='lighting' else ('available','unknown')
     classify = lighting_state if attribute=='lighting' else sidewalk_state
@@ -76,6 +98,10 @@ def road_attribute(line, roads, corridor, radius, attribute):
         output['missing_key_count'] = sum('lit' not in f['properties']['tags'] for f,g in roads)
         output['blank_value_count'] = sum('lit' in f['properties']['tags'] and not f['properties']['tags']['lit'].strip() for f,g in roads)
     else:
+        output['presence_proxy'] = {
+            state: ratio(sum(sidewalk_presence(f['properties']['tags']) == state for f, g in roads),
+                         len(roads), 'OSM_road_objects')
+            for state in ('yes', 'no', 'unknown')}
         output['raw_key_value_counts'] = dict(sorted(Counter(f'{k}={v}' for f,g in roads for k,v in sidewalk_values(f['properties']['tags']).items()).items()))
         output['interpretation'] = 'Any usable sidewalk-family value is tag availability only; no inferred sidewalk presence, side, continuity or walkability.'
     return output

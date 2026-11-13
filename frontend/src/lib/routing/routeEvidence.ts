@@ -52,7 +52,9 @@ const schema = z.object({
           other_recorded: z.object({ object_availability: ratio }),
         }),
       }),
-      sidewalk: tag,
+      sidewalk: tag.extend({
+        presence_proxy: z.object({ yes: ratio, no: ratio, unknown: ratio }).optional(),
+      }),
       opening_hours: z.object({ nonblank: ratio }),
     })
     .nullable(),

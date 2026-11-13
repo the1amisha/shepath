@@ -1,0 +1,48 @@
+{
+  "version": "survey-constrained-v1",
+  "features": [
+    "extra_time_A_in_5_minutes",
+    "footpath_advantage_A",
+    "lighting_advantage_A",
+    "shops_advantage_A",
+    "pedestrians_advantage_A"
+  ],
+  "coefficients": [
+    0.0,
+    0.8227883592768995,
+    1.1670207478542274,
+    0.8040023404810335,
+    0.1902614777102535
+  ],
+  "counts": {
+    "submissions": 40,
+    "consenting_submissions": 39,
+    "clear_choices": 202,
+    "no_preference": 14,
+    "missing": 7,
+    "uncertain": 11,
+    "excluded_without_consent": 1
+  },
+  "source_csv_sha256": "17d1a6de72849e25c0bd1680bb827f5da8d7224198032ae58d6276a26d47a6f5",
+  "evaluation": {
+    "model": {
+      "accuracy": 0.6732673267326733,
+      "log_loss": 0.6384904077250393
+    },
+    "baseline": {
+      "accuracy": 0.6732673267326733,
+      "log_loss": 0.6446828018633134
+    }
+  },
+  "reference_probabilities": [
+    0.3051720893889627,
+    0.7626060797830758,
+    0.4525775996594767,
+    0.690829968959491,
+    0.5852182529805094,
+    0.648793670457359
+  ],
+  "scope": "Exploratory survey-trained weights with hand-designed mapped proxies; not validated on real routes.",
+  "constraints": "Time <= 0, attribute coefficients >= 0, C=1, no intercept.",
+  "evaluation_scope": "Leave-one-submission-out on the same six scenarios. Constraints were chosen after inspecting the original fit, so this is not an untouched final test."
+}
