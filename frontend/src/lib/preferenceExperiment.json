@@ -1,0 +1,135 @@
+{
+  "model": {
+    "experimental_only": true,
+    "features": [
+      "extra_time_A_in_5_minutes",
+      "footpath_advantage_A",
+      "lighting_advantage_A",
+      "shops_advantage_A",
+      "pedestrians_advantage_A"
+    ],
+    "coefficients": [
+      0.6160372912318537,
+      0.2521222024985104,
+      0.5650016989418545,
+      0.2612628649721432,
+      -0.3544994891898366
+    ],
+    "intercept": 0,
+    "C": 1.0,
+    "prediction": "sigmoid(dot(coefficients, A_minus_B_features))",
+    "source_csv_sha256": "17d1a6de72849e25c0bd1680bb827f5da8d7224198032ae58d6276a26d47a6f5"
+  },
+  "counts": {
+    "submissions": 40,
+    "consenting_submissions": 39,
+    "clear_choices": 202,
+    "no_preference": 14,
+    "missing": 7,
+    "uncertain": 11,
+    "excluded_without_consent": 1
+  },
+  "evaluation": {
+    "model": {
+      "accuracy": 0.6732673267326733,
+      "log_loss": 0.6392805108737795
+    },
+    "scenario_baseline": {
+      "accuracy": 0.6732673267326733,
+      "log_loss": 0.6446828018633134
+    },
+    "contributing_submissions": 39
+  },
+  "scenarios": [
+    {
+      "title": "Choice 1 \u2014 During daylight",
+      "a": "10-minute walk; no footpath.",
+      "b": "15-minute walk; continuous usable footpath.",
+      "features": [
+        -1.0,
+        -1.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "observedA": 9,
+      "observedB": 26,
+      "referenceProbability": 0.29563741733592935
+    },
+    {
+      "title": "Choice 2 \u2014 After dark",
+      "a": "18-minute walk; working streetlights throughout.",
+      "b": "12-minute walk; streetlights on only a few stretches.",
+      "features": [
+        1.2,
+        0.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "observedA": 27,
+      "observedB": 8,
+      "referenceProbability": 0.7865487858832216
+    },
+    {
+      "title": "Choice 3 \u2014 During daylight",
+      "a": "12-minute walk; few other pedestrians.",
+      "b": "17-minute walk; other pedestrians along most stretches.",
+      "features": [
+        -1.0,
+        0.0,
+        0.0,
+        0.0,
+        -1.0
+      ],
+      "observedA": 15,
+      "observedB": 17,
+      "referenceProbability": 0.4349857200387526
+    },
+    {
+      "title": "Choice 4 \u2014 After dark",
+      "a": "16-minute walk; open shops along several stretches.",
+      "b": "11-minute walk; no open shops.",
+      "features": [
+        1.0,
+        0.0,
+        0.0,
+        1.0,
+        0.0
+      ],
+      "observedA": 25,
+      "observedB": 9,
+      "referenceProbability": 0.7062624348892512
+    },
+    {
+      "title": "Choice 5 \u2014 After dark",
+      "a": "13-minute walk; lighting throughout; no footpath.",
+      "b": "13-minute walk; continuous footpath; lighting on only a few stretches.",
+      "features": [
+        0.0,
+        -1.0,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "observedA": 19,
+      "observedB": 12,
+      "referenceProbability": 0.5775879574945773
+    },
+    {
+      "title": "Choice 6 \u2014 During daylight",
+      "a": "14-minute walk; open shops; few pedestrians.",
+      "b": "14-minute walk; no open shops; other pedestrians along most stretches.",
+      "features": [
+        0.0,
+        0.0,
+        0.0,
+        1.0,
+        -1.0
+      ],
+      "observedA": 22,
+      "observedB": 13,
+      "referenceProbability": 0.6492541497204339
+    }
+  ]
+}
