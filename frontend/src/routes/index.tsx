@@ -23,6 +23,7 @@ import { useJourneyFocus, focusContent } from "@/hooks/useJourneyFocus";
 import { RouteSummaryPanel } from "@/components/RouteSummaryPanel";
 import { DepartureControl, DepartureTimePanel } from "@/components/DepartureTimePanel";
 import { istInputValue } from "@/lib/routing/departureTime";
+import { RouteComparisonTable } from "@/components/RouteComparisonTable";
 import { LiveRecommendationPanel } from "@/components/LiveRecommendationPanel";
 import {
   recommendRoutes,
@@ -378,11 +379,13 @@ export function ShePathApp() {
             }}
             className="mx-auto max-w-2xl rounded-3xl border border-border bg-card p-5 app-shadow sm:p-8"
           >
-            <p className="mb-5 text-sm leading-6 text-muted-foreground">
-              Historical mapped evidence is limited to a bounded Ranchi pilot. The entire route and
-              its 100 m buffer must fit inside it; a Ranchi place name does not guarantee coverage.
-              Walking routes remain usable when evidence is unavailable.
-            </p>
+            <details className="mb-4 text-xs leading-5 text-muted-foreground">
+              <summary className="cursor-pointer font-semibold">Ranchi pilot coverage</summary>
+              <p className="mt-2">
+                Historical evidence requires the route and its 100 m buffer to fit inside the pilot
+                boundary. Routes remain usable outside evidence coverage.
+              </p>
+            </details>
             <div className="relative space-y-4 before:absolute before:left-[1.35rem] before:top-12 before:h-16 before:border-l-2 before:border-dashed before:border-primary/40">
               <LocationField
                 onSelect={
@@ -511,10 +514,37 @@ export function ShePathApp() {
         <PageFrame
           eyebrow="Evidence preferences"
           title="Choose what matters to you"
-          description="Set optional weights for the mapped evidence you want to compare. All weights start at zero; you can change them again beside the results."
+          description="Use automatic comparison, or set your own priorities."
         >
           <div className="mx-auto max-w-3xl">
-            <EvidencePreferences weights={weights} onChange={setWeights} />
+            {!isMock && (
+              <div className="space-y-3 rounded-2xl border bg-card p-5">
+                <label className="flex items-center gap-3 font-bold">
+                  <input
+                    type="radio"
+                    name="comparison-mode"
+                    checked={mlEnabled}
+                    onChange={() => setMlEnabled(true)}
+                  />
+                  Automatic ML comparison
+                </label>
+                <p className="text-sm text-muted-foreground">
+                  Uses preferences learned from the survey.
+                </p>
+                <label className="flex items-center gap-3 font-bold">
+                  <input
+                    type="radio"
+                    name="comparison-mode"
+                    checked={!mlEnabled}
+                    onChange={() => setMlEnabled(false)}
+                  />
+                  Set my own weights
+                </label>
+              </div>
+            )}
+            {(!mlEnabled || isMock) && (
+              <EvidencePreferences weights={weights} onChange={setWeights} />
+            )}
           </div>
           <div className="mx-auto mt-8 max-w-3xl">
             <Button
@@ -530,6 +560,7 @@ export function ShePathApp() {
               className="mt-3 w-full"
               onClick={() => {
                 setWeights({ ...emptyWeights });
+                setMlEnabled(true);
                 void findRoutes();
               }}
               disabled={loading}
@@ -561,14 +592,6 @@ export function ShePathApp() {
               Edit
             </Button>
           </div>
-          <RouteSummaryPanel
-            routes={routes}
-            selected={selected}
-            states={evidence}
-            comparisonId={summaryComparison}
-            onComparisonChange={setSummaryComparison}
-            mock={isMock}
-          />
           {!isMock && routes.length > 0 && (
             <LiveRecommendationPanel
               routes={routes}
@@ -587,39 +610,20 @@ export function ShePathApp() {
             <aside className="route-options-sheet min-w-0 p-5 lg:p-6">
               <div className="sheet-handle" aria-hidden="true" />
               <h2 className="mb-4 font-display text-2xl font-black">Compare walking routes</h2>
-              <div className="flex items-start gap-3 rounded-2xl bg-secondary p-4">
-                <Sparkles className="mt-0.5 size-5 shrink-0 text-primary" />
-                <p className="text-sm leading-5 text-secondary-foreground">
-                  {isMock ? (
-                    <>
-                      <b>Mock route comparison.</b> Fixed Ranchi demo paths for any inputs; not
-                      verified walking routes. All times and distances are illustrative.
-                    </>
-                  ) : (
-                    <>
-                      <b>Walking-route comparison.</b> Backend travel estimates with historical
-                      mapped evidence where covered; no personal-safety assessment.
-                    </>
-                  )}
-                </p>
-              </div>
-              <p className="mt-3 text-xs leading-5 text-muted-foreground">
-                {mlEnabled && !isMock
-                  ? "ML compares routes automatically. Clear preference matches come first; unresolved alternatives use walking time. You can select any route."
-                  : "Choose a route to view it on the map."}
-              </p>
+              <p className="text-sm text-muted-foreground">Tap a route to view it on the map.</p>
+              {isMock && (
+                <p className="mt-2 text-xs">Illustrative mock routes · not real directions</p>
+              )}
               {!isMock && routes.length > 0 && (
-                <p className="mt-3 text-sm leading-6 text-muted-foreground">
-                  Evidence is processed one route at a time.{" "}
+                <p className="mt-2 text-xs text-muted-foreground" role="status">
+                  Evidence checked:{" "}
                   {
                     routes.filter(
-                      (route) =>
-                        evidence[route.id]?.status === "complete" ||
-                        evidence[route.id]?.status === "error",
+                      (r) =>
+                        evidence[r.id]?.status === "complete" || evidence[r.id]?.status === "error",
                     ).length
-                  }{" "}
-                  of {routes.length} routes have finished an attempt. Waiting or retries can take
-                  time; you can select a route and continue without evidence.
+                  }
+                  /{routes.length}
                 </p>
               )}
               {!loading && !error && !routes.length && (
@@ -647,9 +651,11 @@ export function ShePathApp() {
                   </summary>
                   <EvidencePreferences weights={weights} onChange={setWeights} />
                 </details>
-                <p role="status" className="mt-3 text-sm">
-                  {mlEnabled ? ml.message : match.message}
-                </p>
+                {!mlEnabled && (
+                  <p role="status" className="mt-3 text-sm">
+                    {match.message}
+                  </p>
+                )}
                 {!mlEnabled && sensitivityNote && (
                   <p className="mt-3 text-xs leading-5">
                     Sensitivity example:{" "}
@@ -683,13 +689,16 @@ export function ShePathApp() {
                       onSelect={() => chooseRoute(route.id)}
                     />
                     {!isMock && (
-                      <p className="px-3 py-2 text-sm leading-6">
-                        {routeExplanation(
-                          routes.find((r) => r.id === route.id)!,
-                          routes,
-                          ml,
-                        )}
-                      </p>
+                      <details className="px-3 py-2 text-xs leading-5">
+                        <summary className="cursor-pointer font-bold">Why this route?</summary>
+                        <p className="mt-2">
+                          {routeExplanation(
+                            routes.find((r) => r.id === route.id)!,
+                            routes,
+                            ml,
+                          )}
+                        </p>
+                      </details>
                     )}
                     {!mlEnabled &&
                       match.active &&
@@ -798,21 +807,53 @@ export function ShePathApp() {
                 </div>
               </section>
             </ResultsMapPanel>
+            {routes.length > 0 && !isMock && (
+              <div className="w-full lg:col-span-2">
+                <RouteComparisonTable
+                  routes={routes}
+                  orderedIds={orderedOptions.map((r) => r.id)}
+                  states={evidence}
+                  selected={selected}
+                  onSelect={chooseRoute}
+                />
+              </div>
+            )}
+            <details className="w-full rounded-2xl border bg-card p-4 lg:col-span-2">
+              <summary className="cursor-pointer font-bold">Route summary & comparison</summary>
+              <div className="mt-4">
+                <RouteSummaryPanel
+                  routes={routes}
+                  selected={selected}
+                  states={evidence}
+                  comparisonId={summaryComparison}
+                  onComparisonChange={setSummaryComparison}
+                  mock={isMock}
+                />
+              </div>
+            </details>
             {!isMock && selectedRoute && (
-              <div className="selected-evidence w-full lg:col-span-2">
-                <DepartureTimePanel
-                  route={routes.find((r) => r.id === selected)}
-                  name={selectedRoute.name}
-                  state={evidence[selected]}
-                  departure={departure}
-                  onChange={setDeparture}
-                />
-                <RouteEvidencePanel
-                  route={routes.find((r) => r.id === selected)}
-                  key={selectedRoute.id}
-                  name={selectedRoute.name}
-                  state={evidence[selectedRoute.id]}
-                />
+              <div className="selected-evidence w-full space-y-3 lg:col-span-2">
+                <details className="rounded-2xl border bg-card p-4">
+                  <summary className="cursor-pointer font-bold">Departure time & daylight</summary>
+                  <div className="mt-4">
+                    <DepartureTimePanel
+                      route={routes.find((r) => r.id === selected)}
+                      name={selectedRoute.name}
+                      state={evidence[selected]}
+                      departure={departure}
+                      onChange={setDeparture}
+                    />
+                  </div>
+                </details>
+                <details className="rounded-2xl border bg-card p-4">
+                  <summary className="cursor-pointer font-bold">Street evidence & sources</summary>
+                  <RouteEvidencePanel
+                    route={routes.find((r) => r.id === selected)}
+                    key={selectedRoute.id}
+                    name={selectedRoute.name}
+                    state={evidence[selectedRoute.id]}
+                  />
+                </details>
               </div>
             )}
           </div>
@@ -1016,7 +1057,7 @@ function RouteOption({
             {route.tied ? " (tied)" : ""}
           </span>
         )}
-        <p className="mt-2 text-xs text-muted-foreground">{route.subtitle}</p>
+        <p className="sr-only">{route.subtitle}</p>
         <div className="mt-3 flex flex-wrap items-center gap-3 text-xs font-bold">
           <span className="flex items-center gap-1">
             <Clock3 className="size-3.5 text-muted-foreground" />

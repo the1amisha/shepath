@@ -83,9 +83,8 @@ it("rejects whitespace with associated errors and submits trimmed locations thro
 
 it("explains the buffer before generation and destination presets do not submit", () => {
   search();
-  expect(screen.getByText(/entire route and its 100 m buffer/)).toHaveTextContent(
-    "a Ranchi place name does not guarantee coverage",
-  );
+  fireEvent.click(screen.getByText("Ranchi pilot coverage"));
+  expect(screen.getByText(/route and its 100 m buffer/)).toBeVisible();
   fireEvent.click(screen.getByRole("button", { name: "Doranda, Ranchi" }));
   expect(screen.getByRole("combobox", { name: "Going to" })).toHaveValue("Doranda, Ranchi");
   expect(screen.getByText("Step 1 of 5")).toBeInTheDocument();
@@ -94,6 +93,7 @@ it("explains the buffer before generation and destination presets do not submit"
 
 it("exposes evidence weights without changing the routing request", async () => {
   preferences();
+  fireEvent.click(screen.getByLabelText("Set my own weights"));
   const lighting = screen.getByRole("slider", { name: /^Lighting/ });
   expect(lighting).toHaveValue("0");
   lighting.focus();
@@ -128,7 +128,7 @@ it("keeps tied options unique, distance visible, and selection separate from fas
   expect(second).toHaveTextContent("0.8 km");
   expect(second).toHaveTextContent("Less than 1 min");
   expect(screen.getAllByText("Fastest estimate (tied)")).toHaveLength(2);
-  expect(screen.getByText(/ML compares routes automatically/)).toBeInTheDocument();
+  expect(screen.getByText(/Tap a route to view it on the map/)).toBeInTheDocument();
   fireEvent.click(second);
   expect(second).toHaveAttribute("aria-pressed", "true");
   expect(first).toHaveAttribute("aria-pressed", "false");

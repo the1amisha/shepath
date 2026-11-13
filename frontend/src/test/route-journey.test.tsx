@@ -149,7 +149,7 @@ describe("Real routing journey", () => {
     const alternative = { ...route, id: "another-backend-id", durationSeconds: 800 };
     getRoutes.mockResolvedValue([route, alternative]);
     start();
-    await screen.findByRole("button", { name: /Route 1/ });
+    await screen.findByRole("button", { name: /Route 1 (Selected|Not selected)/ });
     fireEvent.click(screen.getByRole("button", { name: /Fastest/ }));
     expect(screen.getByTestId("map")).toHaveAttribute("data-selected", alternative.id);
     expect(screen.getByTestId("map")).toHaveAttribute(

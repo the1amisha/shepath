@@ -34,10 +34,10 @@ it("reorders cards after evidence arrives, preserves names/selection, and reset 
   render(<ShePathApp />);
   for (const name of ["Plan my walk", "Continue to preferences"])
     fireEvent.click(screen.getByRole("button", { name }));
+  fireEvent.click(screen.getByLabelText("Set my own weights"));
   fireEvent.change(screen.getByRole("slider", { name: /^Lighting/ }), { target: { value: "100" } });
   fireEvent.click(screen.getByRole("button", { name: "Continue to routes" }));
   await screen.findByText("Automatic route recommendation");
-  fireEvent.click(screen.getByLabelText("Use ML recommendations"));
   const order = () =>
     [...document.querySelectorAll("[data-route-card]")].map((e) =>
       e.getAttribute("data-route-card"),
