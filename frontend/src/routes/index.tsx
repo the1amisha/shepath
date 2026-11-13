@@ -261,6 +261,9 @@ export function ShePathApp() {
                 : "Live walking routes with historical mapped context where covered"}
               . No personal-safety assessment is provided.
             </p>
+            <a href="/preference-lab" className="mt-3 inline-block text-sm font-bold text-primary underline">
+              Explore the ML preference experiment
+            </a>
             <p className="welcome-credit">Made for Ranchi. Built by She Builds.</p>
           </div>
         </section>
