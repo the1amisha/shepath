@@ -37,7 +37,7 @@ beforeEach(() => {
   fetchEvidence.mockReset().mockRejectedValue(new Error("Evidence unavailable"));
 });
 describe("Real routing journey", () => {
-  it("puts the ML pick first without changing selection until chosen", async () => {
+  it("automatically ranks and selects the ML pick without opting in", async () => {
     const alternative = { ...route, id: "alternative", durationSeconds: 800 };
     getRoutes.mockResolvedValue([route, alternative]);
     fetchEvidence.mockImplementation(async (r) => {
@@ -46,20 +46,33 @@ describe("Real routing journey", () => {
       const ratio = (n: number) => ({ numerator: n, denominator: 10, percent: n * 10 });
       e.route_context.lighting.states.yes.object_availability = ratio(positive ? 10 : 0);
       e.route_context.lighting.states.no.object_availability = ratio(positive ? 0 : 10);
-      return { ...e, route_context: { ...e.route_context, sidewalk: {
-        ...e.route_context.sidewalk, presence_proxy: { yes: ratio(positive ? 10 : 0), no: ratio(positive ? 0 : 10), unknown: ratio(0) },
-      } } };
+      return {
+        ...e,
+        route_context: {
+          ...e.route_context,
+          sidewalk: {
+            ...e.route_context.sidewalk,
+            presence_proxy: {
+              yes: ratio(positive ? 10 : 0),
+              no: ratio(positive ? 0 : 10),
+              unknown: ratio(0),
+            },
+          },
+        },
+      };
     });
     start();
-    await screen.findByRole("checkbox", { name: "Use ML recommendations" });
-    fireEvent.click(screen.getByRole("checkbox", { name: "Use ML recommendations" }));
     await screen.findByText("Experimental ML pick: Route 2");
-    expect(document.querySelector("[data-route-card]")).toHaveAttribute("data-route-card", "alternative");
-    expect(screen.getByTestId("map")).toHaveAttribute("data-selected", route.id);
-    fireEvent.click(screen.getByRole("button", { name: "Choose ML pick" }));
+    expect(document.querySelector("[data-route-card]")).toHaveAttribute(
+      "data-route-card",
+      "alternative",
+    );
     expect(screen.getByTestId("map")).toHaveAttribute("data-selected", "alternative");
-    fireEvent.click(screen.getByRole("checkbox", { name: "Use ML recommendations" }));
-    expect(document.querySelector("[data-route-card]")).toHaveAttribute("data-route-card", route.id);
+    fireEvent.click(screen.getByLabelText("Use ML recommendations"));
+    expect(document.querySelector("[data-route-card]")).toHaveAttribute(
+      "data-route-card",
+      route.id,
+    );
     expect(screen.getByTestId("map")).toHaveAttribute("data-selected", "alternative");
     expect(getRoutes).toHaveBeenCalledOnce();
   });

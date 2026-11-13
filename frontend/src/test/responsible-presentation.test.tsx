@@ -118,7 +118,9 @@ it("keeps tied options unique, distance visible, and selection separate from fas
   ]);
   preferences();
   fireEvent.click(screen.getByRole("button", { name: "Skip preferences" }));
-  const first = await screen.findByRole("button", { name: /Route 1 Selected/ });
+  await screen.findByRole("button", { name: /Route 2 Selected/ });
+  fireEvent.click(screen.getByRole("button", { name: /Route 1 Not selected/ }));
+  const first = screen.getByRole("button", { name: /Route 1 Selected/ });
   const second = screen.getByRole("button", { name: /Route 2 Not selected/ });
   expect(first).toHaveAttribute("aria-pressed", "true");
   expect(first).not.toHaveTextContent("Fastest");
@@ -126,7 +128,7 @@ it("keeps tied options unique, distance visible, and selection separate from fas
   expect(second).toHaveTextContent("0.8 km");
   expect(second).toHaveTextContent("Less than 1 min");
   expect(screen.getAllByText("Fastest estimate (tied)")).toHaveLength(2);
-  expect(screen.getByText(/first returned route is selected initially/)).toBeInTheDocument();
+  expect(screen.getByText(/ML compares routes automatically/)).toBeInTheDocument();
   fireEvent.click(second);
   expect(second).toHaveAttribute("aria-pressed", "true");
   expect(first).toHaveAttribute("aria-pressed", "false");

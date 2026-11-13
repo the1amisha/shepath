@@ -39,22 +39,25 @@ export function LiveRecommendationPanel({
   return (
     <section className="rounded-3xl border bg-card p-5 sm:p-8" aria-labelledby="live-ml-title">
       <h2 id="live-ml-title" className="font-display text-2xl font-black">
-        ML route recommendation
+        Automatic route recommendation
       </h2>
       <p className="mt-2 text-sm leading-6">
         Survey-trained preference weights compare these real walking routes using historical mapped
         attributes. This experimental hybrid is not a safety assessment or a validated prediction of
         your choice.
       </p>
-      <label className="mt-4 flex items-center gap-3 font-bold">
-        <input
-          type="checkbox"
-          checked={enabled}
-          onChange={(e) => onEnabled(e.target.checked)}
-          className="size-5"
-        />
-        Use ML recommendations
-      </label>
+      <details className="mt-3 text-sm">
+        <summary className="cursor-pointer font-bold">Recommendation settings</summary>
+        <label className="mt-4 flex items-center gap-3 font-bold">
+          <input
+            type="checkbox"
+            checked={enabled}
+            onChange={(e) => onEnabled(e.target.checked)}
+            className="size-5"
+          />
+          Use ML recommendations
+        </label>
+      </details>
       {enabled && (
         <>
           <div className="mt-4 flex flex-wrap items-center gap-3">
@@ -67,6 +70,7 @@ export function LiveRecommendationPanel({
               value={maxExtra}
               onChange={(e) => onMaxExtra(Number(e.target.value))}
             >
+              <option value="Infinity">Compare all returned routes</option>
               {[0, 5, 10, 15, 30].map((n) => (
                 <option key={n} value={n}>
                   {n} minutes
@@ -81,75 +85,79 @@ export function LiveRecommendationPanel({
             <div className="mt-4 rounded-2xl bg-secondary p-4">
               <h3 className="font-bold">Experimental ML pick: {routeName(result.recommendedId)}</h3>
               <p className="mt-2 text-sm leading-6">
-                Its lower fit bound exceeds the upper bounds of the other eligible routes. This only
-                accounts for missing model inputs; map errors and the survey-to-map assumptions can
-                still change the result.
+                This route best matches the survey’s walking preferences using the available inputs.
+                Map records may be incomplete or outdated; this does not establish the safest route.
               </p>
               <Button className="mt-3" onClick={() => onSelect(result.recommendedId!)}>
                 Choose ML pick
               </Button>
             </div>
           )}
-          <div className="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-            {result.rows.map((row) => {
-              const route = routes.find((r) => r.id === row.id)!;
-              const identity = observationKey(route, departure);
-              return (
-                <article key={row.id} className="rounded-2xl border p-4">
-                  <h3 className="font-bold">
-                    {routeName(row.id)} · {Math.round(route.durationSeconds / 60)} min
-                  </h3>
-                  <p className="mt-2 text-sm">
-                    {row.eligible
-                      ? `Preference fit range: ${row.low.toFixed(1)}–${row.high.toFixed(1)} / 100`
-                      : "Outside your extra-time limit"}
-                  </p>
-                  <details className="mt-3 text-sm">
-                    <summary className="cursor-pointer font-bold">
-                      Why this fit? / Add known route details
-                    </summary>
-                    <p className="mt-3 leading-6">
-                      Only change a field if you know this route at your chosen departure time. Your
-                      description overrides the mapped proxy for this journey; it is not uploaded or
-                      saved.
+          <details className="mt-4">
+            <summary className="cursor-pointer text-sm font-bold">
+              Detailed model inputs and optional corrections
+            </summary>
+            <div className="mt-4 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+              {result.rows.map((row) => {
+                const route = routes.find((r) => r.id === row.id)!;
+                const identity = observationKey(route, departure);
+                return (
+                  <article key={row.id} className="rounded-2xl border p-4">
+                    <h3 className="font-bold">
+                      {routeName(row.id)} · {Math.round(route.durationSeconds / 60)} min
+                    </h3>
+                    <p className="mt-2 text-sm">
+                      {row.eligible
+                        ? `Preference fit range: ${row.low.toFixed(1)}–${row.high.toFixed(1)} / 100`
+                        : "Outside your extra-time limit"}
                     </p>
-                    {attributes.map((key, i) => (
-                      <div key={key} className="mt-4">
-                        <label
-                          htmlFor={`ml-${routes.indexOf(route)}-${key}`}
-                          className="block font-bold"
-                        >
-                          {attributeLabels[key]}
-                        </label>
-                        <select
-                          id={`ml-${routes.indexOf(route)}-${key}`}
-                          className="mt-1 w-full rounded-xl border bg-background p-2"
-                          value={observations[identity]?.[key] ?? "unknown"}
-                          onChange={(e) => {
-                            const next = { ...observations[identity] };
-                            if (e.target.value === "unknown") delete next[key];
-                            else next[key] = e.target.value as "yes" | "no";
-                            onObservations({ ...observations, [identity]: next });
-                          }}
-                        >
-                          <option value="unknown">Use available map data / unknown</option>
-                          <option value="yes">Yes, based on my knowledge</option>
-                          <option value="no">No, based on my knowledge</option>
-                        </select>
-                        <p className="mt-1 text-xs leading-5">
-                          {row.values[key].source}. Learned weight:{" "}
-                          {((100 * weights[i]!) / totalWeight).toFixed(1)}%. Contribution:{" "}
-                          {((100 * weights[i]! * row.values[key].low) / totalWeight).toFixed(1)}–
-                          {((100 * weights[i]! * row.values[key].high) / totalWeight).toFixed(1)}{" "}
-                          points.
-                        </p>
-                      </div>
-                    ))}
-                  </details>
-                </article>
-              );
-            })}
-          </div>
+                    <details className="mt-3 text-sm">
+                      <summary className="cursor-pointer font-bold">
+                        Why this fit? / Add known route details
+                      </summary>
+                      <p className="mt-3 leading-6">
+                        Only change a field if you know this route at your chosen departure time.
+                        Your description overrides the mapped proxy for this journey; it is not
+                        uploaded or saved.
+                      </p>
+                      {attributes.map((key, i) => (
+                        <div key={key} className="mt-4">
+                          <label
+                            htmlFor={`ml-${routes.indexOf(route)}-${key}`}
+                            className="block font-bold"
+                          >
+                            {attributeLabels[key]}
+                          </label>
+                          <select
+                            id={`ml-${routes.indexOf(route)}-${key}`}
+                            className="mt-1 w-full rounded-xl border bg-background p-2"
+                            value={observations[identity]?.[key] ?? "unknown"}
+                            onChange={(e) => {
+                              const next = { ...observations[identity] };
+                              if (e.target.value === "unknown") delete next[key];
+                              else next[key] = e.target.value as "yes" | "no";
+                              onObservations({ ...observations, [identity]: next });
+                            }}
+                          >
+                            <option value="unknown">Use available map data / unknown</option>
+                            <option value="yes">Yes, based on my knowledge</option>
+                            <option value="no">No, based on my knowledge</option>
+                          </select>
+                          <p className="mt-1 text-xs leading-5">
+                            {row.values[key].source}. Learned weight:{" "}
+                            {((100 * weights[i]!) / totalWeight).toFixed(1)}%. Contribution:{" "}
+                            {((100 * weights[i]! * row.values[key].low) / totalWeight).toFixed(1)}–
+                            {((100 * weights[i]! * row.values[key].high) / totalWeight).toFixed(1)}{" "}
+                            points.
+                          </p>
+                        </div>
+                      ))}
+                    </details>
+                  </article>
+                );
+              })}
+            </div>
+          </details>
           <p className="mt-3 text-xs leading-5 text-muted-foreground">
             Fit ranges are weighted proxy scores, not probabilities or confidence intervals. Nearby
             tags may describe another street. Zero mapped facilities means unknown, not absent.

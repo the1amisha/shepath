@@ -24,7 +24,12 @@ import { RouteSummaryPanel } from "@/components/RouteSummaryPanel";
 import { DepartureControl, DepartureTimePanel } from "@/components/DepartureTimePanel";
 import { istInputValue } from "@/lib/routing/departureTime";
 import { LiveRecommendationPanel } from "@/components/LiveRecommendationPanel";
-import { recommendRoutes, type Observations } from "@/lib/routing/liveRecommendation";
+import {
+  recommendRoutes,
+  automaticRouteOrder,
+  routeExplanation,
+  type Observations,
+} from "@/lib/routing/liveRecommendation";
 import { EvidencePreferences } from "@/components/EvidencePreferences";
 import {
   criteria,
@@ -114,14 +119,15 @@ export function ShePathApp() {
     interruptRouteRequest();
     setShowSavedPilot(true);
   });
+  const manuallySelected = useRef(false);
   const [selected, setSelected] = useState<RouteKey>("");
   const [summaryComparison, setSummaryComparison] = useState("");
   const [departure, setDeparture] = useState("");
   useEffect(() => {
     setDeparture(istInputValue(new Date()));
   }, []);
-  const [mlEnabled, setMlEnabled] = useState(false);
-  const [maxExtra, setMaxExtra] = useState(5);
+  const [mlEnabled, setMlEnabled] = useState(true);
+  const [maxExtra, setMaxExtra] = useState(Infinity);
   const [observations, setObservations] = useState<Observations>({});
   const [weights, setWeights] = useState<Weights>({ ...emptyWeights });
   const [from, setFrom] = useState("Albert Ekka Chowk, Ranchi");
@@ -165,10 +171,19 @@ export function ShePathApp() {
   const effectiveWeights = normalizedWeights(weights);
   const ml = recommendRoutes(routes, evidence, departure, observations, maxExtra, isMock);
   const orderedOptions = mlEnabled
-    ? [...routeOptions].sort((a, b) => Number(b.id === ml.recommendedId) - Number(a.id === ml.recommendedId))
+    ? automaticRouteOrder(routes, ml).map((r) => routeOptions.find((option) => option.id === r.id)!)
     : match.active
-    ? match.rows.map((row) => routeOptions.find((route) => route.id === row.id)!)
-    : routeOptions;
+      ? match.rows.map((row) => routeOptions.find((route) => route.id === row.id)!)
+      : routeOptions;
+  const automaticFirst = orderedOptions[0]?.id;
+  useEffect(() => {
+    if (mlEnabled && !isMock && automaticFirst && !manuallySelected.current)
+      setSelected(automaticFirst);
+  }, [mlEnabled, automaticFirst]);
+  const chooseRoute = (id: string) => {
+    manuallySelected.current = true;
+    setSelected(id);
+  };
   const sensitivityNote = sensitivity(match.rows, weights);
   const currentIndex = steps.indexOf(screen);
   const findRoutes = async () => {
@@ -185,6 +200,7 @@ export function ShePathApp() {
     setError(null);
     setRoutes([]);
     setObservations({});
+    manuallySelected.current = false;
     setSelected("");
     setSummaryComparison("");
     setScreen("results");
@@ -270,7 +286,10 @@ export function ShePathApp() {
                 : "Live walking routes with historical mapped context where covered"}
               . No personal-safety assessment is provided.
             </p>
-            <a href="/preference-lab" className="mt-3 inline-block text-sm font-bold text-primary underline">
+            <a
+              href="/preference-lab"
+              className="mt-3 inline-block text-sm font-bold text-primary underline"
+            >
               Explore the ML preference experiment
             </a>
             <p className="welcome-credit">Made for Ranchi. Built by She Builds.</p>
@@ -551,14 +570,23 @@ export function ShePathApp() {
             mock={isMock}
           />
           {!isMock && routes.length > 0 && (
-            <LiveRecommendationPanel routes={routes} result={ml} departure={departure}
-              enabled={mlEnabled} onEnabled={setMlEnabled} maxExtra={maxExtra} onMaxExtra={setMaxExtra}
-              observations={observations} onObservations={setObservations} onSelect={setSelected} />
+            <LiveRecommendationPanel
+              routes={routes}
+              result={ml}
+              departure={departure}
+              enabled={mlEnabled}
+              onEnabled={setMlEnabled}
+              maxExtra={maxExtra}
+              onMaxExtra={setMaxExtra}
+              observations={observations}
+              onObservations={setObservations}
+              onSelect={chooseRoute}
+            />
           )}
           <div className="route-layout grid items-start rounded-3xl bg-card app-shadow lg:grid-cols-[390px_minmax(0,1fr)]">
             <aside className="route-options-sheet min-w-0 p-5 lg:p-6">
               <div className="sheet-handle" aria-hidden="true" />
-              <h2 className="mb-4 font-display text-2xl font-black">Find your fit</h2>
+              <h2 className="mb-4 font-display text-2xl font-black">Compare walking routes</h2>
               <div className="flex items-start gap-3 rounded-2xl bg-secondary p-4">
                 <Sparkles className="mt-0.5 size-5 shrink-0 text-primary" />
                 <p className="text-sm leading-5 text-secondary-foreground">
@@ -576,8 +604,9 @@ export function ShePathApp() {
                 </p>
               </div>
               <p className="mt-3 text-xs leading-5 text-muted-foreground">
-                The first returned route is selected initially for viewing, not as a recommendation.
-                Routes are not ranked by safety.
+                {mlEnabled && !isMock
+                  ? "ML compares routes automatically. Clear preference matches come first; unresolved alternatives use walking time. You can select any route."
+                  : "Choose a route to view it on the map."}
               </p>
               {!isMock && routes.length > 0 && (
                 <p className="mt-3 text-sm leading-6 text-muted-foreground">
@@ -612,14 +641,14 @@ export function ShePathApp() {
                 </section>
               )}
               <div className="mt-4">
-                <details>
+                <details hidden={mlEnabled}>
                   <summary className="cursor-pointer font-bold mb-3">
                     Adjust evidence preferences
                   </summary>
                   <EvidencePreferences weights={weights} onChange={setWeights} />
                 </details>
                 <p role="status" className="mt-3 text-sm">
-                  {mlEnabled ? "ML mode is active. Manual evidence weights are paused; turn off ML to use them." : match.message}
+                  {mlEnabled ? ml.message : match.message}
                 </p>
                 {!mlEnabled && sensitivityNote && (
                   <p className="mt-3 text-xs leading-5">
@@ -643,13 +672,27 @@ export function ShePathApp() {
                 )}
                 {orderedOptions.map((route) => (
                   <div key={route.id} data-route-card={route.id}>
-                    {mlEnabled && ml.recommendedId === route.id && <p className="px-3 py-2 text-sm font-bold text-primary">Experimental ML pick</p>}
+                    {mlEnabled && ml.recommendedId === route.id && (
+                      <p className="px-3 py-2 text-sm font-bold text-primary">
+                        Experimental ML pick
+                      </p>
+                    )}
                     <RouteOption
                       route={route}
                       selected={selected === route.id}
-                      onSelect={() => setSelected(route.id)}
+                      onSelect={() => chooseRoute(route.id)}
                     />
-                    {!mlEnabled && match.active &&
+                    {!isMock && (
+                      <p className="px-3 py-2 text-sm leading-6">
+                        {routeExplanation(
+                          routes.find((r) => r.id === route.id)!,
+                          routes,
+                          ml,
+                        )}
+                      </p>
+                    )}
+                    {!mlEnabled &&
+                      match.active &&
                       (() => {
                         const row = match.rows.find((r) => r.id === route.id)!;
                         return (
