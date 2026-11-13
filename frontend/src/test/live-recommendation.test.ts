@@ -1,6 +1,8 @@
 import { describe, expect, it } from "vitest";
 import {
   recommendRoutes,
+  automaticRouteOrder,
+  routeExplanation,
   observationKey,
   attributes,
   liveModel,
@@ -172,4 +174,29 @@ describe("real-route hybrid ML", () => {
     expect(result.recommendedId).toBeUndefined();
     expect(result.rows[1]!.eligible).toBe(false);
   });
+});
+
+it("orders unknown alternatives by time without manufacturing an ML winner", () => {
+  const r = [
+    { ...evidenceRoute, id: "slow", durationSeconds: 1200, distanceMeters: 500 },
+    { ...evidenceRoute, id: "fast", durationSeconds: 600, distanceMeters: 800 },
+  ];
+  const result = { rows: [], message: "Waiting" };
+  expect(automaticRouteOrder(r, result).map((x) => x.id)).toEqual(["fast", "slow"]);
+  expect(routeExplanation(r[0]!, r, result)).toContain("Shortest distance");
+  expect(routeExplanation(r[1]!, r, result)).toContain("fastest estimated walk");
+});
+it("compares long detours by default and preserves unresolved ties within dominance tiers", () => {
+  const r = [routes[0]!, { ...routes[1]!, durationSeconds: 3600 }];
+  const result = recommendRoutes(r, states(), departure);
+  expect(result.rows.every((x) => x.eligible)).toBe(true);
+  const values = result.rows[0]!.values;
+  const ranked = {
+    rows: [
+      { id: r[0]!.id, low: 0, high: 10, eligible: true, values },
+      { id: r[1]!.id, low: 80, high: 90, eligible: true, values },
+    ],
+    message: "",
+  };
+  expect(automaticRouteOrder(r, ranked)[0]!.id).toBe(r[1]!.id);
 });

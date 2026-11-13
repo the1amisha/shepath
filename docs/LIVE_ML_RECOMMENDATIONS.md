@@ -1,3 +1,11 @@
+## Automatic results experience
+
+ML now starts enabled and compares all returned alternatives by default (no detour cap). The optional settings retain manual mode and a detour cap. Routes with strictly separated preference-fit bounds precede dominated routes. Each unresolved tier uses duration, then distance; this fallback is not an ML or safety ranking. A clear winner retains the existing strict missing-input-bound criterion. Failed or incompatible evidence never produces an ML winner.
+
+The first displayed route is selected automatically until the user explicitly selects a route. New journeys reset that choice. Cards explain distance and duration relative only to the returned alternatives, distinguishing shortest from fastest. Model internals and optional descriptions are collapsed by default. No new training data, coefficients or safety outcome claims are introduced.
+
+The earlier opt-in instructions below describe the initial version; the automatic behaviour above supersedes them.
+
 # Experimental ML recommendations on real walking routes
 
 The results page now offers **Use ML recommendations**. It compares the actual returned route IDs and geometries, highlights a clear pick, and moves that card to the top. **Choose ML pick** selects that same route in the map, summary and subsequent journey screens. Selection never changes merely because evidence finishes loading. Manual evidence weighting resumes when ML mode is switched off.
