@@ -37,6 +37,16 @@ beforeEach(() => {
   fetchEvidence.mockReset().mockRejectedValue(new Error("Evidence unavailable"));
 });
 describe("Real routing journey", () => {
+  it("opens the labelled presentation demo from welcome without API calls", () => {
+    render(<ShePathApp />);
+    fireEvent.click(screen.getByRole("button", { name: "Presentation demo" }));
+    expect(screen.getByText("Synthetic demo data · not live routes")).toBeInTheDocument();
+    expect(screen.getByText(/1. Main street/)).toBeInTheDocument();
+    expect(getRoutes).not.toHaveBeenCalled();
+    expect(fetchEvidence).not.toHaveBeenCalled();
+    fireEvent.click(screen.getByRole("button", { name: "Back to live routes" }));
+    expect(screen.getByRole("button", { name: /Plan my walk/ })).toBeInTheDocument();
+  });
   it("automatically ranks and selects the ML pick without opting in", async () => {
     const alternative = { ...route, id: "alternative", durationSeconds: 800 };
     getRoutes.mockResolvedValue([route, alternative]);
@@ -62,7 +72,7 @@ describe("Real routing journey", () => {
       };
     });
     start();
-    await screen.findByText("Experimental ML pick: Route 2");
+    await screen.findByText("Highest suitability: Route 2");
     expect(document.querySelector("[data-route-card]")).toHaveAttribute(
       "data-route-card",
       "alternative",

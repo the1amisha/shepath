@@ -1,3 +1,4 @@
+import { learnedPriorities, type Priorities } from "@/lib/routing/hybridRecommendation";
 import type { RouteData } from "@/lib/routing/types";
 import {
   attributes,
@@ -10,6 +11,7 @@ import {
 import { Button } from "@/components/ui/button";
 
 type Props = {
+  priorities?: Priorities;
   routes: RouteData[];
   result: Recommendation;
   departure: string;
@@ -22,6 +24,7 @@ type Props = {
   onSelect: (id: string) => void;
 };
 export function LiveRecommendationPanel({
+  priorities = learnedPriorities,
   routes,
   result,
   departure,
@@ -34,8 +37,8 @@ export function LiveRecommendationPanel({
   onSelect,
 }: Props) {
   const routeName = (id: string) => `Route ${routes.findIndex((r) => r.id === id) + 1}`;
-  const weights = liveModel.coefficients.slice(1);
-  const totalWeight = weights.reduce((a, b) => a + b, 0);
+  const weights = attributes.map((key) => priorities[key]);
+  const totalWeight = weights.reduce((a, b) => a + b, 0) || 1;
   return (
     <section className="mb-4 rounded-2xl border bg-card p-4" aria-labelledby="live-ml-title">
       <h2 id="live-ml-title" className="font-display text-base font-black">
@@ -48,12 +51,12 @@ export function LiveRecommendationPanel({
         {!enabled
           ? "Manual comparison"
           : result.recommendedId
-            ? `Experimental ML pick: ${routeName(result.recommendedId)}`
+            ? `Highest suitability: ${routeName(result.recommendedId)}`
             : routes.length === 1
               ? "One route available"
               : result.rows.length
-                ? "No clear ML pick · compare walking times"
-                : "ML comparison pending or unavailable"}
+                ? "No unique score leader · compare routes"
+                : "Scoring pending or unavailable"}
       </p>
       <details className="mt-2 text-sm">
         <summary className="cursor-pointer font-semibold">Why this order?</summary>
@@ -100,12 +103,12 @@ export function LiveRecommendationPanel({
               <div className="mt-4 rounded-2xl bg-secondary p-4">
                 <h3 className="font-bold">Preference match: {routeName(result.recommendedId)}</h3>
                 <p className="mt-2 text-sm leading-6">
-                  This route best matches the survey’s walking preferences using the available
-                  inputs. Map records may be incomplete or outdated; this does not establish the
+                  This route has the highest suitability score under the active weights and midpoint
+                  rule. Map records may be incomplete or outdated; this does not establish the
                   safest route.
                 </p>
                 <Button className="mt-3" onClick={() => onSelect(result.recommendedId!)}>
-                  Choose ML pick
+                  Choose this route
                 </Button>
               </div>
             )}
@@ -160,7 +163,7 @@ export function LiveRecommendationPanel({
                               <option value="no">No, based on my knowledge</option>
                             </select>
                             <p className="mt-1 text-xs leading-5">
-                              {row.values[key].source}. Learned weight:{" "}
+                              {row.values[key].source}. Active weight:{" "}
                               {((100 * weights[i]!) / totalWeight).toFixed(1)}%. Contribution:{" "}
                               {((100 * weights[i]! * row.values[key].low) / totalWeight).toFixed(1)}
                               –
@@ -180,8 +183,8 @@ export function LiveRecommendationPanel({
             <p className="mt-3 text-xs leading-5 text-muted-foreground">
               Fit ranges are weighted proxy scores, not probabilities or confidence intervals.
               Nearby tags may describe another street. Zero mapped facilities means unknown, not
-              absent. Pedestrian activity is unknown unless you describe it. Overlapping ranges
-              produce no pick.
+              absent. Pedestrian activity is unknown unless you describe it. Ranking uses range
+              midpoints; overlapping ranges mean the order is uncertain.
             </p>
             <details className="mt-4 text-sm leading-6">
               <summary className="cursor-pointer font-bold">
