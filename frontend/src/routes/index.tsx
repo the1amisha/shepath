@@ -1,3 +1,9 @@
+import {
+  hybridRecommendation,
+  hybridOrder,
+  learnedPriorities,
+} from "@/lib/routing/hybridRecommendation";
+import { PriorityControls, SuitabilityScore, PresentationDemo } from "@/components/HybridScoring";
 import { PlaceField as LocationField } from "@/components/PlaceField";
 import { LocationPicker } from "@/components/LocationPicker";
 import { TripPlanPanel } from "@/components/TripPlanPanel";
@@ -27,7 +33,6 @@ import { RouteComparisonTable } from "@/components/RouteComparisonTable";
 import { LiveRecommendationPanel } from "@/components/LiveRecommendationPanel";
 import {
   recommendRoutes,
-  automaticRouteOrder,
   routeExplanation,
   type Observations,
 } from "@/lib/routing/liveRecommendation";
@@ -127,6 +132,8 @@ export function ShePathApp() {
   useEffect(() => {
     setDeparture(istInputValue(new Date()));
   }, []);
+  const [showPresentationDemo, setShowPresentationDemo] = useState(false);
+  const [priorities, setPriorities] = useState({ ...learnedPriorities });
   const [mlEnabled, setMlEnabled] = useState(true);
   const [maxExtra, setMaxExtra] = useState(Infinity);
   const [observations, setObservations] = useState<Observations>({});
@@ -170,9 +177,12 @@ export function ShePathApp() {
   );
   const match = evidenceMatch(routes, evidence, weights, isMock);
   const effectiveWeights = normalizedWeights(weights);
-  const ml = recommendRoutes(routes, evidence, departure, observations, maxExtra, isMock);
+  const ml = hybridRecommendation(
+    recommendRoutes(routes, evidence, departure, observations, maxExtra, isMock),
+    priorities,
+  );
   const orderedOptions = mlEnabled
-    ? automaticRouteOrder(routes, ml).map((r) => routeOptions.find((option) => option.id === r.id)!)
+    ? hybridOrder(routes, ml).map((r) => routeOptions.find((option) => option.id === r.id)!)
     : match.active
       ? match.rows.map((row) => routeOptions.find((route) => route.id === row.id)!)
       : routeOptions;
@@ -236,12 +246,22 @@ export function ShePathApp() {
   };
   const selectedRoute = routeOptions.find((route) => route.id === selected);
 
+  if (showPresentationDemo)
+    return <PresentationDemo onClose={() => setShowPresentationDemo(false)} />;
+
   if (showSavedPilot) return <SavedRanchiPilot onBack={() => setShowSavedPilot(false)} />;
 
   if (screen === "welcome") {
     return (
       <main className="welcome-canvas">
         <SkipToContent />
+        <button
+          type="button"
+          className="m-3 text-sm underline"
+          onClick={() => setShowPresentationDemo(true)}
+        >
+          Presentation demo
+        </button>
         <section className="welcome-sheet">
           <div className="welcome-brand">
             <Brand />
@@ -303,6 +323,13 @@ export function ShePathApp() {
   return (
     <main className="journey-app min-h-screen bg-background" data-screen={screen}>
       <SkipToContent />
+      <button
+        type="button"
+        className="m-3 text-sm underline"
+        onClick={() => setShowPresentationDemo(true)}
+      >
+        Presentation demo
+      </button>
       <header
         data-journey-header
         className="sticky top-0 z-[1000] border-b border-border/70 bg-background/92 backdrop-blur-xl"
@@ -593,18 +620,22 @@ export function ShePathApp() {
             </Button>
           </div>
           {!isMock && routes.length > 0 && (
-            <LiveRecommendationPanel
-              routes={routes}
-              result={ml}
-              departure={departure}
-              enabled={mlEnabled}
-              onEnabled={setMlEnabled}
-              maxExtra={maxExtra}
-              onMaxExtra={setMaxExtra}
-              observations={observations}
-              onObservations={setObservations}
-              onSelect={chooseRoute}
-            />
+            <>
+              {mlEnabled && <PriorityControls value={priorities} onChange={setPriorities} />}
+              <LiveRecommendationPanel
+                priorities={priorities}
+                routes={routes}
+                result={ml}
+                departure={departure}
+                enabled={mlEnabled}
+                onEnabled={setMlEnabled}
+                maxExtra={maxExtra}
+                onMaxExtra={setMaxExtra}
+                observations={observations}
+                onObservations={setObservations}
+                onSelect={chooseRoute}
+              />
+            </>
           )}
           <div className="route-layout grid items-start rounded-3xl bg-card app-shadow lg:grid-cols-[390px_minmax(0,1fr)]">
             <aside className="route-options-sheet min-w-0 p-5 lg:p-6">
@@ -680,8 +711,11 @@ export function ShePathApp() {
                   <div key={route.id} data-route-card={route.id}>
                     {mlEnabled && ml.recommendedId === route.id && (
                       <p className="px-3 py-2 text-sm font-bold text-primary">
-                        Experimental ML pick
+                        Highest suitability
                       </p>
+                    )}
+                    {mlEnabled && !isMock && (
+                      <SuitabilityScore row={ml.rows.find((r) => r.id === route.id)} />
                     )}
                     <RouteOption
                       route={route}
@@ -695,7 +729,7 @@ export function ShePathApp() {
                           {routeExplanation(
                             routes.find((r) => r.id === route.id)!,
                             routes,
-                            ml,
+                            { rows: ml.rows, message: ml.message },
                           )}
                         </p>
                       </details>
