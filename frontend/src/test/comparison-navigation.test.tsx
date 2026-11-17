@@ -227,6 +227,7 @@ it("names queued and requested routes, preserves sequential processing and selec
   expect(await screen.findByText(/Route 1: Loading mapped evidence/)).toHaveTextContent(
     "retry automatically for up to 4 minutes",
   );
+  fireEvent.click(screen.getAllByText("Why this route?")[1]!);
   expect(screen.getByText(/Route 2: Waiting for analysis/)).toBeVisible();
   expect(fetchEvidence).toHaveBeenCalledOnce();
   fireEvent.click(secondButton);

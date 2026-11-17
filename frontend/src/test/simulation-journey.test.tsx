@@ -14,7 +14,7 @@ vi.mock("@/components/ShePathMap", () => ({
 }));
 import { ShePathApp } from "@/routes/index";
 afterEach(cleanup);
-it("opts in, auto-selects the ML leader, preserves manual choice, and carries simulation labels to overview", async () => {
+it("keeps model experiments separate and preserves the chosen live route when returning", async () => {
   const routes = [evidenceRoute, { ...evidenceRoute, id: "alternative", durationSeconds: 800 }];
   getRoutes.mockResolvedValue(routes);
   fetchEvidence.mockImplementation(async (route: typeof evidenceRoute) => {
@@ -33,10 +33,10 @@ it("opts in, auto-selects the ML leader, preserves manual choice, and carries si
     return e;
   });
   render(<ShePathApp />);
-  fireEvent.click(screen.getByRole("button", { name: "Try simulation-based ML routes" }));
+  fireEvent.click(screen.getByRole("button", { name: "Plan my walk" }));
   fireEvent.click(screen.getByRole("button", { name: "Continue to preferences" }));
   fireEvent.click(screen.getByRole("button", { name: "Continue to routes" }));
-  await screen.findByRole("heading", { name: "Simulation-based ML recommendation" });
+  await screen.findByRole("heading", { name: "Automatic route recommendation" });
   await waitFor(() =>
     expect(screen.getByTestId("map")).toHaveAttribute("data-selected", "alternative"),
   );
@@ -44,18 +44,19 @@ it("opts in, auto-selects the ML leader, preserves manual choice, and carries si
     "data-route-card",
     "alternative",
   );
-  expect(screen.getByText("ML demo recommendation")).toBeInTheDocument();
+  expect(screen.queryByText("Presentation demo")).not.toBeInTheDocument();
+  expect(screen.queryByLabelText("Simulation-based ML routes")).not.toBeInTheDocument();
   fireEvent.click(screen.getByRole("button", { name: /Route 1 Not selected/ }));
-  fireEvent.change(screen.getByLabelText("Departure (IST)"), {
-    target: { value: "2026-11-16T22:00" },
-  });
+  fireEvent.click(screen.getByRole("button", { name: "Model lab" }));
+  expect(screen.getByText(/Hypothetical inputs/)).toBeInTheDocument();
+  const before = screen.getByRole("status").textContent;
+  fireEvent.change(screen.getByLabelText("Lighting"), { target: { value: "1" } });
+  expect(screen.getByRole("status").textContent).not.toBe(before);
+  fireEvent.click(screen.getByRole("button", { name: "Back to journey" }));
   expect(screen.getByTestId("map")).toHaveAttribute("data-selected", evidenceRoute.id);
-  expect(screen.getAllByText(/Simulated rating/)).toHaveLength(2);
-  fireEvent.click(screen.getByRole("button", { name: /View route overview/ }));
-  expect(screen.getByText(/Simulation mode · real routes/)).toBeInTheDocument();
-  expect(screen.getByText(/Simulated rating/)).toBeInTheDocument();
-  fireEvent.click(screen.getByLabelText("Simulation-based ML routes"));
-  expect(screen.queryByText(/Simulation mode · real routes/)).not.toBeInTheDocument();
-  expect(screen.queryByText(/Simulated rating/)).not.toBeInTheDocument();
+  expect(screen.queryByText(/Simulated model rating/)).not.toBeInTheDocument();
   expect(getRoutes).toHaveBeenCalledTimes(1);
+  const card = document.querySelector("[data-route-card]");
+  expect(card?.querySelector("details")).not.toHaveAttribute("open");
+  expect(screen.getByText("Compare route details").closest("details")).not.toHaveAttribute("open");
 });

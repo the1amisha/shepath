@@ -1,11 +1,10 @@
-import { simulationRecommendation } from "@/lib/routing/simulationRecommendation";
-import { SimulationPanel, SimulationScore } from "@/components/SimulationRecommendation";
+import { ModelLab } from "@/components/ModelLab";
 import {
   hybridRecommendation,
   hybridOrder,
   learnedPriorities,
 } from "@/lib/routing/hybridRecommendation";
-import { PriorityControls, SuitabilityScore, PresentationDemo } from "@/components/HybridScoring";
+import { PriorityControls, SuitabilityScore } from "@/components/HybridScoring";
 import { PlaceField as LocationField } from "@/components/PlaceField";
 import { LocationPicker } from "@/components/LocationPicker";
 import { TripPlanPanel } from "@/components/TripPlanPanel";
@@ -134,15 +133,9 @@ export function ShePathApp() {
   useEffect(() => {
     setDeparture(istInputValue(new Date()));
   }, []);
-  const [showPresentationDemo, setShowPresentationDemo] = useState(false);
+  const [showModelLab, setShowModelLab] = useState(false);
   const [priorities, setPriorities] = useState({ ...learnedPriorities });
   const [mlEnabled, setMlEnabled] = useState(true);
-  const [simulationEnabled, setSimulationEnabled] = useState(false);
-  const changeSimulation = (enabled: boolean) => {
-    manuallySelected.current = false;
-    setSimulationEnabled(enabled);
-    setMlEnabled(true);
-  };
   const [maxExtra, setMaxExtra] = useState(Infinity);
   const [observations, setObservations] = useState<Observations>({});
   const [weights, setWeights] = useState<Weights>({ ...emptyWeights });
@@ -186,12 +179,7 @@ export function ShePathApp() {
   const match = evidenceMatch(routes, evidence, weights, isMock);
   const effectiveWeights = normalizedWeights(weights);
   const mappedBounds = recommendRoutes(routes, evidence, departure, observations, maxExtra, isMock);
-  const simulation =
-    simulationEnabled && !isMock
-      ? simulationRecommendation(routes, mappedBounds, departure, maxExtra)
-      : { rows: [], message: "Simulation is off." };
-  const ml =
-    simulationEnabled && !isMock ? simulation : hybridRecommendation(mappedBounds, priorities);
+  const ml = hybridRecommendation(mappedBounds, priorities);
   const orderedOptions = mlEnabled
     ? hybridOrder(routes, ml).map((r) => routeOptions.find((option) => option.id === r.id)!)
     : match.active
@@ -201,7 +189,7 @@ export function ShePathApp() {
   useEffect(() => {
     if (mlEnabled && !isMock && automaticFirst && !manuallySelected.current)
       setSelected(automaticFirst);
-  }, [mlEnabled, automaticFirst, simulationEnabled]);
+  }, [mlEnabled, automaticFirst]);
   const chooseRoute = (id: string) => {
     manuallySelected.current = true;
     setSelected(id);
@@ -257,8 +245,7 @@ export function ShePathApp() {
   };
   const selectedRoute = routeOptions.find((route) => route.id === selected);
 
-  if (showPresentationDemo)
-    return <PresentationDemo onClose={() => setShowPresentationDemo(false)} />;
+  if (showModelLab) return <ModelLab onClose={() => setShowModelLab(false)} />;
 
   if (showSavedPilot) return <SavedRanchiPilot onBack={() => setShowSavedPilot(false)} />;
 
@@ -266,25 +253,6 @@ export function ShePathApp() {
     return (
       <main className="welcome-canvas">
         <SkipToContent />
-        <button
-          type="button"
-          className="m-3 text-sm underline"
-          onClick={() => setShowPresentationDemo(true)}
-        >
-          Presentation demo
-        </button>
-        {!isMock && (
-          <button
-            type="button"
-            className="m-3 rounded-full bg-primary px-5 py-3 font-bold text-primary-foreground"
-            onClick={() => {
-              changeSimulation(true);
-              setScreen("search");
-            }}
-          >
-            Try simulation-based ML routes
-          </button>
-        )}
         <section className="welcome-sheet">
           <div className="welcome-brand">
             <Brand />
@@ -330,12 +298,13 @@ export function ShePathApp() {
                 : "Live walking routes with historical mapped context where covered"}
               . No personal-safety assessment is provided.
             </p>
-            <a
-              href="/preference-lab"
-              className="mt-3 inline-block text-sm font-bold text-primary underline"
+            <button
+              type="button"
+              className="mt-3 text-sm text-primary underline"
+              onClick={() => setShowModelLab(true)}
             >
-              Explore the ML preference experiment
-            </a>
+              Model lab
+            </button>
             <p className="welcome-credit">Made for Ranchi. Built by She Builds.</p>
           </div>
         </section>
@@ -346,34 +315,6 @@ export function ShePathApp() {
   return (
     <main className="journey-app min-h-screen bg-background" data-screen={screen}>
       <SkipToContent />
-      <button
-        type="button"
-        className="m-3 text-sm underline"
-        onClick={() => setShowPresentationDemo(true)}
-      >
-        Presentation demo
-      </button>
-      {!isMock && (
-        <section className="mx-auto max-w-7xl px-4 py-3" aria-label="Recommendation mode">
-          <label className="flex items-center gap-2 text-sm font-bold">
-            <input
-              type="checkbox"
-              checked={simulationEnabled}
-              onChange={(e) => changeSimulation(e.target.checked)}
-            />
-            Simulation-based ML routes
-          </label>
-          {simulationEnabled && (
-            <p className="mt-2 rounded-xl bg-secondary p-3 text-sm font-semibold" role="status">
-              Simulation mode · real routes with generated missing inputs. Scores are hypothetical,
-              not verified safety.
-            </p>
-          )}
-          {simulationEnabled && ["details", "report"].includes(screen) && (
-            <SimulationScore row={simulation.rows.find((r) => r.id === selected)} />
-          )}
-        </section>
-      )}
       <header
         data-journey-header
         className="sticky top-0 z-[1000] border-b border-border/70 bg-background/92 backdrop-blur-xl"
@@ -424,6 +365,9 @@ export function ShePathApp() {
       <div className="mx-auto max-w-7xl px-4 pt-4 sm:px-8">
         <Button variant="outline" size="sm" ref={savedTrigger} onClick={openSaved}>
           Saved Ranchi Pilot Comparison
+        </Button>
+        <Button variant="ghost" size="sm" onClick={() => setShowModelLab(true)}>
+          Model lab
         </Button>
       </div>
 
@@ -600,9 +544,7 @@ export function ShePathApp() {
                   Automatic ML comparison
                 </label>
                 <p className="text-sm text-muted-foreground">
-                  {simulationEnabled
-                    ? "Uses a model trained on explicitly synthetic ratings."
-                    : "Uses preferences learned from the survey."}
+                  Uses preferences learned from the survey.
                 </p>
                 <label className="flex items-center gap-3 font-bold">
                   <input
@@ -610,7 +552,6 @@ export function ShePathApp() {
                     name="comparison-mode"
                     checked={!mlEnabled}
                     onChange={() => {
-                      setSimulationEnabled(false);
                       setMlEnabled(false);
                     }}
                   />
@@ -669,34 +610,22 @@ export function ShePathApp() {
             </Button>
           </div>
           {!isMock && routes.length > 0 && (
-            <>
-              {simulationEnabled ? (
-                <SimulationPanel
-                  result={simulation}
-                  departure={departure}
-                  onDeparture={setDeparture}
-                  maxExtra={maxExtra}
-                  onMaxExtra={setMaxExtra}
-                />
-              ) : (
-                <>
-                  {mlEnabled && <PriorityControls value={priorities} onChange={setPriorities} />}
-                  <LiveRecommendationPanel
-                    priorities={priorities}
-                    routes={routes}
-                    result={ml}
-                    departure={departure}
-                    enabled={mlEnabled}
-                    onEnabled={setMlEnabled}
-                    maxExtra={maxExtra}
-                    onMaxExtra={setMaxExtra}
-                    observations={observations}
-                    onObservations={setObservations}
-                    onSelect={chooseRoute}
-                  />
-                </>
-              )}
-            </>
+            <LiveRecommendationPanel
+              priorities={priorities}
+              routes={routes}
+              result={ml}
+              departure={departure}
+              enabled={mlEnabled}
+              onEnabled={setMlEnabled}
+              maxExtra={maxExtra}
+              onMaxExtra={setMaxExtra}
+              observations={observations}
+              onObservations={setObservations}
+              onSelect={chooseRoute}
+              priorityControls={
+                mlEnabled && <PriorityControls value={priorities} onChange={setPriorities} />
+              }
+            />
           )}
           <div className="route-layout grid items-start rounded-3xl bg-card app-shadow lg:grid-cols-[390px_minmax(0,1fr)]">
             <aside className="route-options-sheet min-w-0 p-5 lg:p-6">
@@ -766,22 +695,20 @@ export function ShePathApp() {
                     <Button className="mt-3" variant="outline" onClick={findRoutes}>
                       Try again
                     </Button>
+                    <Button
+                      className="mt-3 ml-2"
+                      variant="ghost"
+                      onClick={() => setScreen("search")}
+                    >
+                      Edit locations
+                    </Button>
                   </div>
                 )}
                 {orderedOptions.map((route) => (
                   <div key={route.id} data-route-card={route.id}>
                     {mlEnabled && ml.recommendedId === route.id && (
-                      <p className="px-3 py-2 text-sm font-bold text-primary">
-                        {simulationEnabled ? "ML demo recommendation" : "Highest suitability"}
-                      </p>
+                      <p className="px-3 py-2 text-sm font-bold text-primary">Preference match</p>
                     )}
-                    {mlEnabled &&
-                      !isMock &&
-                      (simulationEnabled ? (
-                        <SimulationScore row={simulation.rows.find((r) => r.id === route.id)} />
-                      ) : (
-                        <SuitabilityScore row={ml.rows.find((r) => r.id === route.id)} />
-                      ))}
                     <RouteOption
                       route={route}
                       selected={selected === route.id}
@@ -790,11 +717,17 @@ export function ShePathApp() {
                     {!isMock && (
                       <details className="px-3 py-2 text-xs leading-5">
                         <summary className="cursor-pointer font-bold">Why this route?</summary>
+                        {mlEnabled && (
+                          <SuitabilityScore row={ml.rows.find((r) => r.id === route.id)} />
+                        )}
+                        {route.id !== selected && (
+                          <EvidenceStatus name={route.name} state={evidence[route.id]} />
+                        )}
                         <p className="mt-2">
                           {routeExplanation(
                             routes.find((r) => r.id === route.id)!,
                             routes,
-                            { rows: simulationEnabled ? [] : ml.rows, message: ml.message },
+                            { rows: ml.rows, message: ml.message },
                           )}
                         </p>
                       </details>
@@ -832,14 +765,6 @@ export function ShePathApp() {
                           </details>
                         );
                       })()}
-                    {!isMock && route.id !== selected && (
-                      <p
-                        className="px-3 pt-2 text-xs leading-5 text-muted-foreground"
-                        role="status"
-                      >
-                        <EvidenceStatus name={route.name} state={evidence[route.id]} />
-                      </p>
-                    )}
                   </div>
                 ))}
               </div>
@@ -907,7 +832,8 @@ export function ShePathApp() {
               </section>
             </ResultsMapPanel>
             {routes.length > 0 && !isMock && (
-              <div className="w-full lg:col-span-2">
+              <details className="w-full rounded-2xl border bg-card p-4 lg:col-span-2">
+                <summary className="cursor-pointer font-bold">Compare route details</summary>
                 <RouteComparisonTable
                   routes={routes}
                   orderedIds={orderedOptions.map((r) => r.id)}
@@ -915,7 +841,7 @@ export function ShePathApp() {
                   selected={selected}
                   onSelect={chooseRoute}
                 />
-              </div>
+              </details>
             )}
             <details className="w-full rounded-2xl border bg-card p-4 lg:col-span-2">
               <summary className="cursor-pointer font-bold">Route summary & comparison</summary>

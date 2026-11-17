@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { learnedPriorities, type Priorities } from "@/lib/routing/hybridRecommendation";
 import type { RouteData } from "@/lib/routing/types";
 import {
@@ -8,9 +9,9 @@ import {
   type Observations,
   type Recommendation,
 } from "@/lib/routing/liveRecommendation";
-import { Button } from "@/components/ui/button";
 
 type Props = {
+  priorityControls?: ReactNode;
   priorities?: Priorities;
   routes: RouteData[];
   result: Recommendation;
@@ -24,6 +25,7 @@ type Props = {
   onSelect: (id: string) => void;
 };
 export function LiveRecommendationPanel({
+  priorityControls,
   priorities = learnedPriorities,
   routes,
   result,
@@ -34,7 +36,6 @@ export function LiveRecommendationPanel({
   onMaxExtra,
   observations,
   onObservations,
-  onSelect,
 }: Props) {
   const routeName = (id: string) => `Route ${routes.findIndex((r) => r.id === id) + 1}`;
   const weights = attributes.map((key) => priorities[key]);
@@ -51,19 +52,25 @@ export function LiveRecommendationPanel({
         {!enabled
           ? "Manual comparison"
           : result.recommendedId
-            ? `Highest suitability: ${routeName(result.recommendedId)}`
+            ? `Preference match: ${routeName(result.recommendedId)}`
             : routes.length === 1
               ? "One route available"
               : result.rows.length
                 ? "No unique score leader · compare routes"
                 : "Scoring pending or unavailable"}
       </p>
+      {enabled && result.rows.some((row) => row.high > row.low) && (
+        <p className="mt-1 text-sm text-muted-foreground">
+          Limited map data · ranking is provisional
+        </p>
+      )}
       <details className="mt-2 text-sm">
         <summary className="cursor-pointer font-semibold">Why this order?</summary>
         <p className="mt-2 leading-6">{result.message}</p>
       </details>
       <details className="mt-3 text-sm">
-        <summary className="cursor-pointer font-semibold">ML settings & model details</summary>
+        <summary className="cursor-pointer font-semibold">Options & model details</summary>
+        {priorityControls}
         <details className="mt-3 text-sm">
           <summary className="cursor-pointer font-bold">Recommendation settings</summary>
           <label className="mt-4 flex items-center gap-3 font-bold">
@@ -96,22 +103,6 @@ export function LiveRecommendationPanel({
                 ))}
               </select>
             </div>
-            <p className="mt-4 text-sm leading-6" role="status">
-              {result.message}
-            </p>
-            {result.recommendedId && (
-              <div className="mt-4 rounded-2xl bg-secondary p-4">
-                <h3 className="font-bold">Preference match: {routeName(result.recommendedId)}</h3>
-                <p className="mt-2 text-sm leading-6">
-                  This route has the highest suitability score under the active weights and midpoint
-                  rule. Map records may be incomplete or outdated; this does not establish the
-                  safest route.
-                </p>
-                <Button className="mt-3" onClick={() => onSelect(result.recommendedId!)}>
-                  Choose this route
-                </Button>
-              </div>
-            )}
             <details className="mt-4">
               <summary className="cursor-pointer text-sm font-bold">
                 Detailed model inputs and optional corrections
