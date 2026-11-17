@@ -1,3 +1,5 @@
+import { simulationRecommendation } from "@/lib/routing/simulationRecommendation";
+import { SimulationPanel, SimulationScore } from "@/components/SimulationRecommendation";
 import {
   hybridRecommendation,
   hybridOrder,
@@ -135,6 +137,12 @@ export function ShePathApp() {
   const [showPresentationDemo, setShowPresentationDemo] = useState(false);
   const [priorities, setPriorities] = useState({ ...learnedPriorities });
   const [mlEnabled, setMlEnabled] = useState(true);
+  const [simulationEnabled, setSimulationEnabled] = useState(false);
+  const changeSimulation = (enabled: boolean) => {
+    manuallySelected.current = false;
+    setSimulationEnabled(enabled);
+    setMlEnabled(true);
+  };
   const [maxExtra, setMaxExtra] = useState(Infinity);
   const [observations, setObservations] = useState<Observations>({});
   const [weights, setWeights] = useState<Weights>({ ...emptyWeights });
@@ -177,10 +185,13 @@ export function ShePathApp() {
   );
   const match = evidenceMatch(routes, evidence, weights, isMock);
   const effectiveWeights = normalizedWeights(weights);
-  const ml = hybridRecommendation(
-    recommendRoutes(routes, evidence, departure, observations, maxExtra, isMock),
-    priorities,
-  );
+  const mappedBounds = recommendRoutes(routes, evidence, departure, observations, maxExtra, isMock);
+  const simulation =
+    simulationEnabled && !isMock
+      ? simulationRecommendation(routes, mappedBounds, departure, maxExtra)
+      : { rows: [], message: "Simulation is off." };
+  const ml =
+    simulationEnabled && !isMock ? simulation : hybridRecommendation(mappedBounds, priorities);
   const orderedOptions = mlEnabled
     ? hybridOrder(routes, ml).map((r) => routeOptions.find((option) => option.id === r.id)!)
     : match.active
@@ -190,7 +201,7 @@ export function ShePathApp() {
   useEffect(() => {
     if (mlEnabled && !isMock && automaticFirst && !manuallySelected.current)
       setSelected(automaticFirst);
-  }, [mlEnabled, automaticFirst]);
+  }, [mlEnabled, automaticFirst, simulationEnabled]);
   const chooseRoute = (id: string) => {
     manuallySelected.current = true;
     setSelected(id);
@@ -262,6 +273,18 @@ export function ShePathApp() {
         >
           Presentation demo
         </button>
+        {!isMock && (
+          <button
+            type="button"
+            className="m-3 rounded-full bg-primary px-5 py-3 font-bold text-primary-foreground"
+            onClick={() => {
+              changeSimulation(true);
+              setScreen("search");
+            }}
+          >
+            Try simulation-based ML routes
+          </button>
+        )}
         <section className="welcome-sheet">
           <div className="welcome-brand">
             <Brand />
@@ -330,6 +353,27 @@ export function ShePathApp() {
       >
         Presentation demo
       </button>
+      {!isMock && (
+        <section className="mx-auto max-w-7xl px-4 py-3" aria-label="Recommendation mode">
+          <label className="flex items-center gap-2 text-sm font-bold">
+            <input
+              type="checkbox"
+              checked={simulationEnabled}
+              onChange={(e) => changeSimulation(e.target.checked)}
+            />
+            Simulation-based ML routes
+          </label>
+          {simulationEnabled && (
+            <p className="mt-2 rounded-xl bg-secondary p-3 text-sm font-semibold" role="status">
+              Simulation mode · real routes with generated missing inputs. Scores are hypothetical,
+              not verified safety.
+            </p>
+          )}
+          {simulationEnabled && ["details", "report"].includes(screen) && (
+            <SimulationScore row={simulation.rows.find((r) => r.id === selected)} />
+          )}
+        </section>
+      )}
       <header
         data-journey-header
         className="sticky top-0 z-[1000] border-b border-border/70 bg-background/92 backdrop-blur-xl"
@@ -556,14 +600,19 @@ export function ShePathApp() {
                   Automatic ML comparison
                 </label>
                 <p className="text-sm text-muted-foreground">
-                  Uses preferences learned from the survey.
+                  {simulationEnabled
+                    ? "Uses a model trained on explicitly synthetic ratings."
+                    : "Uses preferences learned from the survey."}
                 </p>
                 <label className="flex items-center gap-3 font-bold">
                   <input
                     type="radio"
                     name="comparison-mode"
                     checked={!mlEnabled}
-                    onChange={() => setMlEnabled(false)}
+                    onChange={() => {
+                      setSimulationEnabled(false);
+                      setMlEnabled(false);
+                    }}
                   />
                   Set my own weights
                 </label>
@@ -621,20 +670,32 @@ export function ShePathApp() {
           </div>
           {!isMock && routes.length > 0 && (
             <>
-              {mlEnabled && <PriorityControls value={priorities} onChange={setPriorities} />}
-              <LiveRecommendationPanel
-                priorities={priorities}
-                routes={routes}
-                result={ml}
-                departure={departure}
-                enabled={mlEnabled}
-                onEnabled={setMlEnabled}
-                maxExtra={maxExtra}
-                onMaxExtra={setMaxExtra}
-                observations={observations}
-                onObservations={setObservations}
-                onSelect={chooseRoute}
-              />
+              {simulationEnabled ? (
+                <SimulationPanel
+                  result={simulation}
+                  departure={departure}
+                  onDeparture={setDeparture}
+                  maxExtra={maxExtra}
+                  onMaxExtra={setMaxExtra}
+                />
+              ) : (
+                <>
+                  {mlEnabled && <PriorityControls value={priorities} onChange={setPriorities} />}
+                  <LiveRecommendationPanel
+                    priorities={priorities}
+                    routes={routes}
+                    result={ml}
+                    departure={departure}
+                    enabled={mlEnabled}
+                    onEnabled={setMlEnabled}
+                    maxExtra={maxExtra}
+                    onMaxExtra={setMaxExtra}
+                    observations={observations}
+                    onObservations={setObservations}
+                    onSelect={chooseRoute}
+                  />
+                </>
+              )}
             </>
           )}
           <div className="route-layout grid items-start rounded-3xl bg-card app-shadow lg:grid-cols-[390px_minmax(0,1fr)]">
@@ -711,12 +772,16 @@ export function ShePathApp() {
                   <div key={route.id} data-route-card={route.id}>
                     {mlEnabled && ml.recommendedId === route.id && (
                       <p className="px-3 py-2 text-sm font-bold text-primary">
-                        Highest suitability
+                        {simulationEnabled ? "ML demo recommendation" : "Highest suitability"}
                       </p>
                     )}
-                    {mlEnabled && !isMock && (
-                      <SuitabilityScore row={ml.rows.find((r) => r.id === route.id)} />
-                    )}
+                    {mlEnabled &&
+                      !isMock &&
+                      (simulationEnabled ? (
+                        <SimulationScore row={simulation.rows.find((r) => r.id === route.id)} />
+                      ) : (
+                        <SuitabilityScore row={ml.rows.find((r) => r.id === route.id)} />
+                      ))}
                     <RouteOption
                       route={route}
                       selected={selected === route.id}
@@ -729,7 +794,7 @@ export function ShePathApp() {
                           {routeExplanation(
                             routes.find((r) => r.id === route.id)!,
                             routes,
-                            { rows: ml.rows, message: ml.message },
+                            { rows: simulationEnabled ? [] : ml.rows, message: ml.message },
                           )}
                         </p>
                       </details>
