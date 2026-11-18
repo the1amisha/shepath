@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { extractFacilityMarkers, type FacilityMarker } from "./facilityMarkers";
 import { facilityHoursSchema } from "./facilityHours";
 import { segmentEvidenceSchema } from "./segmentEvidence";
 import { apiBaseUrl } from "./apiBaseUrl";
@@ -60,7 +61,12 @@ const schema = z.object({
     .nullable(),
 });
 type Parsed = z.infer<typeof schema>;
-export type RouteEvidence = Omit<Parsed, "route"> & { route: Omit<Parsed["route"], "coordinates"> };
+export type RouteEvidence = Omit<Parsed, "route" | "route_context"> & {
+  route: Omit<Parsed["route"], "coordinates">;
+  route_context:
+    | (NonNullable<Parsed["route_context"]> & { facility_markers?: FacilityMarker[] | undefined })
+    | null;
+};
 export type EvidenceErrorCode =
   "busy" | "dataset" | "timeout" | "invalid" | "network" | "response" | "service";
 export class EvidenceError extends Error {
@@ -92,7 +98,11 @@ function delay(ms: number, signal: AbortSignal) {
   });
 }
 
-async function requestEvidence(route: RouteData, signal: AbortSignal, remainingMs: number): Promise<RouteEvidence> {
+async function requestEvidence(
+  route: RouteData,
+  signal: AbortSignal,
+  remainingMs: number,
+): Promise<RouteEvidence> {
   const baseUrl = apiBaseUrl();
   if (route.coordinates.length < 2)
     throw new EvidenceError(
@@ -102,7 +112,10 @@ async function requestEvidence(route: RouteData, signal: AbortSignal, remainingM
   const controller = new AbortController();
   const cancel = () => controller.abort(signal.reason);
   signal.addEventListener("abort", cancel, { once: true });
-  const timer = setTimeout(() => controller.abort(new Error("Evidence deadline")), Math.min(75000, remainingMs));
+  const timer = setTimeout(
+    () => controller.abort(new Error("Evidence deadline")),
+    Math.min(75000, remainingMs),
+  );
   try {
     aborted(signal);
     const response = await fetch(`${baseUrl}/pilot/ranchi/route-evidence`, {
@@ -184,7 +197,19 @@ async function requestEvidence(route: RouteData, signal: AbortSignal, remainingM
         "Facility hours do not match this route's mapped inventory.",
       );
     const { coordinates: _coordinates, ...identity } = value.route;
-    return { ...value, route: identity };
+    const rawContext = (body as { route_context?: { source_features?: unknown } | null })
+      .route_context;
+    const markers =
+      value.status === "available"
+        ? extractFacilityMarkers(rawContext?.source_features, route)
+        : undefined;
+    return {
+      ...value,
+      route: identity,
+      route_context: value.route_context
+        ? { ...value.route_context, ...(markers ? { facility_markers: markers } : {}) }
+        : null,
+    };
   } catch (cause) {
     aborted(signal);
     if (cause instanceof EvidenceError) throw cause;

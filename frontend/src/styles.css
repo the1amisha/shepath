@@ -459,3 +459,18 @@
     padding: 12px;
   }
 }
+
+/* Compact, keyboard-focusable facility markers; endpoint markers remain distinct. */
+.shepath-facility-marker span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border: 2px solid white;
+  border-radius: 50%;
+  color: white;
+  font: 700 11px/1 system-ui, sans-serif;
+  box-shadow: 0 1px 5px #0005;
+}
+.shepath-facility-marker:focus-visible { outline: 3px solid #087fbd; outline-offset: 3px; }

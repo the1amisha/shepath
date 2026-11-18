@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import type { EvidenceState } from "@/hooks/useRouteEvidence";
 import { segmentColors, segmentLabels } from "@/lib/routing/segmentEvidence";
 import { Button } from "@/components/ui/button";
+import { facilityStyles } from "@/lib/routing/facilityMarkers";
 import type { RouteData } from "@/lib/routing";
 
 export function ShePathMap({
@@ -21,14 +22,18 @@ export function ShePathMap({
   const [status, setStatus] = useState<"loading" | "ready" | "initialization-error" | "tile-error">(
     "loading",
   );
+  const [showPlaces, setShowPlaces] = useState(true);
   const [showSegments, setShowSegments] = useState(false);
-  const segmentEvidence =
+  const context =
     !mock &&
     evidenceState?.status === "complete" &&
     evidenceState.evidence.route.id === selected &&
-    evidenceState.evidence.status === "available"
-      ? evidenceState.evidence.route_context?.segment_evidence
-      : undefined;
+    evidenceState.evidence.status === "available" &&
+    evidenceState.evidence.coverage.full_buffer_covered
+      ? evidenceState.evidence.route_context
+      : null;
+  const segmentEvidence = context?.segment_evidence;
+  const facilities = context?.facility_markers;
   const activeRoute = routes.find((route) => route.id === selected);
   useEffect(() => {
     const active = routes.find((route) => route.id === selected);
@@ -81,6 +86,41 @@ export function ShePathMap({
               .addTo(map);
           }
         }
+        if (showPlaces && facilities) {
+          for (const facility of facilities.slice(0, 200)) {
+            const style = facilityStyles[facility.kind];
+            // OSM names and schedules are untrusted text, never popup HTML.
+            const popup = document.createElement("div");
+            const title = document.createElement("strong");
+            title.textContent = facility.name;
+            popup.append(title);
+            for (const text of [
+              style.label,
+              facility.outline
+                ? "Mapped outline point · entrance unverified"
+                : "Mapped location · access unverified",
+              facility.openingHours
+                ? `Listed hours: ${facility.openingHours}`
+                : "Opening hours unknown",
+              "Historical map record · current operation unverified",
+            ]) {
+              const line = document.createElement("p");
+              line.textContent = text;
+              popup.append(line);
+            }
+            L.marker(facility.position, {
+              title: facility.name,
+              icon: L.divIcon({
+                className: "shepath-facility-marker",
+                html: `<span style="background:${style.color}">${style.symbol}</span>`,
+                iconSize: [26, 26],
+                iconAnchor: [13, 13],
+              }),
+            })
+              .bindPopup(popup)
+              .addTo(map);
+          }
+        }
         const markerIcon = (label: string) =>
           L.divIcon({
             className: "shepath-marker",
@@ -88,8 +128,8 @@ export function ShePathMap({
             iconSize: [34, 34],
             iconAnchor: [17, 17],
           });
-        L.marker(active.startPoint, { icon: markerIcon("A") }).addTo(map);
-        L.marker(active.endPoint, { icon: markerIcon("B") }).addTo(map);
+        L.marker(active.startPoint, { icon: markerIcon("A"), zIndexOffset: 1000 }).addTo(map);
+        L.marker(active.endPoint, { icon: markerIcon("B"), zIndexOffset: 1000 }).addTo(map);
         map.fitBounds(L.latLngBounds([...active.coordinates, active.startPoint, active.endPoint]), {
           padding: [44, 44],
           maxZoom: 17,
@@ -111,7 +151,7 @@ export function ShePathMap({
       map?.remove();
       mapRef.current = undefined;
     };
-  }, [routes, selected, attempt, showSegments, segmentEvidence]);
+  }, [routes, selected, attempt, showSegments, segmentEvidence, showPlaces, facilities]);
   // Status messages change the space available to Leaflet; keep controls within it.
   useEffect(() => {
     const map = mapRef.current;
@@ -164,6 +204,54 @@ export function ShePathMap({
             )}
           </div>
         )
+      )}
+      {facilities !== undefined && (
+        <div className="shrink-0 border-b border-border bg-card p-3 text-xs">
+          {facilities.length ? (
+            <>
+              <Button
+                variant="outline"
+                size="sm"
+                aria-pressed={showPlaces}
+                onClick={() => setShowPlaces((value) => !value)}
+              >
+                {showPlaces ? "Hide nearby places" : "Show nearby places"}
+              </Button>
+              <span className="ml-2">
+                {facilities.length > 200 ? `200 of ${facilities.length}` : facilities.length} mapped
+                places · selected route
+              </span>
+              {showPlaces && (
+                <>
+                  <ul
+                    aria-label="Place marker legend"
+                    className="mt-2 flex flex-wrap gap-x-3 gap-y-1"
+                  >
+                    {(Object.keys(facilityStyles) as Array<keyof typeof facilityStyles>)
+                      .filter((kind) => facilities.some((f) => f.kind === kind))
+                      .map((kind) => (
+                        <li key={kind} className="flex items-center gap-1">
+                          <span
+                            aria-hidden="true"
+                            style={{ backgroundColor: facilityStyles[kind].color }}
+                            className="inline-flex h-5 min-w-5 items-center justify-center rounded-full px-1 text-white"
+                          >
+                            {facilityStyles[kind].symbol}
+                          </span>
+                          {facilityStyles[kind].label}
+                        </li>
+                      ))}
+                  </ul>
+                  <p className="mt-2 text-muted-foreground">
+                    Tap a marker for details · opening status unverified
+                  </p>
+                </>
+              )}
+            </>
+          ) : (
+            <p>No displayable facility locations in this route’s map records.</p>
+          )}
+        </div>
       )}
       {segmentEvidence && (
         <div className="shrink-0 border-b border-border bg-card p-3 text-xs">

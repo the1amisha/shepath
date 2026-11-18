@@ -74,7 +74,7 @@ describe("Real routing journey", () => {
       };
     });
     start();
-    await screen.findByText("Preference match: Route 2");
+    await screen.findByRole("heading", { name: "Recommended · Route 2" });
     expect(document.querySelector("[data-route-card]")).toHaveAttribute(
       "data-route-card",
       "alternative",
@@ -86,6 +86,12 @@ describe("Real routing journey", () => {
       route.id,
     );
     expect(screen.getByTestId("map")).toHaveAttribute("data-selected", "alternative");
+    fireEvent.click(screen.getByLabelText("Use ML recommendations"));
+    fireEvent.click(screen.getByRole("button", { name: /Route 1 Not selected/ }));
+    expect(screen.getByTestId("map")).toHaveAttribute("data-selected", route.id);
+    fireEvent.click(screen.getByRole("button", { name: "View recommended route" }));
+    expect(screen.getByTestId("map")).toHaveAttribute("data-selected", alternative.id);
+    expect(document.getElementById("route-comparison-map")).toHaveFocus();
     expect(getRoutes).toHaveBeenCalledOnce();
   });
   it("keeps different evidence with each selected route when navigating details", async () => {

@@ -614,6 +614,7 @@ export function ShePathApp() {
               priorities={priorities}
               routes={routes}
               result={ml}
+              states={evidence}
               departure={departure}
               enabled={mlEnabled}
               onEnabled={setMlEnabled}
@@ -621,7 +622,10 @@ export function ShePathApp() {
               onMaxExtra={setMaxExtra}
               observations={observations}
               onObservations={setObservations}
-              onSelect={chooseRoute}
+              onSelect={(id) => {
+                chooseRoute(id);
+                focusContent(document.getElementById("route-comparison-map"));
+              }}
               priorityControls={
                 mlEnabled && <PriorityControls value={priorities} onChange={setPriorities} />
               }
@@ -707,7 +711,7 @@ export function ShePathApp() {
                 {orderedOptions.map((route) => (
                   <div key={route.id} data-route-card={route.id}>
                     {mlEnabled && ml.recommendedId === route.id && (
-                      <p className="px-3 py-2 text-sm font-bold text-primary">Preference match</p>
+                      <p className="px-3 py-2 text-sm font-bold text-primary">Recommended</p>
                     )}
                     <RouteOption
                       route={route}
@@ -771,6 +775,8 @@ export function ShePathApp() {
             </aside>
             <ResultsMapPanel>
               <section
+                id="route-comparison-map"
+                tabIndex={-1}
                 aria-label="Route comparison map"
                 className="results-map-frame relative min-w-0 overflow-hidden bg-muted lg:rounded-tr-3xl"
               >
