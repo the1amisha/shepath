@@ -37,7 +37,7 @@ it("reorders cards after evidence arrives, preserves names/selection, and reset 
   fireEvent.click(screen.getByLabelText("Set my own weights"));
   fireEvent.change(screen.getByRole("slider", { name: /^Lighting/ }), { target: { value: "100" } });
   fireEvent.click(screen.getByRole("button", { name: "Continue to routes" }));
-  await screen.findByText("Automatic route recommendation");
+  await screen.findByRole("heading", { name: "Your route options" });
   const order = () =>
     [...document.querySelectorAll("[data-route-card]")].map((e) =>
       e.getAttribute("data-route-card"),

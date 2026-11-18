@@ -36,7 +36,7 @@ it("keeps model experiments separate and preserves the chosen live route when re
   fireEvent.click(screen.getByRole("button", { name: "Plan my walk" }));
   fireEvent.click(screen.getByRole("button", { name: "Continue to preferences" }));
   fireEvent.click(screen.getByRole("button", { name: "Continue to routes" }));
-  await screen.findByRole("heading", { name: "Automatic route recommendation" });
+  await screen.findByRole("heading", { name: "Recommended · Route 2" });
   await waitFor(() =>
     expect(screen.getByTestId("map")).toHaveAttribute("data-selected", "alternative"),
   );

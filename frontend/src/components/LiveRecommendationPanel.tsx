@@ -1,4 +1,8 @@
 import type { ReactNode } from "react";
+import type { EvidenceState } from "@/hooks/useRouteEvidence";
+import { Button } from "@/components/ui/button";
+import { recommendationSummary, walkingTime } from "@/lib/routing/recommendationSummary";
+import type { HybridResult } from "@/lib/routing/hybridRecommendation";
 import { learnedPriorities, type Priorities } from "@/lib/routing/hybridRecommendation";
 import type { RouteData } from "@/lib/routing/types";
 import {
@@ -7,14 +11,14 @@ import {
   liveModel,
   observationKey,
   type Observations,
-  type Recommendation,
 } from "@/lib/routing/liveRecommendation";
 
 type Props = {
   priorityControls?: ReactNode;
   priorities?: Priorities;
   routes: RouteData[];
-  result: Recommendation;
+  result: HybridResult;
+  states: Record<string, EvidenceState>;
   departure: string;
   enabled: boolean;
   onEnabled: (value: boolean) => void;
@@ -27,6 +31,8 @@ type Props = {
 export function LiveRecommendationPanel({
   priorityControls,
   priorities = learnedPriorities,
+  states,
+  onSelect,
   routes,
   result,
   departure,
@@ -37,35 +43,95 @@ export function LiveRecommendationPanel({
   observations,
   onObservations,
 }: Props) {
+  const summary = enabled ? recommendationSummary(routes, result, states, priorities) : null;
   const routeName = (id: string) => `Route ${routes.findIndex((r) => r.id === id) + 1}`;
   const weights = attributes.map((key) => priorities[key]);
   const totalWeight = weights.reduce((a, b) => a + b, 0) || 1;
   return (
     <section className="mb-4 rounded-2xl border bg-card p-4" aria-labelledby="live-ml-title">
-      <h2 id="live-ml-title" className="font-display text-base font-black">
-        Automatic route recommendation
-      </h2>
-      <p className="mt-1 text-xs text-muted-foreground">
+      {summary ? (
+        <div className="flex flex-wrap items-start justify-between gap-4">
+          <div className="min-w-0 flex-1">
+            <p className="text-xs font-bold uppercase tracking-wider text-primary">
+              {summary.onlyEligible
+                ? "Within your time limit"
+                : summary.custom
+                  ? "Your priorities"
+                  : "ML preference recommendation"}
+            </p>
+            <h2 id="live-ml-title" className="mt-2 font-display text-2xl font-black">
+              {summary.onlyEligible ? "Time-limit match" : "Recommended"} ·{" "}
+              {routeName(summary.route.id)}
+            </h2>
+            <p role="status" className="mt-2 font-semibold">
+              {walkingTime(summary.route.durationSeconds)} ·{" "}
+              {(summary.route.distanceMeters / 1000).toFixed(1)} km
+              <span className="ml-2 inline-block rounded-full bg-secondary px-3 py-1 text-xs">
+                {summary.extra}
+              </span>
+            </p>
+            <p className="mt-3 text-sm">{summary.reason}</p>
+            {summary.limited && (
+              <p className="mt-2 text-xs font-semibold text-muted-foreground">
+                Limited data · provisional recommendation
+              </p>
+            )}
+          </div>
+          <Button className="w-full sm:w-auto" onClick={() => onSelect(summary.route.id)}>
+            View recommended route
+          </Button>
+        </div>
+      ) : (
+        <>
+          <h2 id="live-ml-title" className="font-display text-lg font-black">
+            Your route options
+          </h2>
+          <p role="status" className="mt-2 text-sm font-semibold">
+            {!enabled
+              ? "Manual comparison"
+              : routes.length === 1
+                ? "One route available"
+                : result.rows.length
+                  ? "No clear preference · compare routes"
+                  : "Recommendation pending or unavailable"}
+          </p>
+        </>
+      )}
+      <p className="mt-2 text-xs text-muted-foreground">
         Experimental preference model · not a safety rating
       </p>
-      <p role="status" className="mt-2 font-semibold text-sm">
-        {!enabled
-          ? "Manual comparison"
-          : result.recommendedId
-            ? `Preference match: ${routeName(result.recommendedId)}`
-            : routes.length === 1
-              ? "One route available"
-              : result.rows.length
-                ? "No unique score leader · compare routes"
-                : "Scoring pending or unavailable"}
-      </p>
-      {enabled && result.rows.some((row) => row.high > row.low) && (
-        <p className="mt-1 text-sm text-muted-foreground">
-          Limited map data · ranking is provisional
-        </p>
-      )}
-      <details className="mt-2 text-sm">
-        <summary className="cursor-pointer font-semibold">Why this order?</summary>
+      <details className="mt-3 text-sm">
+        <summary className="cursor-pointer font-semibold">Why this recommendation?</summary>
+        {summary && (
+          <>
+            <p className="mt-2">
+              Preference fit {summary.row.score!.toFixed(0)}/100 · {summary.row.coverage.toFixed(0)}
+              % input coverage
+            </p>
+            <p className="mt-2">
+              {summary.custom
+                ? "Uses your adjusted weights."
+                : "Uses weights learned from the route-choice survey."}{" "}
+              Missing inputs use a neutral midpoint.
+            </p>
+            {!!summary.facts.length && (
+              <div className="mt-3 rounded-xl bg-secondary p-3">
+                <p className="font-semibold">
+                  Map comparison with {routeName(summary.reference!.id)}
+                </p>
+                <ul className="mt-2 list-disc space-y-1 pl-5">
+                  {summary.facts.map((fact) => (
+                    <li key={fact}>{fact}</li>
+                  ))}
+                </ul>
+                <p className="mt-2 text-xs">
+                  Historical records within 100 m; these comparisons are context, not additional ML
+                  inputs. Current activity is unknown.
+                </p>
+              </div>
+            )}
+          </>
+        )}
         <p className="mt-2 leading-6">{result.message}</p>
       </details>
       <details className="mt-3 text-sm">
