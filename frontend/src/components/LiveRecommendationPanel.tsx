@@ -1,7 +1,11 @@
 import type { ReactNode } from "react";
 import type { EvidenceState } from "@/hooks/useRouteEvidence";
 import { Button } from "@/components/ui/button";
-import { recommendationSummary, walkingTime } from "@/lib/routing/recommendationSummary";
+import {
+  recommendationSummary,
+  recommendationFallback,
+  walkingTime,
+} from "@/lib/routing/recommendationSummary";
 import type { HybridResult } from "@/lib/routing/hybridRecommendation";
 import { learnedPriorities, type Priorities } from "@/lib/routing/hybridRecommendation";
 import type { RouteData } from "@/lib/routing/types";
@@ -44,6 +48,14 @@ export function LiveRecommendationPanel({
   onObservations,
 }: Props) {
   const summary = enabled ? recommendationSummary(routes, result, states, priorities) : null;
+  const fallbackRoute =
+    enabled && !summary && routes.length > 1 && result.rows.length > 0
+      ? [...routes]
+          .filter((route) => result.rows.find((row) => row.id === route.id)?.eligible)
+          .sort(
+            (a, b) => a.durationSeconds - b.durationSeconds || a.distanceMeters - b.distanceMeters,
+          )[0]
+      : undefined;
   const routeName = (id: string) => `Route ${routes.findIndex((r) => r.id === id) + 1}`;
   const weights = attributes.map((key) => priorities[key]);
   const totalWeight = weights.reduce((a, b) => a + b, 0) || 1;
@@ -91,10 +103,20 @@ export function LiveRecommendationPanel({
               ? "Manual comparison"
               : routes.length === 1
                 ? "One route available"
-                : result.rows.length
-                  ? "No clear preference · compare routes"
-                  : "Recommendation pending or unavailable"}
+                : recommendationFallback(result)}
           </p>
+          {fallbackRoute && (
+            <div className="mt-3 flex flex-wrap items-center gap-3">
+              <p className="text-sm">
+                Fastest route · {routeName(fallbackRoute.id)} ·{" "}
+                {walkingTime(fallbackRoute.durationSeconds)} ·{" "}
+                {(fallbackRoute.distanceMeters / 1000).toFixed(1)} km
+              </p>
+              <Button variant="outline" onClick={() => onSelect(fallbackRoute.id)}>
+                View fastest route
+              </Button>
+            </div>
+          )}
         </>
       )}
       <p className="mt-2 text-xs text-muted-foreground">
@@ -133,6 +155,51 @@ export function LiveRecommendationPanel({
           </>
         )}
         <p className="mt-2 leading-6">{result.message}</p>
+        {enabled && result.rows.length > 0 && (
+          <div className="mt-3 overflow-x-auto">
+            <table className="w-full text-left text-xs">
+              <caption className="mb-2 text-left font-semibold">Known model inputs</caption>
+              <thead>
+                <tr>
+                  <th className="p-2">Route</th>
+                  {["Footpath", "Lighting", "Business hours", "Pedestrians"].map((label) => (
+                    <th className="p-2" key={label}>
+                      {label}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {result.rows.map((row) => (
+                  <tr key={row.id}>
+                    <th className="p-2">{routeName(row.id)}</th>
+                    {attributes.map((key) => {
+                      const known = Math.max(
+                        0,
+                        Math.min(100, 100 * (1 - row.values[key].high + row.values[key].low)),
+                      );
+                      return (
+                        <td className="p-2" key={key}>
+                          {priorities[key] === 0
+                            ? "Not used"
+                            : known < 1e-8
+                              ? "Unknown"
+                              : known < 1
+                                ? "<1% known"
+                                : `${Math.round(known)}% known`}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+            <p className="mt-2 text-xs text-muted-foreground">
+              Known input share, not safety or street coverage. Nearby places alone do not establish
+              opening hours or pedestrian activity.
+            </p>
+          </div>
+        )}
       </details>
       <details className="mt-3 text-sm">
         <summary className="cursor-pointer font-semibold">Options & model details</summary>

@@ -121,3 +121,11 @@ export function recommendationSummary(
     limited: row.coverage < 99.999 || (!!other && row.low <= other.high),
   };
 }
+
+/** Keep missing evidence distinct from an actual score tie. */
+export function recommendationFallback(result: HybridResult) {
+  if (!result.rows.length) return "ML comparison unavailable";
+  const scored = result.rows.filter((row) => row.eligible && row.score !== undefined);
+  if (!scored.length) return "Insufficient data for ML comparison";
+  return "Equal top preference scores · compare routes";
+}
