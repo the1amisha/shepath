@@ -3,7 +3,7 @@ import { liveModel } from "@/lib/routing/liveRecommendation";
 export function ModelEvidenceCard() {
   const { counts, evaluation } = liveModel;
   return (
-    <details className="mt-3 rounded-xl bg-secondary p-3 text-sm">
+    <details className="rounded-xl bg-secondary p-2 text-sm">
       <summary className="cursor-pointer font-semibold">How the ML works</summary>
       <ol className="mt-3 list-decimal space-y-2 pl-5">
         <li>Learn preferences from survey route choices using constrained logistic regression.</li>
