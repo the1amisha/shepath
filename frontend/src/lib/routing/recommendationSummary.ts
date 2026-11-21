@@ -129,3 +129,14 @@ export function recommendationFallback(result: HybridResult) {
   if (!scored.length) return "Insufficient data for ML comparison";
   return "Equal top preference scores · compare routes";
 }
+
+/** A unique midpoint leader is not necessarily separated across missing-input bounds. */
+export function preferenceIsSeparated(result: HybridResult) {
+  const eligible = result.rows.filter((row) => row.eligible);
+  const winner = eligible.find((row) => row.id === result.recommendedId && row.score !== undefined);
+  return (
+    !!winner &&
+    eligible.length > 1 &&
+    eligible.every((row) => row.id === winner.id || winner.low > row.high + 1e-8)
+  );
+}

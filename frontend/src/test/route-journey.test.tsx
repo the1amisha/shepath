@@ -196,6 +196,7 @@ describe("Real routing journey", () => {
     getRoutes.mockRejectedValue(new Error("Geocoding failed"));
     start();
     await waitFor(() => expect(screen.getByRole("alert")).toHaveTextContent("Geocoding failed"));
+    expect(screen.getByRole("button", { name: "Open saved comparison" })).toBeInTheDocument();
     expect(screen.getByTestId("map")).toHaveAttribute("data-routes", "[]");
   });
 });

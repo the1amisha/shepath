@@ -1,3 +1,4 @@
+import { preferenceIsSeparated } from "@/lib/routing/recommendationSummary";
 import { ModelLab } from "@/components/ModelLab";
 import {
   hybridRecommendation,
@@ -706,12 +707,24 @@ export function ShePathApp() {
                     >
                       Edit locations
                     </Button>
+                    <Button className="mt-3" variant="outline" onClick={openSaved}>
+                      Open saved comparison
+                    </Button>
+                    <p className="mt-2 text-xs">
+                      Historical journey · needs backend access; no live routing request.
+                    </p>
                   </div>
                 )}
                 {orderedOptions.map((route) => (
                   <div key={route.id} data-route-card={route.id}>
                     {mlEnabled && ml.recommendedId === route.id && (
-                      <p className="px-3 py-2 text-sm font-bold text-primary">Recommended</p>
+                      <p className="px-3 py-2 text-sm font-bold text-primary">
+                        {ml.rows.filter((row) => row.eligible).length === 1
+                          ? "Within time limit"
+                          : preferenceIsSeparated(ml)
+                            ? "Recommended"
+                            : "Top calculated fit"}
+                      </p>
                     )}
                     <RouteOption
                       route={route}

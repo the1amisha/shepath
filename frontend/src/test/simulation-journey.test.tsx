@@ -36,7 +36,7 @@ it("keeps model experiments separate and preserves the chosen live route when re
   fireEvent.click(screen.getByRole("button", { name: "Plan my walk" }));
   fireEvent.click(screen.getByRole("button", { name: "Continue to preferences" }));
   fireEvent.click(screen.getByRole("button", { name: "Continue to routes" }));
-  await screen.findByRole("heading", { name: "Recommended · Route 2" });
+  await screen.findByRole("heading", { name: "Similar matches" });
   await waitFor(() =>
     expect(screen.getByTestId("map")).toHaveAttribute("data-selected", "alternative"),
   );
@@ -44,6 +44,8 @@ it("keeps model experiments separate and preserves the chosen live route when re
     "data-route-card",
     "alternative",
   );
+  expect(screen.getByRole("button", { name: "View top match" })).toBeInTheDocument();
+  expect(screen.getByRole("button", { name: /View fastest/ })).toBeInTheDocument();
   expect(screen.queryByText("Presentation demo")).not.toBeInTheDocument();
   expect(screen.queryByLabelText("Simulation-based ML routes")).not.toBeInTheDocument();
   fireEvent.click(screen.getByRole("button", { name: /Route 1 Not selected/ }));

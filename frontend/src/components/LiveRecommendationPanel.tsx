@@ -1,3 +1,4 @@
+import { ModelEvidenceCard } from "@/components/ModelEvidenceCard";
 import type { ReactNode } from "react";
 import type { EvidenceState } from "@/hooks/useRouteEvidence";
 import { Button } from "@/components/ui/button";
@@ -5,6 +6,7 @@ import {
   recommendationSummary,
   recommendationFallback,
   walkingTime,
+  preferenceIsSeparated,
 } from "@/lib/routing/recommendationSummary";
 import type { HybridResult } from "@/lib/routing/hybridRecommendation";
 import { learnedPriorities, type Priorities } from "@/lib/routing/hybridRecommendation";
@@ -12,7 +14,6 @@ import type { RouteData } from "@/lib/routing/types";
 import {
   attributes,
   attributeLabels,
-  liveModel,
   observationKey,
   type Observations,
 } from "@/lib/routing/liveRecommendation";
@@ -48,8 +49,9 @@ export function LiveRecommendationPanel({
   onObservations,
 }: Props) {
   const summary = enabled ? recommendationSummary(routes, result, states, priorities) : null;
+  const uncertain = !!summary && !summary.onlyEligible && !preferenceIsSeparated(result);
   const fallbackRoute =
-    enabled && !summary && routes.length > 1 && result.rows.length > 0
+    enabled && (!summary || uncertain) && routes.length > 1 && result.rows.length > 0
       ? [...routes]
           .filter((route) => result.rows.find((row) => row.id === route.id)?.eligible)
           .sort(
@@ -72,25 +74,29 @@ export function LiveRecommendationPanel({
                   : "ML preference recommendation"}
             </p>
             <h2 id="live-ml-title" className="mt-2 font-display text-2xl font-black">
-              {summary.onlyEligible ? "Time-limit match" : "Recommended"} ·{" "}
-              {routeName(summary.route.id)}
+              {uncertain
+                ? "Similar matches"
+                : `${summary.onlyEligible ? "Time-limit match" : "Recommended"} · ${routeName(summary.route.id)}`}
             </h2>
             <p role="status" className="mt-2 font-semibold">
+              {uncertain && `${routeName(summary.route.id)} · Top calculated fit · `}
               {walkingTime(summary.route.durationSeconds)} ·{" "}
               {(summary.route.distanceMeters / 1000).toFixed(1)} km
               <span className="ml-2 inline-block rounded-full bg-secondary px-3 py-1 text-xs">
                 {summary.extra}
               </span>
             </p>
-            <p className="mt-3 text-sm">{summary.reason}</p>
+            <p className="mt-3 text-sm">
+              {uncertain ? "Missing information could change the order." : summary.reason}
+            </p>
             {summary.limited && (
               <p className="mt-2 text-xs font-semibold text-muted-foreground">
-                Limited data · provisional recommendation
+                Limited input coverage
               </p>
             )}
           </div>
           <Button className="w-full sm:w-auto" onClick={() => onSelect(summary.route.id)}>
-            View recommended route
+            {uncertain ? "View top match" : "View recommended route"}
           </Button>
         </div>
       ) : (
@@ -119,6 +125,11 @@ export function LiveRecommendationPanel({
           )}
         </>
       )}
+      {uncertain && fallbackRoute && (
+        <Button variant="outline" className="mt-3" onClick={() => onSelect(fallbackRoute.id)}>
+          View fastest · {walkingTime(fallbackRoute.durationSeconds)}
+        </Button>
+      )}
       <p className="mt-2 text-xs text-muted-foreground">
         Experimental preference model · not a safety rating
       </p>
@@ -130,6 +141,7 @@ export function LiveRecommendationPanel({
               Preference fit {summary.row.score!.toFixed(0)}/100 · {summary.row.coverage.toFixed(0)}
               % input coverage
             </p>
+            {uncertain && <p className="mt-2">{summary.reason}</p>}
             <p className="mt-2">
               {summary.custom
                 ? "Uses your adjusted weights."
@@ -202,7 +214,7 @@ export function LiveRecommendationPanel({
         )}
       </details>
       <details className="mt-3 text-sm">
-        <summary className="cursor-pointer font-semibold">Options & model details</summary>
+        <summary className="cursor-pointer font-semibold">Personalise comparison</summary>
         {priorityControls}
         <details className="mt-3 text-sm">
           <summary className="cursor-pointer font-bold">Recommendation settings</summary>
@@ -310,36 +322,10 @@ export function LiveRecommendationPanel({
               absent. Pedestrian activity is unknown unless you describe it. Ranking uses range
               midpoints; overlapping ranges mean the order is uncertain.
             </p>
-            <details className="mt-4 text-sm leading-6">
-              <summary className="cursor-pointer font-bold">
-                Model, evidence mapping and limitations
-              </summary>
-              <p className="mt-3">
-                Constrained logistic regression learned weights from 202 clear survey choices from
-                39 consenting submissions. Nearby positive sidewalk and lighting tag fractions, and
-                the fraction of mapped businesses scheduled open at departure, are hand-designed
-                proxies for the survey attributes. They do not establish real conditions or
-                continuous coverage. Unknown values span 0–1 instead of being scored as absent.
-              </p>
-              <p className="mt-3">
-                The fit forbids rewarding longer walks or penalizing desired attributes. It learned
-                a zero time coefficient, so your extra-time limit handles duration separately. This
-                is a different model from the unconstrained survey demo.
-              </p>
-              <p className="mt-3">
-                Survey cross-validation: {(liveModel.evaluation.model.accuracy * 100).toFixed(1)}%
-                accuracy; baseline {(liveModel.evaluation.baseline.accuracy * 100).toFixed(1)}%.
-                Model log loss {liveModel.evaluation.model.log_loss.toFixed(3)}. These results
-                evaluate the six survey scenarios, not real-route recommendations. Constraints were
-                chosen after inspecting the original fit; this is exploratory evaluation.
-              </p>
-              <a className="mt-2 inline-block underline text-primary" href="/preference-lab">
-                View the original survey experiment
-              </a>
-            </details>
           </>
         )}
       </details>
+      <ModelEvidenceCard />
     </section>
   );
 }
