@@ -1,3 +1,4 @@
+import asyncio
 import math
 import os
 import re
@@ -548,18 +549,19 @@ async def create_route(route_request: RouteRequest) -> RouteResponse:
     profile = TRAVEL_MODE_PROFILES[route_request.travelMode]
 
     async with httpx.AsyncClient(timeout=REQUEST_TIMEOUT_SECONDS) as client:
-        start_point = route_request.originPoint or await geocode_location(
-            client,
-            api_key,
-            route_request.origin,
-            "Origin",
+        async def resolve(point, text, label):
+            return point or await geocode_location(client, api_key, text, label)
+
+        # Independent lookups overlap; await both before closing the shared client.
+        points = await asyncio.gather(
+            resolve(route_request.originPoint, route_request.origin, "Origin"),
+            resolve(route_request.destinationPoint, route_request.destination, "Destination"),
+            return_exceptions=True,
         )
-        end_point = route_request.destinationPoint or await geocode_location(
-            client,
-            api_key,
-            route_request.destination,
-            "Destination",
-        )
+        for point in points:
+            if isinstance(point, BaseException):
+                raise point
+        start_point, end_point = points
         straight_line_distance_meters = calculate_straight_line_distance_meters(
             start_point,
             end_point,

@@ -249,7 +249,8 @@ def analyze_route(route_id, coordinates, distance_metres=None, duration_seconds=
         for f, g in data._projected if f['id'] in selected and 'opening_hours' in f['properties']['tags']]
     # Phase 5A's clipped_road_length is an object-line sum, not unique coverage.
     # Preserve it for parity, and explicitly provide non-overlapping line coverage.
-    roads = [g.intersection(line.buffer(buffer_metres, quad_segs=64)) for f, g in data._projected
+    corridor = line.buffer(buffer_metres, quad_segs=64)
+    roads = [g.intersection(corridor) for f, g in data._projected
              if f['id'] in selected and 'roads_and_pedestrian_ways' in f['properties']['categories']]
     parts = [part for g in roads for part in verify.coverage.line_parts(g)]
     context['nearby_road_geometry'] = {'unique_clipped_line_length_metres': unary_union(parts).length,
