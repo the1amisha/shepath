@@ -29,7 +29,8 @@ it("routes the campus shortcut using its selected coordinates", async () => {
   getRoutes.mockResolvedValue([evidenceRoute]);
   render(<ShePathApp />);
   fireEvent.click(screen.getByRole("button", { name: "Plan my journey" }));
-  fireEvent.click(screen.getByRole("button", { name: "Sarala Birla University" }));
+  fireEvent.focus(screen.getByLabelText("Going to"));
+  fireEvent.click(screen.getByRole("option", { name: "Sarala Birla University" }));
   expect(screen.getByLabelText("Going to")).toHaveValue(
     "Sarala Birla University, Ara, Mahilong, Ranchi",
   );
@@ -45,8 +46,8 @@ it("uses the campus as start without replacing the destination", async () => {
   getRoutes.mockResolvedValue([evidenceRoute]);
   render(<ShePathApp />);
   fireEvent.click(screen.getByRole("button", { name: "Plan my journey" }));
-  fireEvent.change(screen.getByLabelText("Use shortcuts for"), { target: { value: "origin" } });
-  fireEvent.click(screen.getByRole("button", { name: "Sarala Birla University" }));
+  fireEvent.focus(screen.getByLabelText("Starting from"));
+  fireEvent.click(screen.getByRole("option", { name: "Sarala Birla University" }));
   expect(screen.getByLabelText("Starting from")).toHaveValue(
     "Sarala Birla University, Ara, Mahilong, Ranchi",
   );
@@ -67,15 +68,13 @@ it("targets shortcuts at the last focused field and preserves campus coordinates
   const origin = screen.getByLabelText("Starting from");
   const destination = screen.getByLabelText("Going to");
   fireEvent.focus(origin);
-  expect(screen.getByLabelText("Use shortcuts for")).toHaveValue("origin");
-  fireEvent.blur(origin);
-  fireEvent.click(screen.getByRole("button", { name: "Sarala Birla University" }));
+
+  fireEvent.click(screen.getByRole("option", { name: "Sarala Birla University" }));
   expect(origin).toHaveValue("Sarala Birla University, Ara, Mahilong, Ranchi");
   expect(destination).toHaveValue("Ranchi Railway Station, Ranchi");
   fireEvent.focus(destination);
-  expect(screen.getByLabelText("Use shortcuts for")).toHaveValue("destination");
-  fireEvent.blur(destination);
-  fireEvent.click(screen.getByRole("button", { name: "Doranda, Ranchi" }));
+
+  fireEvent.click(screen.getByRole("option", { name: "Doranda, Ranchi" }));
   expect(origin).toHaveValue("Sarala Birla University, Ara, Mahilong, Ranchi");
   expect(destination).toHaveValue("Doranda, Ranchi");
   for (const name of ["Continue to preferences", "Skip preferences"])
@@ -87,4 +86,22 @@ it("targets shortcuts at the last focused field and preserves campus coordinates
     destination: "Doranda, Ranchi",
   });
   expect(getRoutes.mock.calls[0]![0]).not.toHaveProperty("destinationPoint");
+});
+
+it("offers current location first only for the origin and allows keyboard shortcut selection", () => {
+  render(<ShePathApp />);
+  fireEvent.click(screen.getByRole("button", { name: "Plan my journey" }));
+  const origin = screen.getByLabelText("Starting from");
+  fireEvent.focus(origin);
+  expect(screen.getAllByRole("option")[0]).toHaveTextContent("Current location");
+  fireEvent.keyDown(origin, { key: "ArrowDown" });
+  fireEvent.keyDown(origin, { key: "ArrowDown" });
+  fireEvent.keyDown(origin, { key: "Enter" });
+  expect(origin).toHaveValue("Sarala Birla University, Ara, Mahilong, Ranchi");
+  const destination = screen.getByLabelText("Going to");
+  fireEvent.focus(destination);
+  expect(screen.queryByRole("option", { name: "Current location" })).not.toBeInTheDocument();
+  fireEvent.keyDown(destination, { key: "Escape" });
+  expect(screen.queryByRole("listbox")).not.toBeInTheDocument();
+  expect(getRoutes).not.toHaveBeenCalled();
 });

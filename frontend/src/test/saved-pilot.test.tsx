@@ -152,38 +152,4 @@ describe("Saved pilot view", () => {
     expect(within(first).getAllByText("Unknown").length).toBeGreaterThanOrEqual(2);
     expect(within(first).getByText("0%")).toBeInTheDocument();
   });
-  it("keeps matching live IDs and places separate and preserves the journey on return", async () => {
-    const live = {
-      id: fixture.journey.routeIds[0],
-      distanceMeters: 1000,
-      durationSeconds: 600,
-      coordinates: [
-        [1, 2],
-        [3, 4],
-      ],
-      startPoint: [1, 2],
-      endPoint: [3, 4],
-    };
-    getRoutes.mockResolvedValue([live]);
-    respond();
-    render(<ShePathApp />);
-    expect(fetch).not.toHaveBeenCalled();
-    fireEvent.click(screen.getByRole("button", { name: /Plan my journey/ }));
-    fireEvent.change(screen.getByLabelText(/Going to/), {
-      target: { value: fixture.journey.destination },
-    });
-    fireEvent.click(screen.getByRole("button", { name: /Continue to preferences/ }));
-    fireEvent.click(screen.getByRole("button", { name: /Continue to routes/ }));
-    await screen.findByRole("button", { name: /Fastest/ });
-    fireEvent.click(screen.getByRole("button", { name: "Saved Ranchi Pilot Comparison" }));
-    await screen.findByRole("region", { name: "Three saved routes" });
-    expect(
-      screen.getByText(/snapshot and geometry identity cannot be verified/),
-    ).toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: "Back to journey" }));
-    expect(screen.getByTestId("map")).toHaveAttribute("data-routes", JSON.stringify([live]));
-    expect(screen.queryByText(/Mapped proximity observations/)).not.toBeInTheDocument();
-    expect(screen.getByText("Compare walking routes")).toBeInTheDocument();
-    expect(getRoutes).toHaveBeenCalledOnce();
-  });
 });

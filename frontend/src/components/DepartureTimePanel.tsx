@@ -12,7 +12,9 @@ import { summarizeHours, type HoursState } from "@/lib/routing/facilityHours";
 export function DepartureControl({
   value,
   onChange,
+  compact = false,
 }: {
+  compact?: boolean;
   value: string;
   onChange: (value: string) => void;
 }) {
@@ -21,33 +23,43 @@ export function DepartureControl({
   return (
     <div className="space-y-2 min-w-0">
       <label htmlFor={id} className="block text-sm font-bold">
-        Departure date and time (IST)
+        {compact ? "Departure (IST)" : "Departure date and time (IST)"}
       </label>
       <div className="flex flex-wrap items-center gap-3">
         <input
           id={id}
-          type="datetime-local"
-          min="2000-01-01T00:00"
-          max="2100-12-31T23:59"
-          value={value}
-          onChange={(event) => onChange(event.target.value)}
-          aria-describedby={`${id}-help`}
+          type={compact ? "time" : "datetime-local"}
+          min={compact ? undefined : "2000-01-01T00:00"}
+          max={compact ? undefined : "2100-12-31T23:59"}
+          value={compact ? value.slice(11, 16) : value}
+          onChange={(event) =>
+            onChange(
+              compact
+                ? `${value.slice(0, 10) || istInputValue(new Date()).slice(0, 10)}T${event.target.value}`
+                : event.target.value,
+            )
+          }
+          aria-describedby={!compact || !valid ? `${id}-help` : undefined}
           aria-invalid={!valid}
           className="w-full min-w-0 max-w-xs rounded-xl border border-border bg-background px-3 py-2 text-sm"
         />
-        <button
-          type="button"
-          className="rounded-xl border px-3 py-2 text-sm"
-          onClick={() => onChange(istInputValue(new Date()))}
-        >
-          Use current IST time
-        </button>
+        {!compact && (
+          <button
+            type="button"
+            className="rounded-xl border px-3 py-2 text-sm"
+            onClick={() => onChange(istInputValue(new Date()))}
+          >
+            Use current IST time
+          </button>
+        )}
       </div>
-      <p id={`${id}-help`} className="text-xs text-muted-foreground">
-        {valid
-          ? "Ranchi time (UTC+05:30), regardless of your device timezone. Changing it does not request new routes."
-          : "Enter a valid IST date and time between 2000 and 2100."}
-      </p>
+      {(!compact || !valid) && (
+        <p id={`${id}-help`} className="text-xs text-muted-foreground">
+          {valid
+            ? "Ranchi time (UTC+05:30), regardless of your device timezone. Changing it does not request new routes."
+            : "Enter a valid IST date and time between 2000 and 2100."}
+        </p>
+      )}
     </div>
   );
 }

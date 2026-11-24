@@ -1,4 +1,4 @@
-import { useEffect, useId, useState } from "react";
+import { useEffect, useId, useState, useRef } from "react";
 import { z } from "zod";
 import { apiBaseUrl } from "@/lib/routing/apiBaseUrl";
 import type { LatLng } from "@/lib/routing/types";
@@ -25,7 +25,11 @@ export function PlaceField({
   error,
   onSelect,
   onFocus,
+  shortcuts = false,
+  onCurrentLocation,
 }: {
+  shortcuts?: boolean;
+  onCurrentLocation?: (() => void) | undefined;
   label: string;
   value: string;
   onChange: (value: string) => void;
@@ -35,6 +39,7 @@ export function PlaceField({
   onFocus?: () => void;
 }) {
   const id = useId();
+  const input = useRef<HTMLInputElement>(null);
   const [query, setQuery] = useState<string | null>(null);
   const [focused, setFocused] = useState(false);
   const [places, setPlaces] = useState<Place[]>([]);
@@ -87,27 +92,61 @@ export function PlaceField({
     setPlaces([]);
     setMessage("");
     setActive(-1);
+    setFocused(false);
     onSelect?.(place);
   }
-  const visible = searching && places.length > 0;
+  const options: { label: string; choose: () => void }[] = searching
+    ? places.map((place) => ({ label: place.label, choose: () => choose(place) }))
+    : shortcuts
+      ? [
+          ...(onCurrentLocation ? [{ label: "Current location", choose: onCurrentLocation }] : []),
+          ...(enabled
+            ? [
+                {
+                  label: "Sarala Birla University",
+                  choose: () =>
+                    choose({
+                      label: "Sarala Birla University, Ara, Mahilong, Ranchi",
+                      point: [23.3473466, 85.4174703],
+                    }),
+                },
+              ]
+            : []),
+          ...[
+            "Albert Ekka Chowk, Ranchi",
+            "Ranchi Railway Station, Ranchi",
+            "Lalpur, Ranchi",
+            "Morabadi, Ranchi",
+            "Doranda, Ranchi",
+          ].map((name) => ({ label: name, choose: () => onChange(name) })),
+        ]
+      : [];
+  const visible = focused && options.length > 0;
+  function selectOption(index: number) {
+    options[index]?.choose();
+    setFocused(false);
+    setQuery(null);
+    setActive(-1);
+  }
   return (
-    <div>
-      <label
-        htmlFor={id}
-        className="grid grid-cols-[auto_1fr] gap-4 rounded-2xl border border-input bg-background p-4 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/10"
-      >
+    <div className="relative">
+      <div className="grid grid-cols-[auto_minmax(0,1fr)_auto] gap-4 rounded-2xl border border-input bg-background p-4 focus-within:border-primary focus-within:ring-2 focus-within:ring-primary/10">
         <span className={cn("mt-4 size-3 rounded-full ring-4 ring-card", dot)} />
         <span className="min-w-0">
-          <span className="block text-xs font-bold uppercase tracking-[0.13em] text-muted-foreground">
+          <label
+            htmlFor={id}
+            className="block text-xs font-bold uppercase tracking-[0.13em] text-muted-foreground"
+          >
             {label}
-          </span>
+          </label>
           <input
+            ref={input}
             id={id}
             value={value}
             autoComplete="off"
-            role={enabled ? "combobox" : undefined}
+            role={enabled || shortcuts ? "combobox" : undefined}
             aria-autocomplete={enabled ? "list" : undefined}
-            aria-expanded={enabled ? visible : undefined}
+            aria-expanded={enabled || shortcuts ? visible : undefined}
             aria-controls={visible ? `${id}-list` : undefined}
             aria-activedescendant={visible && active >= 0 ? `${id}-option-${active}` : undefined}
             aria-invalid={!!error}
@@ -129,6 +168,7 @@ export function PlaceField({
             }}
             onKeyDown={(event) => {
               if (event.key === "Escape") {
+                setFocused(false);
                 setQuery(null);
                 setPlaces([]);
                 setMessage("");
@@ -137,37 +177,56 @@ export function PlaceField({
                 event.preventDefault();
                 setActive((i) =>
                   event.key === "ArrowDown"
-                    ? (i + 1) % places.length
+                    ? (i + 1) % options.length
                     : i <= 0
-                      ? places.length - 1
+                      ? options.length - 1
                       : i - 1,
                 );
               }
               if (visible && event.key === "Enter" && active >= 0) {
                 event.preventDefault();
-                choose(places[active]!);
+                selectOption(active);
               }
             }}
             className="mt-1 w-full bg-transparent text-base font-bold text-foreground outline-none placeholder:text-muted-foreground"
             placeholder="Enter a place"
           />
         </span>
-      </label>
+        {shortcuts && (
+          <button
+            type="button"
+            aria-label={`Show ${label.toLowerCase()} locations`}
+            aria-expanded={visible}
+            className="self-center rounded-lg p-2 text-muted-foreground hover:bg-secondary"
+            onMouseDown={(event) => event.preventDefault()}
+            onClick={() => {
+              if (visible) setFocused(false);
+              else {
+                input.current?.focus();
+                setQuery(null);
+                setFocused(true);
+              }
+            }}
+          >
+            <span aria-hidden="true">⌄</span>
+          </button>
+        )}
+      </div>
       {visible && (
         <ul
           id={`${id}-list`}
           role="listbox"
           aria-label={`${label} suggestions`}
-          className="relative z-20 mt-1 max-h-64 overflow-auto rounded-2xl border border-border bg-card p-1 shadow-lg"
+          className="absolute left-0 right-0 z-30 mt-1 max-h-64 overflow-auto rounded-2xl border border-border bg-card p-1 shadow-lg"
         >
-          {places.map((place, i) => (
+          {options.map((place, i) => (
             <li
               key={`${place.label}-${i}`}
               id={`${id}-option-${i}`}
               role="option"
               aria-selected={active === i}
               onMouseDown={(event) => event.preventDefault()}
-              onClick={() => choose(place)}
+              onClick={() => selectOption(i)}
               className={cn(
                 "cursor-pointer break-words rounded-xl px-4 py-3 text-sm hover:bg-secondary",
                 active === i && "bg-secondary",
@@ -178,13 +237,7 @@ export function PlaceField({
           ))}
         </ul>
       )}
-      {enabled && (
-        <p className="mt-2 text-xs text-muted-foreground">
-          Type at least 3 characters. Suggestions search India, prioritising Ranchi. Typed searches
-          are sent to the location service.
-        </p>
-      )}
-      {enabled && (
+      {enabled && focused && query === value && message && (
         <p role="status" className="mt-1 text-xs text-muted-foreground">
           {focused && query === value ? message : ""}
         </p>
