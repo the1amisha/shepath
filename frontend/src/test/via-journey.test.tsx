@@ -13,7 +13,7 @@ afterEach(() => {
 it("plans a direct journey without a via field or shared stop", async () => {
   getRoutes.mockResolvedValue([evidenceRoute]);
   render(<ShePathApp />);
-  fireEvent.click(screen.getByRole("button", { name: "Plan my walk" }));
+  fireEvent.click(screen.getByRole("button", { name: "Plan my journey" }));
   expect(screen.queryByLabelText("Via (optional)")).not.toBeInTheDocument();
   for (const name of ["Continue to preferences", "Skip preferences"])
     fireEvent.click(screen.getByRole("button", { name }));
@@ -28,7 +28,7 @@ it("plans a direct journey without a via field or shared stop", async () => {
 it("routes the campus shortcut using its selected coordinates", async () => {
   getRoutes.mockResolvedValue([evidenceRoute]);
   render(<ShePathApp />);
-  fireEvent.click(screen.getByRole("button", { name: "Plan my walk" }));
+  fireEvent.click(screen.getByRole("button", { name: "Plan my journey" }));
   fireEvent.click(screen.getByRole("button", { name: "Sarala Birla University" }));
   expect(screen.getByLabelText("Going to")).toHaveValue(
     "Sarala Birla University, Ara, Mahilong, Ranchi",
@@ -44,7 +44,7 @@ it("routes the campus shortcut using its selected coordinates", async () => {
 it("uses the campus as start without replacing the destination", async () => {
   getRoutes.mockResolvedValue([evidenceRoute]);
   render(<ShePathApp />);
-  fireEvent.click(screen.getByRole("button", { name: "Plan my walk" }));
+  fireEvent.click(screen.getByRole("button", { name: "Plan my journey" }));
   fireEvent.change(screen.getByLabelText("Use shortcuts for"), { target: { value: "origin" } });
   fireEvent.click(screen.getByRole("button", { name: "Sarala Birla University" }));
   expect(screen.getByLabelText("Starting from")).toHaveValue(
@@ -63,7 +63,7 @@ it("uses the campus as start without replacing the destination", async () => {
 it("targets shortcuts at the last focused field and preserves campus coordinates", async () => {
   getRoutes.mockResolvedValue([evidenceRoute]);
   render(<ShePathApp />);
-  fireEvent.click(screen.getByRole("button", { name: "Plan my walk" }));
+  fireEvent.click(screen.getByRole("button", { name: "Plan my journey" }));
   const origin = screen.getByLabelText("Starting from");
   const destination = screen.getByLabelText("Going to");
   fireEvent.focus(origin);

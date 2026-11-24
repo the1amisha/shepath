@@ -10,6 +10,7 @@ export function TripPlanPanel({
   from,
   to,
   departure,
+  mode = "walk",
 }: {
   routes: RouteData[];
   selected: string;
@@ -17,10 +18,11 @@ export function TripPlanPanel({
   from: string;
   to: string;
   departure: string;
+  mode?: "walk" | "drive";
 }) {
   const id = useId();
   const [error, setError] = useState("");
-  const text = tripPlanText(routes, selected, states, from, to, departure);
+  const text = tripPlanText(routes, selected, states, from, to, departure, mode);
   if (!text) return null;
   return (
     <section
