@@ -33,7 +33,7 @@ beforeEach(() => {
 });
 function search() {
   render(<ShePathApp />);
-  fireEvent.click(screen.getByRole("button", { name: "Plan my walk" }));
+  fireEvent.click(screen.getByRole("button", { name: "Plan my journey" }));
 }
 function preferences() {
   search();

@@ -38,7 +38,7 @@ afterEach(() => {
 });
 function start() {
   render(<ShePathApp />);
-  fireEvent.click(screen.getByRole("button", { name: "Plan my walk" }));
+  fireEvent.click(screen.getByRole("button", { name: "Plan my journey" }));
   fireEvent.click(screen.getByRole("button", { name: "Continue to preferences" }));
   fireEvent.click(screen.getByRole("button", { name: "Continue to routes" }));
 }
@@ -257,7 +257,7 @@ it("focuses journey screens without history changes or stealing focus on evidenc
   const push = vi.spyOn(window.history, "pushState");
   const replace = vi.spyOn(window.history, "replaceState");
   render(<ShePathApp />);
-  for (const label of ["Plan my walk", "Continue to preferences", "Continue to routes"]) {
+  for (const label of ["Plan my journey", "Continue to preferences", "Continue to routes"]) {
     fireEvent.click(screen.getByRole("button", { name: label }));
     expect(screen.getByRole("heading", { level: 1 })).toHaveFocus();
   }

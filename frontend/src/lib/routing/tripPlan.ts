@@ -11,10 +11,22 @@ export function tripPlanText(
   from: string,
   to: string,
   departure: string,
+  mode: "walk" | "drive" = "walk",
 ): string | null {
   const route = routes.find((r) => r.id === selected);
   const summary = summarizeRoute(routes, selected, states);
   if (!route || !summary) return null;
+  if (mode === "drive")
+    return [
+      "SHEPATH · Driving trip plan",
+      `From: ${from}`,
+      `To: ${to}`,
+      `Selected: ${summary.name}`,
+      `Estimated drive: ${Math.round(route.durationSeconds / 60)} min · ${(route.distanceMeters / 1000).toFixed(1)} km`,
+      `Departure: ${departure.replace("T", " ")} IST`,
+      "Routes compared by travel time. No live traffic or driving-safety rating.",
+      "Static plan only; no live tracking or turn-by-turn navigation.",
+    ].join("\n\n");
   const instant = parseDeparture(departure);
   const lines = [
     "SHEPATH · Walking trip plan",

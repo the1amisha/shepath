@@ -27,7 +27,7 @@ it("updates the summary/comparator without requests and preserves the choice in 
     };
   });
   render(<ShePathApp />);
-  for (const name of ["Plan my walk", "Continue to preferences", "Skip preferences"])
+  for (const name of ["Plan my journey", "Continue to preferences", "Skip preferences"])
     fireEvent.click(screen.getByRole("button", { name }));
   await screen.findByRole("button", { name: /Route 2 Selected/ });
   fireEvent.click(screen.getByRole("button", { name: /Route 1 Not selected/ }));

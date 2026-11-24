@@ -80,7 +80,7 @@ it("keeps mock tile failure wording explicitly illustrative", async () => {
 
 it.each(["initialization", "tiles"])("retains route cards, evidence and navigation through %s failure and map retry", async failure => {
   render(<ShePathApp />);
-  fireEvent.click(screen.getByRole("button", { name: "Plan my walk" }));
+  fireEvent.click(screen.getByRole("button", { name: "Plan my journey" }));
   if (failure === "initialization") mocks.map.mockImplementation(() => { throw new Error("Initialization failed"); });
   fireEvent.click(screen.getByRole("button", { name: "Continue to preferences" }));
   fireEvent.click(screen.getByRole("button", { name: "Continue to routes" }));

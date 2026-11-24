@@ -27,7 +27,7 @@ const route = {
 };
 function start() {
   render(<ShePathApp />);
-  fireEvent.click(screen.getByRole("button", { name: /Plan my walk/ }));
+  fireEvent.click(screen.getByRole("button", { name: /Plan my journey/ }));
   fireEvent.click(screen.getByRole("button", { name: /Continue to preferences/ }));
   fireEvent.click(screen.getByRole("button", { name: /Continue to routes/ }));
 }
@@ -47,7 +47,7 @@ describe("Real routing journey", () => {
     expect(getRoutes).not.toHaveBeenCalled();
     expect(fetchEvidence).not.toHaveBeenCalled();
     fireEvent.click(screen.getByRole("button", { name: "Back to journey" }));
-    expect(screen.getByRole("button", { name: /Plan my walk/ })).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Plan my journey/ })).toBeInTheDocument();
   });
   it("automatically ranks and selects the ML pick without opting in", async () => {
     const alternative = { ...route, id: "alternative", durationSeconds: 800 };
@@ -177,7 +177,7 @@ describe("Real routing journey", () => {
   it("does not request routes on Welcome or while typing", () => {
     render(<ShePathApp />);
     expect(getRoutes).not.toHaveBeenCalled();
-    fireEvent.click(screen.getByRole("button", { name: /Plan my walk/ }));
+    fireEvent.click(screen.getByRole("button", { name: /Plan my journey/ }));
     fireEvent.change(screen.getByRole("combobox", { name: /Starting from/ }), {
       target: { value: "New origin" },
     });
@@ -197,4 +197,31 @@ describe("Real routing journey", () => {
     expect(screen.getByRole("button", { name: "Open saved comparison" })).toBeInTheDocument();
     expect(screen.getByTestId("map")).toHaveAttribute("data-routes", "[]");
   });
+});
+
+it("requests driving routes, sorts by time, shares driving text, and can switch back to walking", async () => {
+  const slow = { ...route, id: "drive-slow", durationSeconds: 900 };
+  const fast = { ...route, id: "drive-fast", durationSeconds: 300 };
+  getRoutes.mockResolvedValue([slow, fast]);
+  render(<ShePathApp />);
+  fireEvent.click(screen.getByRole("button", { name: "Plan my journey" }));
+  fireEvent.change(screen.getByRole("combobox", { name: "Travel mode" }), { target: { value: "drive" } });
+  fireEvent.click(screen.getByRole("button", { name: "Compare driving routes" }));
+  await screen.findByRole("button", { name: /Route 2 Selected/ });
+  expect(getRoutes).toHaveBeenLastCalledWith(expect.objectContaining({ travelMode: "drive" }));
+  expect(fetchEvidence).not.toHaveBeenCalled();
+  expect(screen.queryByText("ML PREFERENCE RECOMMENDATION")).not.toBeInTheDocument();
+  expect(screen.getByText("Step 2 of 3")).toBeInTheDocument();
+  fireEvent.click(screen.getByRole("button", { name: "View route overview" }));
+  expect(screen.getByText("Driving")).toBeInTheDocument();
+  const url = new URL(screen.getByRole("link", { name: "Share on WhatsApp" }).getAttribute("href")!);
+  expect(url.searchParams.get("text")).toContain("Driving trip plan");
+  expect(url.searchParams.get("text")).not.toContain("estimated walk");
+  fireEvent.click(screen.getByRole("button", { name: "Compare routes" }));
+  fireEvent.click(screen.getByRole("button", { name: "Edit" }));
+  fireEvent.change(screen.getByRole("combobox", { name: "Travel mode" }), { target: { value: "walk" } });
+  fireEvent.click(screen.getByRole("button", { name: "Continue to preferences" }));
+  fireEvent.click(screen.getByRole("button", { name: "Continue to routes" }));
+  await waitFor(() => expect(getRoutes).toHaveBeenLastCalledWith(expect.objectContaining({ travelMode: "walk" })));
+  await waitFor(() => expect(fetchEvidence).toHaveBeenCalled());
 });

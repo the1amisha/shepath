@@ -168,7 +168,7 @@ describe("Saved pilot view", () => {
     respond();
     render(<ShePathApp />);
     expect(fetch).not.toHaveBeenCalled();
-    fireEvent.click(screen.getByRole("button", { name: /Plan my walk/ }));
+    fireEvent.click(screen.getByRole("button", { name: /Plan my journey/ }));
     fireEvent.change(screen.getByLabelText(/Going to/), {
       target: { value: fixture.journey.destination },
     });

@@ -15,7 +15,7 @@ it.each(["Continue to routes", "Skip preferences"])("keeps the four-step mock jo
   fetchEvidence.mockClear();
   render(<ShePathApp />); noScores();
   expect(screen.getByText(/Mock mode: fixed illustrative/)).toBeInTheDocument();
-  fireEvent.click(screen.getByRole("button", { name: "Plan my walk" }));
+  fireEvent.click(screen.getByRole("button", { name: "Plan my journey" }));
   expect(screen.getByText("Step 1 of 4")).toBeInTheDocument();
   fireEvent.click(screen.getByRole("button", { name: "Continue to preferences" }));
   expect(screen.getByText("Step 2 of 4")).toBeInTheDocument();

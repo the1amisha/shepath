@@ -30,7 +30,7 @@ afterEach(() => {
 it("routes selected coordinates and clears stale points when names are edited", async () => {
   getRoutes.mockResolvedValue([evidenceRoute]);
   render(<ShePathApp />);
-  fireEvent.click(screen.getByRole("button", { name: "Plan my walk" }));
+  fireEvent.click(screen.getByRole("button", { name: "Plan my journey" }));
   fireEvent.click(screen.getByRole("button", { name: "Pick test points" }));
   for (const name of ["Continue to preferences", "Skip preferences"])
     fireEvent.click(screen.getByRole("button", { name }));

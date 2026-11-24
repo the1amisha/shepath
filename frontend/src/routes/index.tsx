@@ -53,17 +53,17 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "SHEPATH — Compare walking routes" },
+      { title: "SHEPATH — Compare routes" },
       {
         name: "description",
         content:
-          "Compare walking routes and explore historical mapped geographic evidence in the bounded Ranchi pilot. No personal-safety assessment.",
+          "Compare walking and driving routes and explore historical mapped geographic evidence in the bounded Ranchi pilot. No personal-safety assessment.",
       },
-      { property: "og:title", content: "SHEPATH — Compare walking routes" },
+      { property: "og:title", content: "SHEPATH — Compare routes" },
       {
         property: "og:description",
         content:
-          "Compare walking routes and explore historical mapped geographic evidence in the bounded Ranchi pilot. No personal-safety assessment.",
+          "Compare walking and driving routes and explore historical mapped geographic evidence in the bounded Ranchi pilot. No personal-safety assessment.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -87,13 +87,17 @@ type RouteOptionData = {
   color: string;
 };
 
-function toRouteOptions(routes: RouteData[]): RouteOptionData[] {
+function toRouteOptions(routes: RouteData[], driving = false): RouteOptionData[] {
   const shortestTime = Math.min(...routes.map((route) => route.durationSeconds));
   const tied = routes.filter((route) => route.durationSeconds === shortestTime).length > 1;
   return routes.map((route, index) => ({
     id: route.id,
     name: `${isMock ? "Demo route" : "Route"} ${index + 1}`,
-    subtitle: isMock ? "Illustrative walking estimate" : "Estimated walking time",
+    subtitle: isMock
+      ? "Illustrative walking estimate"
+      : driving
+        ? "Estimated driving time"
+        : "Estimated walking time",
     time:
       route.durationSeconds < 60
         ? "Less than 1 min"
@@ -105,7 +109,7 @@ function toRouteOptions(routes: RouteData[]): RouteOptionData[] {
   }));
 }
 
-const steps: Screen[] = ["welcome", "search", "preferences", "results", "details"];
+const walkingSteps: Screen[] = ["welcome", "search", "preferences", "results", "details"];
 
 function Brand() {
   return (
@@ -121,6 +125,9 @@ function Brand() {
 }
 
 export function ShePathApp() {
+  const [travelMode, setTravelMode] = useState<"walk" | "drive">("walk");
+  const driving = travelMode === "drive";
+  const steps: Screen[] = driving ? ["welcome", "search", "results", "details"] : walkingSteps;
   const [showSavedPilot, setShowSavedPilot] = useState(false);
   const [screen, setScreen] = useState<Screen>("welcome");
   const { savedTrigger, openSaved } = useJourneyFocus(screen, showSavedPilot, () => {
@@ -163,34 +170,40 @@ export function ShePathApp() {
     if (!liveJourneyVisible) {
       interruptRouteRequest();
     }
-  }, [from, to, liveJourneyVisible]);
+  }, [from, to, travelMode, liveJourneyVisible]);
   useEffect(
     () => () => {
       requestGeneration.current++;
     },
     [],
   );
-  const routeOptions = toRouteOptions(routes);
+  const routeOptions = toRouteOptions(routes, driving);
   const evidence = useRouteEvidence(
     routes,
-    "walk",
-    JSON.stringify([from, to, originPoint, destinationPoint]),
+    travelMode,
+    JSON.stringify([from, to, originPoint, destinationPoint, travelMode]),
     !isMock && liveJourneyVisible,
   );
   const match = evidenceMatch(routes, evidence, weights, isMock);
   const effectiveWeights = normalizedWeights(weights);
   const mappedBounds = recommendRoutes(routes, evidence, departure, observations, maxExtra, isMock);
   const ml = hybridRecommendation(mappedBounds, priorities);
-  const orderedOptions = mlEnabled
-    ? hybridOrder(routes, ml).map((r) => routeOptions.find((option) => option.id === r.id)!)
-    : match.active
-      ? match.rows.map((row) => routeOptions.find((route) => route.id === row.id)!)
-      : routeOptions;
+  const orderedOptions = driving
+    ? [...routeOptions].sort(
+        (a, b) =>
+          routes.find((r) => r.id === a.id)!.durationSeconds -
+          routes.find((r) => r.id === b.id)!.durationSeconds,
+      )
+    : mlEnabled
+      ? hybridOrder(routes, ml).map((r) => routeOptions.find((option) => option.id === r.id)!)
+      : match.active
+        ? match.rows.map((row) => routeOptions.find((route) => route.id === row.id)!)
+        : routeOptions;
   const automaticFirst = orderedOptions[0]?.id;
   useEffect(() => {
-    if (mlEnabled && !isMock && automaticFirst && !manuallySelected.current)
+    if ((driving || mlEnabled) && !isMock && automaticFirst && !manuallySelected.current)
       setSelected(automaticFirst);
-  }, [mlEnabled, automaticFirst]);
+  }, [mlEnabled, driving, automaticFirst]);
   const chooseRoute = (id: string) => {
     manuallySelected.current = true;
     setSelected(id);
@@ -221,7 +234,7 @@ export function ShePathApp() {
         ...(!isMock && originPoint ? { originPoint } : {}),
         ...(!isMock && destinationPoint ? { destinationPoint } : {}),
         destination: to.trim(),
-        travelMode: "walk",
+        travelMode,
       });
       if (generation !== requestGeneration.current) return;
       if (!data.length) return;
@@ -267,7 +280,7 @@ export function ShePathApp() {
             />
           </div>
           <div className="welcome-copy">
-            <p className="welcome-eyebrow">Ranchi walking pilot</p>
+            <p className="welcome-eyebrow">Ranchi route planner</p>
             <h1 id="journey-heading" tabIndex={-1}>
               Find your way.
               <br />
@@ -275,15 +288,15 @@ export function ShePathApp() {
             </h1>
             <p className="welcome-description">
               A little local context
-              <br className="lg:hidden" /> for every walk you take.
+              <br className="lg:hidden" /> for every journey you take.
             </p>
             <Button
               size="lg"
               className="welcome-action"
-              aria-label="Plan my walk"
+              aria-label="Plan my journey"
               onClick={() => setScreen("search")}
             >
-              Plan my walk <ArrowRight className="size-4" />
+              Plan my journey <ArrowRight className="size-4" />
             </Button>
             <Button
               variant="ghost"
@@ -296,7 +309,7 @@ export function ShePathApp() {
             <p className="welcome-disclosure">
               {isMock
                 ? "Mock mode: fixed illustrative walking routes"
-                : "Live walking routes with historical mapped context where covered"}
+                : "Walking and driving routes with historical mapped context where covered"}
               . No personal-safety assessment is provided.
             </p>
             <button
@@ -345,7 +358,7 @@ export function ShePathApp() {
             ))}
           </div>
           <div className="rounded-full bg-secondary px-3 py-2 text-xs font-bold text-secondary-foreground md:ml-6">
-            Step {currentIndex} of 4
+            Step {currentIndex} of {steps.length - 1}
             <span className="sr-only">
               :{" "}
               {
@@ -378,7 +391,7 @@ export function ShePathApp() {
           description={
             isMock
               ? "Add your start and destination. Mock mode uses fixed demo routes."
-              : "Add your start and destination to compare walking routes."
+              : "Choose where to go and how to travel."
           }
         >
           <form
@@ -390,7 +403,8 @@ export function ShePathApp() {
               setFrom(from.trim());
               setTo(to.trim());
               setSearchSubmitted(false);
-              setScreen("preferences");
+              if (driving) void findRoutes();
+              else setScreen("preferences");
             }}
             className="mx-auto max-w-2xl rounded-3xl border border-border bg-card p-5 app-shadow sm:p-8"
           >
@@ -457,6 +471,31 @@ export function ShePathApp() {
                 }}
               />
             )}
+            <label className="mt-5 flex items-center gap-3 text-sm font-bold">
+              Travel mode
+              <select
+                aria-label="Travel mode"
+                value={travelMode}
+                className="rounded-full border border-border bg-background px-4 py-2"
+                onChange={(event) => {
+                  interruptRouteRequest();
+                  setRoutes([]);
+                  setSelected("");
+                  setTravelMode(event.target.value === "drive" ? "drive" : "walk");
+                }}
+              >
+                <option value="walk">Walking</option>
+                <option value="drive" disabled={isMock}>
+                  Driving
+                </option>
+              </select>
+            </label>
+            {driving && (
+              <p className="mt-2 text-xs text-muted-foreground">
+                Driving routes are compared by travel time. ML preferences currently support
+                walking.
+              </p>
+            )}
             <label className="mt-5 flex items-center gap-3 text-sm">
               Use shortcuts for
               <select
@@ -519,7 +558,8 @@ export function ShePathApp() {
               </div>
             )}
             <Button type="submit" className="mt-8 w-full" size="lg">
-              Continue to preferences <ArrowRight className="size-4" />
+              {driving ? "Compare driving routes" : "Continue to preferences"}{" "}
+              <ArrowRight className="size-4" />
             </Button>
           </form>
         </PageFrame>
@@ -609,7 +649,7 @@ export function ShePathApp() {
               Edit
             </Button>
           </div>
-          {!isMock && routes.length > 0 && (
+          {!isMock && !driving && routes.length > 0 && (
             <LiveRecommendationPanel
               priorities={priorities}
               routes={routes}
@@ -634,12 +674,19 @@ export function ShePathApp() {
           <div className="route-layout grid items-start rounded-3xl bg-card app-shadow lg:grid-cols-[390px_minmax(0,1fr)]">
             <aside className="route-options-sheet min-w-0 p-5 lg:p-6">
               <div className="sheet-handle" aria-hidden="true" />
-              <h2 className="mb-4 font-display text-2xl font-black">Compare walking routes</h2>
+              <h2 className="mb-4 font-display text-2xl font-black">
+                {driving ? "Compare driving routes" : "Compare walking routes"}
+              </h2>
               <p className="text-sm text-muted-foreground">Tap a route to view it on the map.</p>
+              {driving && (
+                <p className="mt-2 text-xs text-muted-foreground">
+                  Fastest estimate first · ML preferences support walking only.
+                </p>
+              )}
               {isMock && (
                 <p className="mt-2 text-xs">Illustrative mock routes · not real directions</p>
               )}
-              {!isMock && routes.length > 0 && (
+              {!isMock && !driving && routes.length > 0 && (
                 <p className="mt-2 text-xs text-muted-foreground" role="status">
                   Evidence checked:{" "}
                   {
@@ -670,18 +717,18 @@ export function ShePathApp() {
                 </section>
               )}
               <div className="mt-4">
-                <details hidden={mlEnabled}>
+                <details hidden={mlEnabled || driving}>
                   <summary className="cursor-pointer font-bold mb-3">
                     Adjust evidence preferences
                   </summary>
                   <EvidencePreferences weights={weights} onChange={setWeights} />
                 </details>
-                {!mlEnabled && (
+                {!driving && !mlEnabled && (
                   <p role="status" className="mt-3 text-sm">
                     {match.message}
                   </p>
                 )}
-                {!mlEnabled && sensitivityNote && (
+                {!driving && !mlEnabled && sensitivityNote && (
                   <p className="mt-3 text-xs leading-5">
                     Sensitivity example:{" "}
                     {routeOptions.find((r) => r.id === sensitivityNote.id)?.name} would rank first
@@ -716,7 +763,7 @@ export function ShePathApp() {
                 )}
                 {orderedOptions.map((route) => (
                   <div key={route.id} data-route-card={route.id}>
-                    {mlEnabled && ml.recommendedId === route.id && (
+                    {!driving && mlEnabled && ml.recommendedId === route.id && (
                       <p className="px-3 py-2 text-sm font-bold text-primary">
                         {ml.rows.filter((row) => row.eligible).length === 1
                           ? "Within time limit"
@@ -730,7 +777,7 @@ export function ShePathApp() {
                       selected={selected === route.id}
                       onSelect={() => chooseRoute(route.id)}
                     />
-                    {!isMock && (
+                    {!isMock && !driving && (
                       <details className="px-3 py-2 text-xs leading-5">
                         <summary className="cursor-pointer font-bold">Why this route?</summary>
                         {mlEnabled && (
@@ -748,7 +795,8 @@ export function ShePathApp() {
                         </p>
                       </details>
                     )}
-                    {!mlEnabled &&
+                    {!driving &&
+                      !mlEnabled &&
                       match.active &&
                       (() => {
                         const row = match.rows.find((r) => r.id === route.id)!;
@@ -849,8 +897,11 @@ export function ShePathApp() {
                 </div>
               </section>
             </ResultsMapPanel>
-            {routes.length > 0 && !isMock && (
-              <details className="w-full rounded-2xl border bg-card p-4 lg:col-span-2">
+            {routes.length > 0 && !isMock && !driving && (
+              <details
+                hidden={driving}
+                className="w-full rounded-2xl border bg-card p-4 lg:col-span-2"
+              >
                 <summary className="cursor-pointer font-bold">Compare route details</summary>
                 <RouteComparisonTable
                   routes={routes}
@@ -861,7 +912,10 @@ export function ShePathApp() {
                 />
               </details>
             )}
-            <details className="w-full rounded-2xl border bg-card p-4 lg:col-span-2">
+            <details
+              hidden={driving}
+              className="w-full rounded-2xl border bg-card p-4 lg:col-span-2"
+            >
               <summary className="cursor-pointer font-bold">Route summary & comparison</summary>
               <div className="mt-4">
                 <RouteSummaryPanel
@@ -874,7 +928,7 @@ export function ShePathApp() {
                 />
               </div>
             </details>
-            {!isMock && selectedRoute && (
+            {!isMock && !driving && selectedRoute && (
               <div className="selected-evidence w-full space-y-3 lg:col-span-2">
                 <details className="rounded-2xl border bg-card p-4">
                   <summary className="cursor-pointer font-bold">Departure time & daylight</summary>
@@ -907,7 +961,7 @@ export function ShePathApp() {
         <PageFrame
           eyebrow="Route overview"
           title={`${selectedRoute.name} overview`}
-          description={`${isMock ? "Illustrative" : "Estimated"} ${selectedRoute.time} walk from ${from} to ${to}. ${isMock ? "Fixed demo geometry." : "No personal-safety assessment."}`}
+          description={`${isMock ? "Illustrative" : "Estimated"} ${selectedRoute.time} ${driving ? "drive" : "walk"} from ${from} to ${to}. ${isMock ? "Fixed demo geometry." : "No personal-safety assessment."}`}
         >
           <div className="mx-auto max-w-5xl space-y-5">
             {!isMock && (
@@ -918,13 +972,14 @@ export function ShePathApp() {
                 from={from}
                 to={to}
                 departure={departure}
+                mode={travelMode}
               />
             )}
             <div className="overflow-hidden rounded-3xl border border-border bg-card app-shadow">
               <div className="grid grid-cols-3 gap-3 p-5 text-center">
                 <Stat label="Estimated time" value={selectedRoute.time} />
                 <Stat label="Distance" value={selectedRoute.distanceKm} />
-                <Stat label="Mode" value="Walking" />
+                <Stat label="Mode" value={driving ? "Driving" : "Walking"} />
               </div>
               <div className="min-h-[360px]" data-testid="overview-map-frame">
                 <ShePathMap
@@ -939,7 +994,7 @@ export function ShePathApp() {
               <p className="text-sm text-muted-foreground">
                 Fixed demo route; no geographic observations or personal-safety assessments.
               </p>
-            ) : (
+            ) : !driving ? (
               <details className="rounded-2xl border bg-card p-4">
                 <summary className="cursor-pointer font-bold">Departure time & daylight</summary>
                 <div className="mt-4">
@@ -952,21 +1007,27 @@ export function ShePathApp() {
                   />
                 </div>
               </details>
+            ) : (
+              <p className="text-sm text-muted-foreground">
+                Driving time estimate · no live traffic or driving-safety rating.
+              </p>
             )}
-            <details className="rounded-2xl border bg-card p-4">
-              <summary className="cursor-pointer font-bold">Route summary & comparison</summary>
-              <div className="mt-4">
-                <RouteSummaryPanel
-                  routes={routes}
-                  selected={selected}
-                  states={evidence}
-                  comparisonId={summaryComparison}
-                  onComparisonChange={setSummaryComparison}
-                  mock={isMock}
-                />
-              </div>
-            </details>
-            {!isMock && (
+            {!driving && (
+              <details className="rounded-2xl border bg-card p-4">
+                <summary className="cursor-pointer font-bold">Route summary & comparison</summary>
+                <div className="mt-4">
+                  <RouteSummaryPanel
+                    routes={routes}
+                    selected={selected}
+                    states={evidence}
+                    comparisonId={summaryComparison}
+                    onComparisonChange={setSummaryComparison}
+                    mock={isMock}
+                  />
+                </div>
+              </details>
+            )}
+            {!isMock && !driving && (
               <details className="rounded-2xl border bg-card p-4">
                 <summary className="cursor-pointer font-bold">Map data & sources</summary>
                 <RouteEvidencePanel

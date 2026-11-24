@@ -32,7 +32,7 @@ it("reorders cards after evidence arrives, preserves names/selection, and reset 
     };
   });
   render(<ShePathApp />);
-  for (const name of ["Plan my walk", "Continue to preferences"])
+  for (const name of ["Plan my journey", "Continue to preferences"])
     fireEvent.click(screen.getByRole("button", { name }));
   fireEvent.click(screen.getByLabelText("Set my own weights"));
   fireEvent.change(screen.getByRole("slider", { name: /^Lighting/ }), { target: { value: "100" } });
