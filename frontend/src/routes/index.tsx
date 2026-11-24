@@ -1,4 +1,8 @@
-import { preferenceIsSeparated, recommendationSummary } from "@/lib/routing/recommendationSummary";
+import {
+  preferenceIsSeparated,
+  recommendationSummary,
+  timeFallbackSummary,
+} from "@/lib/routing/recommendationSummary";
 import { ModelLab } from "@/components/ModelLab";
 import {
   hybridRecommendation,
@@ -690,7 +694,11 @@ export function ShePathApp() {
                                       evidence[route.id]?.status === "loading" ||
                                       evidence[route.id]?.status === "queued"
                                     ? "Comparing available route information…"
-                                    : "Not enough information for a preference match"
+                                    : timeFallbackSummary(
+                                        routes.find((item) => item.id === route.id)!,
+                                        routes,
+                                        ml,
+                                      )
                                 : match.active
                                   ? "Ordered by your evidence preferences"
                                   : "Original route order"

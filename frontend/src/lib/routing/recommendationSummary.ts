@@ -140,3 +140,47 @@ export function preferenceIsSeparated(result: HybridResult) {
     eligible.every((row) => row.id === winner.id || winner.low > row.high + 1e-8)
   );
 }
+
+/** Describe time fallback without implying that missing inputs produced an ML match. */
+export function timeFallbackSummary(route: RouteData, routes: RouteData[], result: HybridResult) {
+  const row = result.rows.find((item) => item.id === route.id);
+  const peers = routes.filter((candidate) => {
+    const other = result.rows.find((item) => item.id === candidate.id);
+    return other?.score === undefined && other?.eligible === row?.eligible;
+  });
+  const fastest =
+    [...peers].sort(
+      (a, b) => a.durationSeconds - b.durationSeconds || a.distanceMeters - b.distanceMeters,
+    )[0] ?? route;
+  const extra = route.durationSeconds - fastest.durationSeconds;
+  const hasScoredPeers = result.rows.some(
+    (item) => item.score !== undefined && item.eligible === row?.eligible,
+  );
+  const prefix =
+    row?.eligible === false
+      ? "Outside your extra-time limit. "
+      : hasScoredPeers
+        ? "Placed after routes with a preference match. "
+        : "";
+  if (routes.length === 1) return "Only route returned for this journey.";
+  if (peers.length === 1 && hasScoredPeers) return prefix + "Travel time is shown for comparison.";
+  const scope = hasScoredPeers || row?.eligible === false ? " in this group" : "";
+  if (extra > 0) {
+    const delay =
+      extra < 60
+        ? "Less than 1 minute"
+        : `About ${Math.round(extra / 60)} ${Math.round(extra / 60) === 1 ? "minute" : "minutes"}`;
+    return prefix + `${delay} longer than the fastest${scope}; ordered by estimated walking time.`;
+  }
+  const tied = peers.filter((item) => item.durationSeconds === route.durationSeconds);
+  if (tied.length > 1) {
+    const distanceDiffers = tied.some((item) => item.distanceMeters !== route.distanceMeters);
+    return (
+      prefix +
+      (distanceDiffers
+        ? "Same estimated walking time; shorter routes are listed first."
+        : "Same estimated time and distance; original route order retained.")
+    );
+  }
+  return prefix + `Fastest estimated walk${scope}; ranked by travel time.`;
+}
