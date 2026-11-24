@@ -267,6 +267,7 @@
   margin: 18px 0 32px;
 }
 .welcome-action {
+  margin-top: 28px;
   width: 100%;
   min-height: 54px;
 }
@@ -354,7 +355,8 @@
   }
   .welcome-copy {
     text-align: left;
-    align-self: center;
+    align-self: start;
+    padding-top: 8px;
   }
   .welcome-copy h1 {
     font-size: clamp(36px, 4vw, 48px);
@@ -470,7 +472,12 @@
   border: 2px solid white;
   border-radius: 50%;
   color: white;
-  font: 700 11px/1 system-ui, sans-serif;
+  font:
+    700 11px/1 system-ui,
+    sans-serif;
   box-shadow: 0 1px 5px #0005;
 }
-.shepath-facility-marker:focus-visible { outline: 3px solid #087fbd; outline-offset: 3px; }
+.shepath-facility-marker:focus-visible {
+  outline: 3px solid #087fbd;
+  outline-offset: 3px;
+}

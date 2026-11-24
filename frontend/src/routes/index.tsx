@@ -1,4 +1,4 @@
-import { preferenceIsSeparated } from "@/lib/routing/recommendationSummary";
+import { preferenceIsSeparated, recommendationSummary } from "@/lib/routing/recommendationSummary";
 import { ModelLab } from "@/components/ModelLab";
 import {
   hybridRecommendation,
@@ -180,6 +180,7 @@ export function ShePathApp() {
   const effectiveWeights = normalizedWeights(weights);
   const mappedBounds = recommendRoutes(routes, evidence, departure, observations, maxExtra, isMock);
   const ml = hybridRecommendation(mappedBounds, priorities);
+  const preferenceSummary = recommendationSummary(routes, ml, evidence, priorities);
   const orderedOptions = driving
     ? [...routeOptions].sort(
         (a, b) =>
@@ -291,7 +292,7 @@ export function ShePathApp() {
             )}
             <button
               type="button"
-              className="mt-3 text-sm text-primary underline"
+              className="mt-4 block text-sm text-primary underline"
               onClick={() => setShowModelLab(true)}
             >
               Model lab
@@ -560,28 +561,6 @@ export function ShePathApp() {
               Edit
             </Button>
           </div>
-          {!isMock && !driving && routes.length > 0 && (
-            <LiveRecommendationPanel
-              priorities={priorities}
-              routes={routes}
-              result={ml}
-              states={evidence}
-              departure={departure}
-              enabled={mlEnabled}
-              onEnabled={setMlEnabled}
-              maxExtra={maxExtra}
-              onMaxExtra={setMaxExtra}
-              observations={observations}
-              onObservations={setObservations}
-              onSelect={(id) => {
-                chooseRoute(id);
-                focusContent(document.getElementById("route-comparison-map"));
-              }}
-              priorityControls={
-                mlEnabled && <PriorityControls value={priorities} onChange={setPriorities} />
-              }
-            />
-          )}
           <div className="route-layout grid items-start rounded-3xl bg-card app-shadow lg:grid-cols-[390px_minmax(0,1fr)]">
             <aside className="route-options-sheet min-w-0 p-5 lg:p-6">
               <div className="sheet-handle" aria-hidden="true" />
@@ -672,76 +651,122 @@ export function ShePathApp() {
                     </p>
                   </div>
                 )}
-                {orderedOptions.map((route) => (
-                  <div key={route.id} data-route-card={route.id}>
-                    {!driving && mlEnabled && ml.recommendedId === route.id && (
-                      <p className="px-3 py-2 text-sm font-bold text-primary">
-                        {ml.rows.filter((row) => row.eligible).length === 1
-                          ? "Within time limit"
-                          : preferenceIsSeparated(ml)
-                            ? "Recommended"
-                            : "Top calculated fit"}
-                      </p>
-                    )}
-                    <RouteOption
-                      route={route}
-                      selected={selected === route.id}
-                      onSelect={() => chooseRoute(route.id)}
-                    />
-                    {!isMock && !driving && (
-                      <details className="px-3 py-2 text-xs leading-5">
-                        <summary className="cursor-pointer font-bold">Why this route?</summary>
-                        {mlEnabled && (
-                          <SuitabilityScore row={ml.rows.find((r) => r.id === route.id)} />
-                        )}
-                        {route.id !== selected && (
-                          <EvidenceStatus name={route.name} state={evidence[route.id]} />
-                        )}
-                        <p className="mt-2">
-                          {routeExplanation(
-                            routes.find((r) => r.id === route.id)!,
-                            routes,
-                            { rows: ml.rows, message: ml.message },
+                {orderedOptions.map((route, index) => {
+                  const row = ml.rows.find((row) => row.id === route.id);
+                  return (
+                    <div key={route.id} data-route-card={route.id}>
+                      <RouteOption
+                        route={route}
+                        rank={index + 1}
+                        preference={
+                          !isMock && !driving && mlEnabled
+                            ? row?.eligible === false
+                              ? "Outside your time limit"
+                              : ml.recommendedId === route.id
+                                ? ml.rows.filter((row) => row.eligible).length === 1
+                                  ? "Within time limit"
+                                  : preferenceIsSeparated(ml)
+                                    ? "Recommended"
+                                    : "Top calculated fit"
+                                : row?.score !== undefined
+                                  ? "Alternative preference match"
+                                  : undefined
+                            : undefined
+                        }
+                        explanation={
+                          isMock
+                            ? "Illustrative demo route"
+                            : driving
+                              ? "Ordered by estimated driving time"
+                              : mlEnabled
+                                ? row?.score !== undefined
+                                  ? preferenceSummary?.route.id === route.id
+                                    ? preferenceSummary.reason
+                                    : row.reason.replace(
+                                        " inputs contribute most.",
+                                        " is the strongest preference factor.",
+                                      )
+                                  : !evidence[route.id] ||
+                                      evidence[route.id]?.status === "loading" ||
+                                      evidence[route.id]?.status === "queued"
+                                    ? "Comparing available route information…"
+                                    : "Not enough information for a preference match"
+                                : match.active
+                                  ? "Ordered by your evidence preferences"
+                                  : "Original route order"
+                        }
+                        provisional={
+                          !isMock &&
+                          !driving &&
+                          mlEnabled &&
+                          (row?.coverage ?? 100) < 99.999 &&
+                          row?.score !== undefined
+                        }
+                        selected={selected === route.id}
+                        onSelect={() => chooseRoute(route.id)}
+                      />
+                      {!isMock && !driving && (
+                        <details className="px-3 py-2 text-xs leading-5">
+                          <summary className="cursor-pointer font-bold">Why this route?</summary>
+                          {mlEnabled && (
+                            <p className="mt-2">
+                              Experimental preference model · not a safety rating
+                            </p>
                           )}
-                        </p>
-                      </details>
-                    )}
-                    {!driving &&
-                      !mlEnabled &&
-                      match.active &&
-                      (() => {
-                        const row = match.rows.find((r) => r.id === route.id)!;
-                        return (
-                          <details className="px-3 py-2 text-xs leading-5">
-                            <summary className="cursor-pointer font-bold">
-                              Evidence match {row.score.toFixed(1)} / 100 · Why this order?
-                            </summary>
-                            <p>
-                              This is a weighted evidence index, not a probability or safety score.
-                            </p>
-                            {criteria.map((key) => (
-                              <p key={key}>
-                                {criterionLabels[key]}: {row.values[key].toFixed(1)} ×{" "}
-                                {(effectiveWeights[key] * 100).toFixed(1)}% ={" "}
-                                {row.contributions[key].toFixed(1)} points.
+                          {mlEnabled && (
+                            <SuitabilityScore row={ml.rows.find((r) => r.id === route.id)} />
+                          )}
+                          {route.id !== selected && (
+                            <EvidenceStatus name={route.name} state={evidence[route.id]} />
+                          )}
+                          <p className="mt-2">
+                            {routeExplanation(
+                              routes.find((r) => r.id === route.id)!,
+                              routes,
+                              { rows: ml.rows, message: ml.message },
+                            )}
+                          </p>
+                        </details>
+                      )}
+                      {!driving &&
+                        !mlEnabled &&
+                        match.active &&
+                        (() => {
+                          const row = match.rows.find((r) => r.id === route.id)!;
+                          return (
+                            <details className="px-3 py-2 text-xs leading-5">
+                              <summary className="cursor-pointer font-bold">
+                                Evidence match {row.score.toFixed(1)} / 100 · Why this order?
+                              </summary>
+                              <p>
+                                This is a weighted evidence index, not a probability or safety
+                                score.
                               </p>
-                            ))}
-                            <p>
-                              Mapped businesses: {row.businessesPerKm.toFixed(2)} records/km.
-                              Unknown nearby lighting tags: {(100 - row.values.lighting).toFixed(1)}
-                              %; unknown sidewalk tags:{" "}
-                              {(100 - row.values.infrastructure).toFixed(1)}%.
-                            </p>
-                            <p>
-                              Nearby tags may belong to other streets. A recorded “no” counts as
-                              documented evidence. Zero mapped businesses does not establish
-                              physical absence.
-                            </p>
-                          </details>
-                        );
-                      })()}
-                  </div>
-                ))}
+                              {criteria.map((key) => (
+                                <p key={key}>
+                                  {criterionLabels[key]}: {row.values[key].toFixed(1)} ×{" "}
+                                  {(effectiveWeights[key] * 100).toFixed(1)}% ={" "}
+                                  {row.contributions[key].toFixed(1)} points.
+                                </p>
+                              ))}
+                              <p>
+                                Mapped businesses: {row.businessesPerKm.toFixed(2)} records/km.
+                                Unknown nearby lighting tags:{" "}
+                                {(100 - row.values.lighting).toFixed(1)}
+                                %; unknown sidewalk tags:{" "}
+                                {(100 - row.values.infrastructure).toFixed(1)}%.
+                              </p>
+                              <p>
+                                Nearby tags may belong to other streets. A recorded “no” counts as
+                                documented evidence. Zero mapped businesses does not establish
+                                physical absence.
+                              </p>
+                            </details>
+                          );
+                        })()}
+                    </div>
+                  );
+                })}
               </div>
             </aside>
             <ResultsMapPanel>
@@ -808,6 +833,34 @@ export function ShePathApp() {
                 </div>
               </section>
             </ResultsMapPanel>
+            {!isMock && !driving && routes.length > 0 && (
+              <details className="rounded-2xl border bg-card p-4 lg:col-span-2">
+                <summary className="cursor-pointer font-bold">
+                  Comparison settings & model details
+                </summary>
+                <LiveRecommendationPanel
+                  settingsOnly
+                  priorities={priorities}
+                  routes={routes}
+                  result={ml}
+                  states={evidence}
+                  departure={departure}
+                  enabled={mlEnabled}
+                  onEnabled={setMlEnabled}
+                  maxExtra={maxExtra}
+                  onMaxExtra={setMaxExtra}
+                  observations={observations}
+                  onObservations={setObservations}
+                  onSelect={(id) => {
+                    chooseRoute(id);
+                    focusContent(document.getElementById("route-comparison-map"));
+                  }}
+                  priorityControls={
+                    mlEnabled && <PriorityControls value={priorities} onChange={setPriorities} />
+                  }
+                />
+              </details>
+            )}
             {routes.length > 0 && !isMock && !driving && (
               <details
                 hidden={driving}
@@ -998,7 +1051,15 @@ function RouteOption({
   route,
   selected,
   onSelect,
+  rank,
+  preference,
+  explanation,
+  provisional,
 }: {
+  rank: number;
+  preference?: string | undefined;
+  explanation: string;
+  provisional: boolean;
   route: RouteOptionData;
   selected: boolean;
   onSelect: () => void;
@@ -1022,6 +1083,14 @@ function RouteOption({
           <span className="font-display text-base font-black">{route.name}</span>
           <span className="text-xs font-bold">{selected ? "Selected" : "Not selected"}</span>
         </div>
+        <p className="mt-3 text-xs font-bold uppercase tracking-wide text-primary">
+          Comparison rank {rank}
+        </p>
+        {preference && <p className="mt-1 text-sm font-bold">{preference}</p>}
+        <p className="mt-1 text-sm text-muted-foreground">{explanation}</p>
+        {provisional && (
+          <p className="mt-1 text-xs text-muted-foreground">Limited data · order may change</p>
+        )}
         {route.fastest && (
           <span className="mt-2 inline-block rounded-full bg-secondary px-2 py-1 text-xs font-bold text-secondary-foreground">
             {isMock ? "Fastest demo estimate" : "Fastest estimate"}
@@ -1030,7 +1099,7 @@ function RouteOption({
         )}
         <p className="sr-only">{route.subtitle}</p>
         <div className="mt-3 flex flex-wrap items-center gap-3 text-xs font-bold">
-          <span className="flex items-center gap-1">
+          <span className="flex items-center gap-1 text-xl">
             <Clock3 className="size-3.5 text-muted-foreground" />
             {route.time}
           </span>

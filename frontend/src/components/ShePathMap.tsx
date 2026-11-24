@@ -242,9 +242,7 @@ export function ShePathMap({
                         </li>
                       ))}
                   </ul>
-                  <p className="mt-2 text-muted-foreground">
-                    Tap a marker for details · opening status unverified
-                  </p>
+                  <p className="mt-2 text-muted-foreground">Tap a marker for details</p>
                 </>
               )}
             </>
