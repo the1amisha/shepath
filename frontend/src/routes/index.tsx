@@ -72,7 +72,7 @@ export const Route = createFileRoute("/")({
   component: ShePathApp,
 });
 
-type Screen = "welcome" | "search" | "preferences" | "results" | "details" | "report";
+type Screen = "welcome" | "search" | "preferences" | "results" | "details";
 type RouteKey = string;
 const isMock = routingProvider === "mock";
 
@@ -105,7 +105,7 @@ function toRouteOptions(routes: RouteData[]): RouteOptionData[] {
   }));
 }
 
-const steps: Screen[] = ["welcome", "search", "preferences", "results", "details", "report"];
+const steps: Screen[] = ["welcome", "search", "preferences", "results", "details"];
 
 function Brand() {
   return (
@@ -158,7 +158,7 @@ export function ShePathApp() {
     inFlight.current = false;
     setLoading(false);
   }
-  const liveJourneyVisible = !showSavedPilot && ["results", "details", "report"].includes(screen);
+  const liveJourneyVisible = !showSavedPilot && ["results", "details"].includes(screen);
   useEffect(() => {
     if (!liveJourneyVisible) {
       interruptRouteRequest();
@@ -345,7 +345,7 @@ export function ShePathApp() {
             ))}
           </div>
           <div className="rounded-full bg-secondary px-3 py-2 text-xs font-bold text-secondary-foreground md:ml-6">
-            Step {currentIndex} of 5
+            Step {currentIndex} of 4
             <span className="sr-only">
               :{" "}
               {
@@ -354,7 +354,6 @@ export function ShePathApp() {
                   preferences: "Evidence preferences",
                   results: "Compare routes",
                   details: "Route overview",
-                  report: "Geographic evidence",
                   welcome: "Welcome",
                 }[screen]
               }
@@ -910,73 +909,8 @@ export function ShePathApp() {
           title={`${selectedRoute.name} overview`}
           description={`${isMock ? "Illustrative" : "Estimated"} ${selectedRoute.time} walk from ${from} to ${to}. ${isMock ? "Fixed demo geometry." : "No personal-safety assessment."}`}
         >
-          <div className="mx-auto max-w-5xl">
-            <RouteSummaryPanel
-              routes={routes}
-              selected={selected}
-              states={evidence}
-              comparisonId={summaryComparison}
-              onComparisonChange={setSummaryComparison}
-              mock={isMock}
-            />
-          </div>
-          <div className="mx-auto grid max-w-5xl gap-6 lg:grid-cols-[1fr_0.8fr]">
-            <div className="overflow-hidden rounded-3xl border border-border bg-card app-shadow">
-              <div className="min-h-[360px]" data-testid="overview-map-frame">
-                <ShePathMap
-                  routes={routes}
-                  selected={selected}
-                  mock={isMock}
-                  evidenceState={evidence[selected]}
-                />
-              </div>
-              <div className="p-6">
-                <div className="grid grid-cols-1 gap-4 text-center sm:grid-cols-3">
-                  <Stat label="Estimated time" value={selectedRoute.time} />
-                  <Stat label="Distance" value={selectedRoute.distanceKm} />
-                  <Stat label="Mode" value="Walking" />
-                </div>
-              </div>
-            </div>
-            <div className="rounded-3xl bg-card p-6 app-shadow">
-              <div className="overview-identity">
-                <img src="/images/ranchi-walk-v2.webp" width="94" height="106" alt="" />
-                <div>
-                  <p className="text-xs font-bold uppercase text-muted-foreground">Walking route</p>
-                  <p className="font-display text-2xl font-black">{selectedRoute.name}</p>
-                  <p className="text-sm text-muted-foreground">
-                    {selectedRoute.time} · {selectedRoute.distanceKm}
-                  </p>
-                </div>
-              </div>
-              <h2 className="font-display text-xl font-black">
-                {isMock ? "Illustrative route" : "About this route"}
-              </h2>
-              <p className="mt-3 text-sm leading-6 text-muted-foreground">
-                {isMock
-                  ? "Mock mode uses fixed demo geometry, times and distances for any inputs. These are not verified walking routes; no geographic observations or personal-safety assessments are supplied."
-                  : "Travel estimates and geometry come from the backend. Historical mapped geographic context is shown below where covered. Actual lighting, activity and personal safety remain unverified."}
-              </p>
-            </div>
-          </div>
-          {!isMock && (
-            <div className="mx-auto mt-6 max-w-4xl">
-              <DepartureTimePanel
-                route={routes.find((r) => r.id === selected)}
-                name={selectedRoute.name}
-                state={evidence[selected]}
-                departure={departure}
-                onChange={setDeparture}
-              />
-              <RouteEvidencePanel
-                route={routes.find((r) => r.id === selected)}
-                name={selectedRoute.name}
-                state={evidence[selectedRoute.id]}
-              />
-            </div>
-          )}
-          {!isMock && (
-            <div className="mx-auto max-w-4xl">
+          <div className="mx-auto max-w-5xl space-y-5">
+            {!isMock && (
               <TripPlanPanel
                 routes={routes}
                 selected={selected}
@@ -985,50 +919,71 @@ export function ShePathApp() {
                 to={to}
                 departure={departure}
               />
-            </div>
-          )}
-          <div className="mx-auto mt-7 max-w-4xl">
-            <Button className="w-full" onClick={() => setScreen("report")}>
-              View geographic evidence <ArrowRight className="size-4" />
-            </Button>
-          </div>
-        </PageFrame>
-      )}
-
-      {screen === "report" && selectedRoute && (
-        <PageFrame
-          eyebrow="Route context"
-          title="Geographic evidence"
-          description={
-            isMock
-              ? "This is an illustrative journey. No geographic evidence has been analyzed for this demo route."
-              : `Historical mapped evidence for ${selectedRoute.name}, analyzed against its exact route geometry. This is not a personal-safety assessment.`
-          }
-        >
-          <div className="mx-auto max-w-4xl overflow-hidden rounded-3xl border border-border bg-card app-shadow">
-            {isMock ? (
-              <div className="p-8">
-                <h2 className="font-display text-xl font-black">
-                  No evidence for illustrative routes
-                </h2>
-                <p className="mt-3 text-sm leading-6 text-muted-foreground">
-                  Mock routes demonstrate the interface only. No lighting, activity, current-open
-                  status or safety scores are calculated. The Saved Ranchi Pilot Comparison is a
-                  separate historical snapshot and is not evidence for this demo route.
-                </p>
-              </div>
-            ) : (
-              <RouteEvidencePanel
-                route={routes.find((r) => r.id === selected)}
-                name={selectedRoute.name}
-                state={evidence[selectedRoute.id]}
-              />
             )}
-          </div>
-          <div className="mx-auto mt-6 flex max-w-4xl justify-center">
-            <Button variant="dark" size="lg" onClick={() => setScreen("welcome")}>
-              Plan another journey
-            </Button>
+            <div className="overflow-hidden rounded-3xl border border-border bg-card app-shadow">
+              <div className="grid grid-cols-3 gap-3 p-5 text-center">
+                <Stat label="Estimated time" value={selectedRoute.time} />
+                <Stat label="Distance" value={selectedRoute.distanceKm} />
+                <Stat label="Mode" value="Walking" />
+              </div>
+              <div className="min-h-[360px]" data-testid="overview-map-frame">
+                <ShePathMap
+                  routes={routes}
+                  selected={selected}
+                  mock={isMock}
+                  evidenceState={evidence[selected]}
+                />
+              </div>
+            </div>
+            {isMock ? (
+              <p className="text-sm text-muted-foreground">
+                Fixed demo route; no geographic observations or personal-safety assessments.
+              </p>
+            ) : (
+              <details className="rounded-2xl border bg-card p-4">
+                <summary className="cursor-pointer font-bold">Departure time & daylight</summary>
+                <div className="mt-4">
+                  <DepartureTimePanel
+                    route={routes.find((r) => r.id === selected)}
+                    name={selectedRoute.name}
+                    state={evidence[selected]}
+                    departure={departure}
+                    onChange={setDeparture}
+                  />
+                </div>
+              </details>
+            )}
+            <details className="rounded-2xl border bg-card p-4">
+              <summary className="cursor-pointer font-bold">Route summary & comparison</summary>
+              <div className="mt-4">
+                <RouteSummaryPanel
+                  routes={routes}
+                  selected={selected}
+                  states={evidence}
+                  comparisonId={summaryComparison}
+                  onComparisonChange={setSummaryComparison}
+                  mock={isMock}
+                />
+              </div>
+            </details>
+            {!isMock && (
+              <details className="rounded-2xl border bg-card p-4">
+                <summary className="cursor-pointer font-bold">Map data & sources</summary>
+                <RouteEvidencePanel
+                  route={routes.find((r) => r.id === selected)}
+                  name={selectedRoute.name}
+                  state={evidence[selectedRoute.id]}
+                />
+              </details>
+            )}
+            <div className="flex flex-wrap justify-center gap-3">
+              <Button variant="outline" onClick={() => setScreen("results")}>
+                Compare routes
+              </Button>
+              <Button variant="dark" onClick={() => setScreen("welcome")}>
+                Plan another journey
+              </Button>
+            </div>
           </div>
         </PageFrame>
       )}

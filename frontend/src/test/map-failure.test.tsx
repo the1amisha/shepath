@@ -102,7 +102,7 @@ it.each(["initialization", "tiles"])("retains route cards, evidence and navigati
   expect(mocks.fetchEvidence.mock.calls[0]![0]).toEqual(evidenceRoute);
   expect(card).toHaveAttribute("aria-pressed", "true");
   fireEvent.click(screen.getByRole("button", { name: "View route overview" }));
-  expect(screen.getByRole("button", { name: /View geographic evidence/ })).toBeEnabled();
+  expect(screen.getByRole("button", { name: /Plan another journey/ })).toBeEnabled();
   await act(async () => {});
 });
 

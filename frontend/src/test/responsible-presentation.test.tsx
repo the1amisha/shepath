@@ -87,7 +87,7 @@ it("explains the buffer before generation and destination presets do not submit"
   expect(screen.getByText(/route and its 100 m buffer/)).toBeVisible();
   fireEvent.click(screen.getByRole("button", { name: "Doranda, Ranchi" }));
   expect(screen.getByRole("combobox", { name: "Going to" })).toHaveValue("Doranda, Ranchi");
-  expect(screen.getByText("Step 1 of 5")).toBeInTheDocument();
+  expect(screen.getByText("Step 1 of 4")).toBeInTheDocument();
   expect(getRoutes).not.toHaveBeenCalled();
 });
 
@@ -156,27 +156,21 @@ it("preserves selected evidence through overview and report with heading first a
   expect(screen.queryByText("9 mapped records")).not.toBeInTheDocument();
   fireEvent.click(screen.getByRole("button", { name: /Route 2 Not selected/ }));
   fireEvent.click(screen.getByRole("button", { name: "View route overview" }));
-  expect(screen.getByText("Step 4 of 5")).toBeInTheDocument();
+  expect(screen.getByText("Step 4 of 4")).toBeInTheDocument();
   expect(screen.getByTestId("overview-map-frame")).toHaveClass("min-h-[360px]");
   expect(screen.getByTestId("map")).toHaveAttribute("data-routes", JSON.stringify([route, other]));
   expect(screen.getByText("9 mapped records")).toBeInTheDocument();
   expect(screen.queryByText("7 mapped records")).not.toBeInTheDocument();
-  fireEvent.click(screen.getByRole("button", { name: "View geographic evidence" }));
-  expect(screen.getByText("Step 5 of 5")).toBeInTheDocument();
-  const heading = screen.getByRole("heading", { level: 1, name: "Geographic evidence" });
-  const introduction = screen.getByText(/Historical mapped evidence for Route 2/);
-  const evidenceHeading = screen.getByRole("heading", {
-    level: 2,
-    name: /Mapped geographic evidence.*Route 2/,
-  });
-  expect(
-    heading.compareDocumentPosition(introduction) & Node.DOCUMENT_POSITION_FOLLOWING,
-  ).toBeTruthy();
-  expect(
-    introduction.compareDocumentPosition(evidenceHeading) & Node.DOCUMENT_POSITION_FOLLOWING,
-  ).toBeTruthy();
-  expect(screen.getByText("9 mapped records")).toBeInTheDocument();
-  expect(screen.queryByText("7 mapped records")).not.toBeInTheDocument();
+  expect(screen.queryByRole("button", { name: "View geographic evidence" })).not.toBeInTheDocument();
+  const sources = screen.getByText("Map data & sources").closest("details")!;
+  expect(sources.open).toBe(false);
+  fireEvent.click(screen.getByText("Map data & sources"));
+  expect(sources.open).toBe(true);
+  expect(screen.getByText("9 mapped records")).toBeVisible();
+  const share = screen.getByRole("link", { name: "Share on WhatsApp" });
+  const pdf = screen.getByRole("button", { name: "Save as PDF" });
+  expect(share.compareDocumentPosition(screen.getByTestId("overview-map-frame")) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  expect(pdf.compareDocumentPosition(screen.getByTestId("overview-map-frame")) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
   expect(fetchEvidence).toHaveBeenCalledTimes(2);
   expect(fetchEvidence.mock.calls.map((call) => call[0])).toEqual([route, other]);
 });

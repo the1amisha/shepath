@@ -156,10 +156,8 @@ describe("Real routing journey", () => {
     fireEvent.click(screen.getByRole("button", { name: /View route overview/ }));
     expect(screen.getByText("1.4 km")).toBeInTheDocument();
     expect(screen.getByTestId("map")).toHaveAttribute("data-routes", JSON.stringify([route]));
-    fireEvent.click(screen.getByRole("button", { name: /View geographic evidence/ }));
-    expect(screen.getByRole("heading", { name: "Geographic evidence" })).toBeInTheDocument();
+    fireEvent.click(screen.getByText("Map data & sources"));
     expect(screen.queryByText("94")).not.toBeInTheDocument();
-    fireEvent.click(screen.getByRole("button", { name: /Go back/ }));
     fireEvent.click(screen.getByRole("button", { name: /Go back/ }));
     expect(getRoutes).toHaveBeenCalledOnce();
   });
