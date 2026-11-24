@@ -67,7 +67,7 @@ it("updates the share link when departure or destination changes and reports blo
     before,
   );
   vi.spyOn(window, "open").mockReturnValue(null);
-  fireEvent.click(screen.getByRole("button", { name: "Open printable plan" }));
+  fireEvent.click(screen.getByRole("button", { name: "Save as PDF" }));
   expect(screen.getByRole("status")).toHaveTextContent("blocked");
 });
 it("prints text as text, with no executable user markup or external resources", () => {

@@ -28,19 +28,8 @@ export function TripPlanPanel({
       className="mt-6 rounded-3xl border border-border bg-card p-5 sm:p-7"
     >
       <h2 id={id} className="font-display text-xl font-bold">
-        Share your trip plan
+        Share or save
       </h2>
-      <p className="mt-2 text-sm text-muted-foreground">
-        A static summary of your selected route and departure time. Review the text before sharing;
-        it includes your start and destination. WhatsApp lets you choose the recipient and send it
-        yourself.
-      </p>
-      <details className="mt-4">
-        <summary className="cursor-pointer font-semibold">Preview shared text</summary>
-        <pre className="mt-3 whitespace-pre-wrap break-words text-xs leading-6 font-sans">
-          {text}
-        </pre>
-      </details>
       <div className="mt-4 flex flex-wrap gap-3">
         <a
           href={whatsappPlanUrl(text)}
@@ -61,13 +50,22 @@ export function TripPlanPanel({
           }
           className="rounded-xl border border-border px-4 py-2 font-semibold focus-visible:ring-2 focus-visible:ring-ring"
         >
-          Open printable plan
+          Save as PDF
         </button>
       </div>
       <p className="mt-2 text-xs text-muted-foreground">
-        In the printable tab, choose Print / save as PDF. The summary has no live tracking or
-        navigation map and makes no extra route requests.
+        PDF opens a printable tab. Choose Print → Save as PDF.
       </p>
+      <details className="mt-3 text-sm">
+        <summary className="cursor-pointer font-semibold">Preview shared text</summary>
+        <p className="mt-2 text-xs text-muted-foreground">
+          Includes your start, destination and departure time. Choose the recipient in WhatsApp. No
+          live tracking.
+        </p>
+        <pre className="mt-3 whitespace-pre-wrap break-words text-xs leading-6 font-sans">
+          {text}
+        </pre>
+      </details>
       <p role="status" className="mt-2 text-sm">
         {error}
       </p>

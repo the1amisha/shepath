@@ -247,12 +247,13 @@ it("names queued and requested routes, preserves sequential processing and selec
   expect(screen.queryByText("7 mapped records")).not.toBeInTheDocument();
   expect(fetchEvidence.mock.calls.map((call) => call[0])).toEqual([evidenceRoute, second]);
   fireEvent.click(screen.getByText("View route overview"));
+  fireEvent.click(screen.getByText("Map data & sources"));
   expect(screen.getByText("9 mapped records")).toBeVisible();
   expect(screen.queryByText("7 mapped records")).not.toBeInTheDocument();
   expect(screen.getByRole("heading", { level: 1 })).toHaveFocus();
 });
 
-it("focuses all five screens without history changes or stealing focus on evidence updates", async () => {
+it("focuses journey screens without history changes or stealing focus on evidence updates", async () => {
   const push = vi.spyOn(window.history, "pushState");
   const replace = vi.spyOn(window.history, "replaceState");
   render(<ShePathApp />);
@@ -261,7 +262,7 @@ it("focuses all five screens without history changes or stealing focus on eviden
     expect(screen.getByRole("heading", { level: 1 })).toHaveFocus();
   }
   await screen.findByText("7 mapped records");
-  for (const label of ["View route overview", "View geographic evidence", "Go back", "Go back"]) {
+  for (const label of ["View route overview", "Go back"]) {
     fireEvent.click(screen.getByRole("button", { name: label }));
     expect(screen.getByRole("heading", { level: 1 })).toHaveFocus();
   }
