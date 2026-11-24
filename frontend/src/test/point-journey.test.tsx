@@ -41,7 +41,8 @@ it("routes selected coordinates and clears stale points when names are edited", 
   });
   fireEvent.click(screen.getByRole("button", { name: "Edit" }));
   fireEvent.change(screen.getByLabelText("Starting from"), { target: { value: "New start" } });
-  fireEvent.click(screen.getByRole("button", { name: "Doranda, Ranchi" }));
+  fireEvent.focus(screen.getByLabelText("Going to"));
+  fireEvent.click(screen.getByRole("option", { name: "Doranda, Ranchi" }));
   for (const name of ["Continue to preferences", "Skip preferences"])
     fireEvent.click(screen.getByRole("button", { name }));
   await screen.findByRole("button", { name: "View route overview" });

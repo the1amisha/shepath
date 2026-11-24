@@ -42,7 +42,10 @@ function preferences() {
 
 it("uses responsible landing and page/social metadata without mock scores", async () => {
   render(<ShePathApp />);
-  expect(screen.getByText(/historical mapped context where covered/)).toBeInTheDocument();
+  expect(screen.queryByText(/historical mapped context where covered/)).not.toBeInTheDocument();
+  expect(
+    screen.queryByRole("button", { name: "Saved Ranchi Pilot Comparison" }),
+  ).not.toBeInTheDocument();
   expect(
     screen.getByRole("img", { name: "Illustration of a woman walking along a leafy path" }),
   ).toBeInTheDocument();
@@ -81,11 +84,10 @@ it("rejects whitespace with associated errors and submits trimmed locations thro
   });
 });
 
-it("explains the buffer before generation and destination presets do not submit", () => {
+it("selects destination shortcuts without submitting", () => {
   search();
-  fireEvent.click(screen.getByText("Ranchi pilot coverage"));
-  expect(screen.getByText(/route and its 100 m buffer/)).toBeVisible();
-  fireEvent.click(screen.getByRole("button", { name: "Doranda, Ranchi" }));
+  fireEvent.focus(screen.getByLabelText("Going to"));
+  fireEvent.click(screen.getByRole("option", { name: "Doranda, Ranchi" }));
   expect(screen.getByRole("combobox", { name: "Going to" })).toHaveValue("Doranda, Ranchi");
   expect(screen.getByText("Step 1 of 4")).toBeInTheDocument();
   expect(getRoutes).not.toHaveBeenCalled();
@@ -161,7 +163,9 @@ it("preserves selected evidence through overview and report with heading first a
   expect(screen.getByTestId("map")).toHaveAttribute("data-routes", JSON.stringify([route, other]));
   expect(screen.getByText("9 mapped records")).toBeInTheDocument();
   expect(screen.queryByText("7 mapped records")).not.toBeInTheDocument();
-  expect(screen.queryByRole("button", { name: "View geographic evidence" })).not.toBeInTheDocument();
+  expect(
+    screen.queryByRole("button", { name: "View geographic evidence" }),
+  ).not.toBeInTheDocument();
   const sources = screen.getByText("Map data & sources").closest("details")!;
   expect(sources.open).toBe(false);
   fireEvent.click(screen.getByText("Map data & sources"));
@@ -169,8 +173,14 @@ it("preserves selected evidence through overview and report with heading first a
   expect(screen.getByText("9 mapped records")).toBeVisible();
   const share = screen.getByRole("link", { name: "Share on WhatsApp" });
   const pdf = screen.getByRole("button", { name: "Save as PDF" });
-  expect(share.compareDocumentPosition(screen.getByTestId("overview-map-frame")) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
-  expect(pdf.compareDocumentPosition(screen.getByTestId("overview-map-frame")) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy();
+  expect(
+    share.compareDocumentPosition(screen.getByTestId("overview-map-frame")) &
+      Node.DOCUMENT_POSITION_FOLLOWING,
+  ).toBeTruthy();
+  expect(
+    pdf.compareDocumentPosition(screen.getByTestId("overview-map-frame")) &
+      Node.DOCUMENT_POSITION_FOLLOWING,
+  ).toBeTruthy();
   expect(fetchEvidence).toHaveBeenCalledTimes(2);
   expect(fetchEvidence.mock.calls.map((call) => call[0])).toEqual([route, other]);
 });

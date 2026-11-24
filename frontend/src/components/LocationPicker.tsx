@@ -1,9 +1,11 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useImperativeHandle, type Ref } from "react";
 import type { LatLng } from "@/lib/routing/types";
 import { Button } from "@/components/ui/button";
 
 type Target = "origin" | "destination";
 type Props = {
+  ref?: Ref<{ locate: () => void }>;
+  compact?: boolean;
   locationNames?: string;
   origin: LatLng | null;
   destination: LatLng | null;
@@ -61,15 +63,18 @@ export function LocationPicker(props: Props) {
       { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 },
     );
   }
+  useImperativeHandle(props.ref, () => ({ locate }));
   return (
     <section className="mt-5 space-y-3" aria-label="Choose locations on a map">
       <div className="flex flex-wrap gap-2">
         <Button type="button" variant="outline" aria-expanded={open} onClick={() => setOpen(!open)}>
           {open ? "Hide location map" : "Choose on map"}
         </Button>
-        <Button type="button" variant="outline" disabled={locating} onClick={locate}>
-          Use my location as start
-        </Button>
+        {!props.compact && (
+          <Button type="button" variant="outline" disabled={locating} onClick={locate}>
+            Use my location as start
+          </Button>
+        )}
         {locating && (
           <Button
             type="button"
@@ -84,10 +89,12 @@ export function LocationPicker(props: Props) {
           </Button>
         )}
       </div>
-      <p className="text-xs text-muted-foreground">
-        Your browser asks permission for current location. The selected coordinates are sent for
-        routing when you find routes. No live tracking.
-      </p>
+      {!props.compact && (
+        <p className="text-xs text-muted-foreground">
+          Your browser asks permission for current location. The selected coordinates are sent for
+          routing when you find routes. No live tracking.
+        </p>
+      )}
       {open && (
         <>
           <div className="flex flex-wrap gap-2" aria-label="Location to select">

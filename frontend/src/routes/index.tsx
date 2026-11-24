@@ -12,15 +12,7 @@ import { TripPlanPanel } from "@/components/TripPlanPanel";
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { routingService, routingProvider, type RouteData, type LatLng } from "@/lib/routing";
-import {
-  ArrowLeft,
-  ArrowRight,
-  ChevronRight,
-  Clock3,
-  MapPin,
-  Navigation,
-  Sparkles,
-} from "lucide-react";
+import { ArrowLeft, ArrowRight, ChevronRight, Clock3, Navigation, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ResultsMapPanel } from "@/components/ResultsMapPanel";
 import { ShePathMap } from "@/components/ShePathMap";
@@ -130,7 +122,7 @@ export function ShePathApp() {
   const steps: Screen[] = driving ? ["welcome", "search", "results", "details"] : walkingSteps;
   const [showSavedPilot, setShowSavedPilot] = useState(false);
   const [screen, setScreen] = useState<Screen>("welcome");
-  const { savedTrigger, openSaved } = useJourneyFocus(screen, showSavedPilot, () => {
+  const { openSaved } = useJourneyFocus(screen, showSavedPilot, () => {
     interruptRouteRequest();
     setShowSavedPilot(true);
   });
@@ -150,7 +142,7 @@ export function ShePathApp() {
   const [from, setFrom] = useState("Albert Ekka Chowk, Ranchi");
   const [to, setTo] = useState("Ranchi Railway Station, Ranchi");
   const [originPoint, setOriginPoint] = useState<LatLng | null>(null);
-  const [shortcutTarget, setShortcutTarget] = useState<"origin" | "destination">("destination");
+  const locationPicker = useRef<{ locate: () => void }>(null);
   const [destinationPoint, setDestinationPoint] = useState<LatLng | null>(null);
   const [routes, setRoutes] = useState<RouteData[]>([]);
   const [interrupted, setInterrupted] = useState(false);
@@ -286,10 +278,6 @@ export function ShePathApp() {
               <br />
               Feel more informed.
             </h1>
-            <p className="welcome-description">
-              A little local context
-              <br className="lg:hidden" /> for every journey you take.
-            </p>
             <Button
               size="lg"
               className="welcome-action"
@@ -298,20 +286,9 @@ export function ShePathApp() {
             >
               Plan my journey <ArrowRight className="size-4" />
             </Button>
-            <Button
-              variant="ghost"
-              className="welcome-saved"
-              ref={savedTrigger}
-              onClick={openSaved}
-            >
-              Saved Ranchi Pilot Comparison
-            </Button>
-            <p className="welcome-disclosure">
-              {isMock
-                ? "Mock mode: fixed illustrative walking routes"
-                : "Walking and driving routes with historical mapped context where covered"}
-              . No personal-safety assessment is provided.
-            </p>
+            {isMock && (
+              <p className="welcome-disclosure">Mock mode: fixed illustrative walking routes.</p>
+            )}
             <button
               type="button"
               className="mt-3 text-sm text-primary underline"
@@ -376,24 +353,13 @@ export function ShePathApp() {
       </header>
 
       <div className="mx-auto max-w-7xl px-4 pt-4 sm:px-8">
-        <Button variant="outline" size="sm" ref={savedTrigger} onClick={openSaved}>
-          Saved Ranchi Pilot Comparison
-        </Button>
         <Button variant="ghost" size="sm" onClick={() => setShowModelLab(true)}>
           Model lab
         </Button>
       </div>
 
       {screen === "search" && (
-        <PageFrame
-          eyebrow="Plan your journey"
-          title="Where are you headed?"
-          description={
-            isMock
-              ? "Add your start and destination. Mock mode uses fixed demo routes."
-              : "Choose where to go and how to travel."
-          }
-        >
+        <section className="px-4 py-6 sm:py-10">
           <form
             noValidate
             onSubmit={(event) => {
@@ -408,13 +374,14 @@ export function ShePathApp() {
             }}
             className="mx-auto max-w-2xl rounded-3xl border border-border bg-card p-5 app-shadow sm:p-8"
           >
-            <details className="mb-4 text-xs leading-5 text-muted-foreground">
-              <summary className="cursor-pointer font-semibold">Ranchi pilot coverage</summary>
-              <p className="mt-2">
-                Historical evidence requires the route and its 100 m buffer to fit inside the pilot
-                boundary. Routes remain usable outside evidence coverage.
-              </p>
-            </details>
+            <h1
+              id="journey-heading"
+              tabIndex={-1}
+              className="mb-6 font-display text-2xl font-bold sm:text-3xl"
+            >
+              Where are you headed?
+            </h1>
+            {isMock && <p className="mb-4 text-sm">Mock mode uses fixed demo routes.</p>}
             <div className="relative space-y-4 before:absolute before:left-[1.35rem] before:top-12 before:h-16 before:border-l-2 before:border-dashed before:border-primary/40">
               <LocationField
                 onSelect={
@@ -426,7 +393,8 @@ export function ShePathApp() {
                     : undefined
                 }
                 label="Starting from"
-                onFocus={() => setShortcutTarget("origin")}
+                onCurrentLocation={!isMock ? () => locationPicker.current?.locate() : undefined}
+                shortcuts
                 value={from}
                 onChange={(value) => {
                   setFrom(value);
@@ -445,7 +413,7 @@ export function ShePathApp() {
                     : undefined
                 }
                 label="Going to"
-                onFocus={() => setShortcutTarget("destination")}
+                shortcuts
                 value={to}
                 onChange={(value) => {
                   setTo(value);
@@ -457,6 +425,8 @@ export function ShePathApp() {
             </div>
             {!isMock && (
               <LocationPicker
+                ref={locationPicker}
+                compact
                 locationNames={JSON.stringify([from, to])}
                 origin={originPoint}
                 destination={destinationPoint}
@@ -471,98 +441,39 @@ export function ShePathApp() {
                 }}
               />
             )}
-            <label className="mt-5 flex items-center gap-3 text-sm font-bold">
-              Travel mode
-              <select
-                aria-label="Travel mode"
-                value={travelMode}
-                className="rounded-full border border-border bg-background px-4 py-2"
-                onChange={(event) => {
-                  interruptRouteRequest();
-                  setRoutes([]);
-                  setSelected("");
-                  setTravelMode(event.target.value === "drive" ? "drive" : "walk");
-                }}
-              >
-                <option value="walk">Walking</option>
-                <option value="drive" disabled={isMock}>
-                  Driving
-                </option>
-              </select>
-            </label>
+            <div className="mt-5 grid grid-cols-2 gap-3 border-t border-border pt-5">
+              <label className="min-w-0 text-sm font-bold">
+                Travel mode
+                <select
+                  aria-label="Travel mode"
+                  value={travelMode}
+                  className="mt-2 block w-full rounded-xl border border-border bg-background px-3 py-2 text-sm"
+                  onChange={(event) => {
+                    interruptRouteRequest();
+                    setRoutes([]);
+                    setSelected("");
+                    setTravelMode(event.target.value === "drive" ? "drive" : "walk");
+                  }}
+                >
+                  <option value="walk">Walking</option>
+                  <option value="drive" disabled={isMock}>
+                    Driving
+                  </option>
+                </select>
+              </label>
+              {!isMock && <DepartureControl compact value={departure} onChange={setDeparture} />}
+            </div>
             {driving && (
               <p className="mt-2 text-xs text-muted-foreground">
-                Driving routes are compared by travel time. ML preferences currently support
-                walking.
+                Driving: fastest estimate first. ML preferences support walking.
               </p>
-            )}
-            <label className="mt-5 flex items-center gap-3 text-sm">
-              Use shortcuts for
-              <select
-                aria-label="Use shortcuts for"
-                className="rounded-full border border-border bg-background px-3 py-2"
-                value={shortcutTarget}
-                onChange={(event) =>
-                  setShortcutTarget(event.target.value === "origin" ? "origin" : "destination")
-                }
-              >
-                <option value="origin">Starting point</option>
-                <option value="destination">Destination</option>
-              </select>
-            </label>
-            <div className="mt-3 flex flex-wrap gap-2">
-              {!isMock && (
-                <Button
-                  type="button"
-                  variant="secondary"
-                  size="sm"
-                  onClick={() => {
-                    // Campus listing pin supplied by the user; not a verified entrance.
-                    if (shortcutTarget === "origin") {
-                      setFrom("Sarala Birla University, Ara, Mahilong, Ranchi");
-                      setOriginPoint([23.3473466, 85.4174703]);
-                    } else {
-                      setTo("Sarala Birla University, Ara, Mahilong, Ranchi");
-                      setDestinationPoint([23.3473466, 85.4174703]);
-                    }
-                  }}
-                >
-                  <MapPin className="size-3.5" />
-                  Sarala Birla University
-                </Button>
-              )}
-              {["Lalpur, Ranchi", "Morabadi, Ranchi", "Doranda, Ranchi"].map((place) => (
-                <Button
-                  type="button"
-                  key={place}
-                  variant="secondary"
-                  size="sm"
-                  onClick={() => {
-                    if (shortcutTarget === "origin") {
-                      setFrom(place);
-                      setOriginPoint(null);
-                    } else {
-                      setTo(place);
-                      setDestinationPoint(null);
-                    }
-                  }}
-                >
-                  <MapPin className="size-3.5" />
-                  {place}
-                </Button>
-              ))}
-            </div>
-            {!isMock && (
-              <div className="mt-6">
-                <DepartureControl value={departure} onChange={setDeparture} />
-              </div>
             )}
             <Button type="submit" className="mt-8 w-full" size="lg">
               {driving ? "Compare driving routes" : "Continue to preferences"}{" "}
               <ArrowRight className="size-4" />
             </Button>
           </form>
-        </PageFrame>
+        </section>
       )}
 
       {screen === "preferences" && (
