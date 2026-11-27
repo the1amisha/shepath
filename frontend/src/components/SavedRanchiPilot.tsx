@@ -51,7 +51,7 @@ export function SavedRanchiPilot({ onBack }: { onBack: () => void }) {
           <Button variant="ghost" size="icon" aria-label="Back to journey" onClick={onBack}>
             <ArrowLeft className="size-5" />
           </Button>
-          <span className="font-display text-lg font-black">SHEPATH</span>
+          <span className="font-display text-lg font-black">ShePath</span>
           <span className="ml-auto rounded-full bg-secondary px-3 py-2 text-xs font-bold text-secondary-foreground">
             Saved pilot
           </span>

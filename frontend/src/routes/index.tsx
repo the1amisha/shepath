@@ -17,7 +17,7 @@ import { TripPlanPanel } from "@/components/TripPlanPanel";
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import { routingService, routingProvider, type RouteData, type LatLng } from "@/lib/routing";
-import { ArrowLeft, ArrowRight, ChevronRight, Clock3, Navigation, Sparkles } from "lucide-react";
+import { ArrowLeft, ArrowRight, ChevronRight, Clock3, Sparkles } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ResultsMapPanel } from "@/components/ResultsMapPanel";
 import { ShePathMap } from "@/components/ShePathMap";
@@ -50,13 +50,13 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "SHEPATH — Compare routes" },
+      { title: "ShePath — Compare routes" },
       {
         name: "description",
         content:
           "Compare walking and driving routes and explore historical mapped geographic evidence in the bounded Ranchi pilot. No personal-safety assessment.",
       },
-      { property: "og:title", content: "SHEPATH — Compare routes" },
+      { property: "og:title", content: "ShePath — Compare routes" },
       {
         property: "og:description",
         content:
@@ -110,12 +110,10 @@ const steps: Screen[] = ["welcome", "search", "preferences", "results", "details
 
 function Brand() {
   return (
-    <div className="flex items-center gap-2.5" aria-label="SHEPATH by She Builds">
-      <div className="grid size-9 place-items-center rounded-full bg-foreground text-white">
-        <Navigation className="size-5 -rotate-12" strokeWidth={2.6} />
-      </div>
+    <div className="flex items-center gap-2.5" aria-label="ShePath by She Builds">
+      <img src="/images/shepath-mark.png" width="36" height="36" alt="" className="rounded-xl" />
       <div className="leading-none">
-        <div className="font-display text-2xl font-black tracking-tight">shepath</div>
+        <div className="font-display text-2xl font-black tracking-tight">ShePath</div>
       </div>
     </div>
   );
