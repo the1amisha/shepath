@@ -25,9 +25,10 @@ const route = {
   startPoint: [23.37, 85.32],
   endPoint: [23.35, 85.33],
 };
-function start() {
+function start(mode: "drive" | "walk" = "walk") {
   render(<ShePathApp />);
   fireEvent.click(screen.getByRole("button", { name: /Plan my journey/ }));
+  fireEvent.change(screen.getByLabelText("Travel mode"), { target: { value: mode } });
   fireEvent.click(screen.getByRole("button", { name: /Continue to preferences/ }));
   fireEvent.click(screen.getByRole("button", { name: /Continue to routes/ }));
 }
@@ -49,8 +50,8 @@ describe("Real routing journey", () => {
     fireEvent.click(screen.getByRole("button", { name: "Back to journey" }));
     expect(screen.getByRole("button", { name: /Plan my journey/ })).toBeInTheDocument();
   });
-  it("automatically ranks and selects the ML pick without opting in", async () => {
-    const alternative = { ...route, id: "alternative", durationSeconds: 800 };
+  it.each(["walk", "drive"] as const)("ranks a slower route first on evidence in %s mode", async (mode) => {
+    const alternative = { ...route, id: "alternative", durationSeconds: 1100 };
     getRoutes.mockResolvedValue([route, alternative]);
     fetchEvidence.mockImplementation(async (r) => {
       const e = evidenceFixture(r);
@@ -73,7 +74,7 @@ describe("Real routing journey", () => {
         },
       };
     });
-    start();
+    start(mode);
     await screen.findByText("Recommended", { exact: true });
     expect(
       screen.queryByRole("heading", { name: "Recommended · Route 2" }),
@@ -85,7 +86,7 @@ describe("Real routing journey", () => {
       "data-route-card",
       "alternative",
     );
-    expect(screen.getByTestId("map")).toHaveAttribute("data-selected", "alternative");
+    await waitFor(() => expect(screen.getByTestId("map")).toHaveAttribute("data-selected", "alternative"));
     fireEvent.click(screen.getByLabelText("Use ML recommendations"));
     expect(document.querySelector("[data-route-card]")).toHaveAttribute(
       "data-route-card",
@@ -212,12 +213,13 @@ it("requests driving routes, sorts by time, shares driving text, and can switch 
   render(<ShePathApp />);
   fireEvent.click(screen.getByRole("button", { name: "Plan my journey" }));
   fireEvent.change(screen.getByRole("combobox", { name: "Travel mode" }), { target: { value: "drive" } });
-  fireEvent.click(screen.getByRole("button", { name: "Compare driving routes" }));
+  fireEvent.click(screen.getByRole("button", { name: "Continue to preferences" }));
+  fireEvent.click(screen.getByRole("button", { name: "Continue to routes" }));
   await screen.findByRole("button", { name: /Route 2 Selected/ });
   expect(getRoutes).toHaveBeenLastCalledWith(expect.objectContaining({ travelMode: "drive" }));
-  expect(fetchEvidence).not.toHaveBeenCalled();
-  expect(screen.queryByText("ML PREFERENCE RECOMMENDATION")).not.toBeInTheDocument();
-  expect(screen.getByText("Step 2 of 3")).toBeInTheDocument();
+  await waitFor(() => expect(fetchEvidence).toHaveBeenCalledTimes(2));
+  expect(screen.getAllByText("Why this route?")).toHaveLength(2);
+  expect(screen.getByText("Step 3 of 4")).toBeInTheDocument();
   fireEvent.click(screen.getByRole("button", { name: "View route overview" }));
   expect(screen.getByText("Driving")).toBeInTheDocument();
   const url = new URL(screen.getByRole("link", { name: "Share on WhatsApp" }).getAttribute("href")!);

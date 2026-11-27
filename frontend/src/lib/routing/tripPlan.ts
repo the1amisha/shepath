@@ -16,20 +16,9 @@ export function tripPlanText(
   const route = routes.find((r) => r.id === selected);
   const summary = summarizeRoute(routes, selected, states);
   if (!route || !summary) return null;
-  if (mode === "drive")
-    return [
-      "SHEPATH · Driving trip plan",
-      `From: ${from}`,
-      `To: ${to}`,
-      `Selected: ${summary.name}`,
-      `Estimated drive: ${Math.round(route.durationSeconds / 60)} min · ${(route.distanceMeters / 1000).toFixed(1)} km`,
-      `Departure: ${departure.replace("T", " ")} IST`,
-      "Routes compared by travel time. No live traffic or driving-safety rating.",
-      "Static plan only; no live tracking or turn-by-turn navigation.",
-    ].join("\n\n");
   const instant = parseDeparture(departure);
   const lines = [
-    "SHEPATH · Walking trip plan",
+    `SHEPATH · ${mode === "drive" ? "Driving" : "Walking"} trip plan`,
     `From: ${from}`,
     `To: ${to}`,
     `Selected: ${summary.name}`,
@@ -55,7 +44,7 @@ export function tripPlanText(
         lines.push(
           `Estimated arrival: ${formatIst(sun.arrival)}.`,
           sun.nightMinutes < 0.01
-            ? "Estimated walk falls between sunrise and sunset."
+            ? "Estimated trip falls between sunrise and sunset."
             : `About ${Math.max(1, Math.round(sun.nightMinutes))} min falls between sunset and sunrise.`,
           "Daylight is an offline estimate for central Ranchi; weather, terrain, stops and actual lighting are not modeled.",
         );

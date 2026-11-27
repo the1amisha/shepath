@@ -25,7 +25,7 @@ export function hybridRecommendation(result: Recommendation, priorities: Priorit
     attributes.some((key) => !Number.isFinite(priorities[key]) || priorities[key] < 0) ||
     total <= 0
   )
-    return { rows: [], message: "No active priorities · ordered by walking time." };
+    return { rows: [], message: "No active priorities · ordered by travel time." };
   const rows = result.rows.map((row): HybridRow => {
     const low =
       (attributes.reduce((sum, key) => sum + priorities[key] * row.values[key].low, 0) * 100) /
@@ -41,7 +41,7 @@ export function hybridRecommendation(result: Recommendation, priorities: Priorit
       ? priorityLabels[positive[0]] + " inputs contribute most."
       : coverage > 1e-8
         ? "Limited positive inputs; compare coverage."
-        : "Inputs unknown; walking-time fallback.";
+        : "Inputs unknown; travel-time fallback.";
     return {
       ...row,
       low,
@@ -61,8 +61,8 @@ export function hybridRecommendation(result: Recommendation, priorities: Priorit
     message: !rows.length
       ? result.message
       : !scored.length
-        ? "Not enough known inputs to score · ordered by walking time."
-        : "Ordered by route suitability using survey weights and your priorities. Unknown inputs use a neutral midpoint; low coverage makes the result provisional. Ties use walking time.",
+        ? "Not enough known inputs to score · ordered by travel time."
+        : "Ordered by route suitability using survey weights and your priorities. Unknown inputs use a neutral midpoint; low coverage makes the result provisional. Ties use travel time.",
   };
 }
 

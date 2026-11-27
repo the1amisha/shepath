@@ -126,12 +126,12 @@ export function DepartureTimePanel({
                   <p>Sunrise on departure date: about {formatIst(sun.sunrise)}</p>
                   <p className="mt-2 font-bold">
                     {sun.nightMinutes < 0.01
-                      ? "Your estimated walk falls between sunrise and sunset."
-                      : `About ${Math.max(1, Math.round(sun.nightMinutes))} min of this walk falls between sunset and sunrise.`}
+                      ? "Your estimated trip falls between sunrise and sunset."
+                      : `About ${Math.max(1, Math.round(sun.nightMinutes))} min of this trip falls between sunset and sunrise.`}
                   </p>
                 </>
               ) : (
-                <p>Daylight estimate unavailable. Supported walking durations are 0–48 hours.</p>
+                <p>Daylight estimate unavailable. Supported travel durations are 0–48 hours.</p>
               )}
               <p className="mt-2 text-xs">
                 Offline estimate for central Ranchi, using the route's travel duration. Twilight,

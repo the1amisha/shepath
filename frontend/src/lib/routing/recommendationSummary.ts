@@ -170,7 +170,7 @@ export function timeFallbackSummary(route: RouteData, routes: RouteData[], resul
       extra < 60
         ? "Less than 1 minute"
         : `About ${Math.round(extra / 60)} ${Math.round(extra / 60) === 1 ? "minute" : "minutes"}`;
-    return prefix + `${delay} longer than the fastest${scope}; ordered by estimated walking time.`;
+    return prefix + `${delay} longer than the fastest${scope}; ordered by estimated travel time.`;
   }
   const tied = peers.filter((item) => item.durationSeconds === route.durationSeconds);
   if (tied.length > 1) {
@@ -178,9 +178,9 @@ export function timeFallbackSummary(route: RouteData, routes: RouteData[], resul
     return (
       prefix +
       (distanceDiffers
-        ? "Same estimated walking time; shorter routes are listed first."
+        ? "Same estimated travel time; shorter routes are listed first."
         : "Same estimated time and distance; original route order retained.")
     );
   }
-  return prefix + `Fastest estimated walk${scope}; ranked by travel time.`;
+  return prefix + `Fastest estimated trip${scope}; ranked by travel time.`;
 }

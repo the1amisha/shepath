@@ -28,11 +28,11 @@ export function RouteComparisonTable({
       >
         <table className="w-full text-left text-sm">
           <caption className="sr-only">
-            Walking estimates and nearby mapped records for each route
+            Travel estimates and nearby mapped records for each route
           </caption>
           <thead className="bg-secondary text-xs">
             <tr>
-              {["Route", "Walk", "Distance", "Businesses", "Lighting tags", "Footpath tags"].map(
+              {["Route", "Time", "Distance", "Businesses", "Lighting tags", "Footpath tags"].map(
                 (label) => (
                   <th key={label} scope="col" className="whitespace-nowrap px-3 py-3">
                     {label}

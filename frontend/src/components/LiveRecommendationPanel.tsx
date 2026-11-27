@@ -240,7 +240,7 @@ export function LiveRecommendationPanel({
             <>
               <div className="mt-4 flex flex-wrap items-center gap-3">
                 <label htmlFor="ml-extra-time" className="text-sm font-bold">
-                  Maximum extra walking time beyond fastest
+                  Maximum extra travel time beyond fastest
                 </label>
                 <select
                   id="ml-extra-time"

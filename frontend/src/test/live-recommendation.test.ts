@@ -184,7 +184,7 @@ it("orders unknown alternatives by time without manufacturing an ML winner", () 
   const result = { rows: [], message: "Waiting" };
   expect(automaticRouteOrder(r, result).map((x) => x.id)).toEqual(["fast", "slow"]);
   expect(routeExplanation(r[0]!, r, result)).toContain("Shortest distance");
-  expect(routeExplanation(r[1]!, r, result)).toContain("fastest estimated walk");
+  expect(routeExplanation(r[1]!, r, result)).toContain("fastest estimated trip");
 });
 it("compares long detours by default and preserves unresolved ties within dominance tiers", () => {
   const r = [routes[0]!, { ...routes[1]!, durationSeconds: 3600 }];

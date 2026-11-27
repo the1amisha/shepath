@@ -33,7 +33,7 @@ it("gives exact count differences and a rounded gap using the fastest other rout
   expect(summary.name).toBe("Route 1");
   expect(summary.comparisonId).toBe("second");
   expect(summary.travel).toBe(
-    "Route 1 is about 5.3 km with an estimated walk of 64 min. It is about 1 min slower than Route 2.",
+    "Route 1 is about 5.3 km with an estimated travel time of 64 min. It is about 1 min slower than Route 2.",
   );
   expect(summary.mapped).toContain("19 mapped business records and 4 mapped healthcare records");
   expect(summary.mapped).toContain(
@@ -71,7 +71,7 @@ it("handles time ties, sub-minute differences, one route and singular counts", (
   expect(summarizeRoute(pair, "first", s)!.travel).toContain("less than 1 min slower");
   pair[1]!.durationSeconds = 3840;
   expect(summarizeRoute(pair, "first", s)!.travel).toContain(
-    "same estimated walking time as Route 2",
+    "same estimated travel time as Route 2",
   );
   const e = edit(s);
   e.route_context!.categories.shops_and_businesses.count = 1;

@@ -60,8 +60,8 @@ export function ModelEvidenceCard() {
           Missing-input ranges show how the score could change, not statistical confidence.
         </p>
         <p className="mt-2">
-          The learned time coefficient is zero. The extra-time limit handles walking duration
-          separately. Nearby tags do not verify conditions on the walked street.
+          The learned time coefficient is zero. The extra-time limit handles travel duration
+          separately. Nearby tags do not verify conditions on the selected street.
         </p>
       </details>
       <a href="/preference-lab" className="mt-3 inline-block font-semibold text-primary underline">
