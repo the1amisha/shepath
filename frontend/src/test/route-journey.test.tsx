@@ -233,3 +233,18 @@ it("requests driving routes, sorts by time, shares driving text, and can switch 
   await waitFor(() => expect(getRoutes).toHaveBeenLastCalledWith(expect.objectContaining({ travelMode: "walk" })));
   await waitFor(() => expect(fetchEvidence).toHaveBeenCalled());
 });
+
+it("restores the selected overview on reload without requesting directions again", async () => {
+  const { JourneyEntry } = await import("@/routes/index");
+  getRoutes.mockResolvedValue([route]);
+  start();
+  fireEvent.click(await screen.findByRole("button", { name: /Route 1 Selected/ }));
+  fireEvent.click(screen.getByRole("button", { name: "View route overview" }));
+  cleanup();
+  const navigation = vi.spyOn(performance, "getEntriesByType").mockReturnValue([{type:"reload"} as PerformanceNavigationTiming]);
+  try {
+    render(<JourneyEntry/>);
+    expect(await screen.findByRole("heading", {name:"Route 1 overview"})).toBeInTheDocument();
+    expect(getRoutes).toHaveBeenCalledTimes(1);
+  } finally { navigation.mockRestore(); }
+});
