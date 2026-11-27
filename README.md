@@ -1,21 +1,25 @@
 # SHEPATH
 
-SHEPATH helps users compare walking routes in Ranchi using journey estimates and historical OpenStreetMap evidence. It shows what is mapped nearby and where information is missing. It does not assess or guarantee personal safety.
+SHEPATH helps users compare walking and driving routes in the Ranchi pilot, including Hatia and Mahilong using journey estimates and historical OpenStreetMap evidence. It shows what is mapped nearby and where information is missing. It does not assess or guarantee personal safety.
+
+[Open the ShePath planner](https://shepath.amisha02bai.workers.dev/)
 
 ## Current features
 
-- A responsive five-step journey: search, evidence preferences, route comparison, overview and evidence.
-- Live walking routes with distance, duration and an interactive map.
+- Choose an origin, destination, travel mode and departure time, then compare routes and inspect the selected route.
+- Live walking and driving routes with distance, duration and an interactive map.
 - [Choose start and destination](docs/LOCATION_PICKER.md) from typed place suggestions or the map, or use your current location as the start.
 - [Segment-level evidence](docs/SEGMENT_EVIDENCE.md): roughly 150 m stretches, nearby facility coverage, longest facility gap and missing-tag percentages.
 - Route-specific mapped businesses, healthcare, police and pedestrian infrastructure within a 100 m buffer.
 - Lighting, sidewalk and opening-hours tag availability, with unknown data shown explicitly.
 - A separate saved Albert Ekka Chowk → Doranda pilot comparison.
 - [Fix the map](docs/FIX_THE_MAP.md): review stretches with unknown tag coverage and open their area in OpenStreetMap.
-- [Static trip sharing](docs/TRIP_SHARING.md): WhatsApp text and a printable plan that can be saved as PDF.
+- [Static trip sharing](docs/TRIP_SHARING.md): share a snapshot of the selected path and estimated arrival on WhatsApp, or save a PDF with an offline route outline, endpoint markers and available landmarks.
 - [Evidence verification](docs/EVIDENCE_VERIFICATION.md): inspect source and geometry identifiers and recheck displayed evidence against the service.
 - [Plain-language route summaries](docs/ROUTE_SUMMARY.md): travel-time differences, mapped facility counts and longest gaps, with a choice of comparison route.
-- [Departure-time awareness](docs/DEPARTURE_TIME.md): IST departure controls, supported opening-hours schedules with unknowns separate, and offline sunrise/sunset walking estimates.
+- [Departure-time awareness](docs/DEPARTURE_TIME.md): IST departure controls, supported opening-hours schedules with unknowns separate, and offline sunrise/sunset travel estimates.
+
+Automatic comparison uses weights learned from walking-survey choices for both travel modes. Driving preferences have yet to be independently validated. Users can also choose manual weights.
 
 [Evidence-match weights](docs/EVIDENCE_MATCH.md) reorder supported live routes using tag coverage and mapped business density, with contribution explanations and sensitivity examples. Street activity is unavailable and excluded. Mapped facilities and tags are historical records, not verified street conditions.
 
@@ -36,6 +40,8 @@ Keep API credentials in the local backend environment. The committed example fil
 - `frontend/` — interface, map components and frontend tests.
 - `backend/` — API, routing integration and backend tests.
 - `data/ranchi_safety/` — pinned pilot data, extraction scripts and provenance records.
+- `ml/` — preference-model training and simulation.
+- `tests/` — offline checks of the route API contract used by the planner.
 - `scripts/` — local capability checks.
 - `docs/` — setup, specifications and documentation index.
 
@@ -43,10 +49,29 @@ Keep API credentials in the local backend environment. The committed example fil
 
 See the [frontend guide](frontend/README.md), [contribution guide](CONTRIBUTING.md) and [documentation index](docs/README.md).
 
-The UI has been reviewed on Windows with live routing and in responsive browser layouts. Fresh-clone installation, Linux startup, production deployment and a full accessibility review remain separate validation tasks. Historical validation reports document their own scope and limitations.
+### Run the tests
+
+With the backend environment active, run these commands from the repository root. The root test exercises both travel profiles with two provider alternatives and checks that the API preserves their paths, distances and durations.
+
+```sh
+python -m unittest discover -s tests -v
+python -m unittest discover -s backend/tests -v
+```
+
+With frontend dependencies installed, run the interface and route-sharing tests and build the application.
+
+```sh
+cd frontend
+npm test
+npm run build
+```
 
 ## Data and limitations
 
 OpenStreetMap data is © OpenStreetMap contributors and subject to the ODbL; see [OpenStreetMap copyright](https://www.openstreetmap.org/copyright). Preserve the tracked data, source dates, hashes and attribution.
 
 Missing information means unknown. Record counts do not establish continuous footpaths, working lights, open businesses or personal safety. Measured street activity and community reports are planned work. Opening-hours evaluation supports a documented weekly subset; complex schedules remain unknown.
+
+## License
+
+The original ShePath code is available under the [MIT License](LICENSE). OpenStreetMap data retains its ODbL terms. Third-party software and assets retain their respective licenses.
