@@ -1,6 +1,7 @@
+import { readPlan } from "@/lib/routing/plannedRoute";
 import { fireEvent, render, screen, cleanup } from "@testing-library/react";
 import { afterEach, expect, it, vi } from "vitest";
-import { tripPlanText, whatsappPlanUrl, openPrintablePlan } from "@/lib/routing/tripPlan";
+import { openPrintablePlan } from "@/lib/routing/tripPlan";
 import { TripPlanPanel } from "@/components/TripPlanPanel";
 import { evidenceFixture, evidenceRoute } from "./evidenceFixture";
 import type { RouteEvidence } from "@/lib/routing/routeEvidence";
@@ -15,41 +16,47 @@ afterEach(() => {
   cleanup();
   vi.restoreAllMocks();
 });
-it("preserves place names and encodes the exact text for WhatsApp", () => {
-  const text = tripPlanText(
-    [evidenceRoute],
-    evidenceRoute.id,
-    states(),
-    "चौक & A",
-    "B #1",
-    departure,
-  )!;
-  expect(text).toContain("From: चौक & A");
-  expect(text).toContain("2026-10-29 15:00 IST");
-  expect(text).toContain("7 mapped business records");
-  expect(text).toContain("Source snapshot:");
-  expect(text).toContain("no live location");
-  expect(new URL(whatsappPlanUrl(text)).searchParams.get("text")).toBe(text);
+it("shares the selected geometry and arrival even when evidence is unavailable", () => {
+  const destination = "राँची & Station";
+  render(
+    <TripPlanPanel
+      routes={[evidenceRoute]}
+      selected={evidenceRoute.id}
+      states={{}}
+      from="A"
+      to={destination}
+      departure={departure}
+    />,
+  );
+  const url = new URL(
+    screen.getByRole("link", { name: "Share on WhatsApp" }).getAttribute("href")!,
+  );
+  const message = url.searchParams.get("text")!;
+  expect(message).toContain("Expected arrival");
+  const snapshot = readPlan(new URL(message.split("snapshot): ")[1]!).hash);
+  expect(snapshot.coordinates).toEqual(evidenceRoute.coordinates);
+  expect(snapshot.info[1]).toBe(destination);
 });
-it("does not invent counts or daylight when evidence is missing or mismatched", () => {
-  for (const s of [
-    {},
-    { [evidenceRoute.id]: { status: "error", message: "Offline" } } as Record<
-      string,
-      EvidenceState
-    >,
-    { other: states()[evidenceRoute.id]! },
-  ]) {
-    const text = tripPlanText([evidenceRoute], evidenceRoute.id, s, "A", "B", departure)!;
-    expect(text).not.toContain("7 mapped");
-    expect(text).not.toContain("Estimated arrival");
-  }
+it("rejects an incomplete shared route", () => {
+  expect(() => readPlan("#plan=broken")).toThrow();
 });
-it("handles invalid departure and absent selected route", () => {
-  expect(tripPlanText([], "missing", {}, "A", "B", departure)).toBeNull();
-  const text = tripPlanText([evidenceRoute], evidenceRoute.id, states(), "A", "B", "bad")!;
-  expect(text).toContain("not set to a valid");
-  expect(text).not.toContain("Estimated arrival");
+it("embeds a tile-free route and endpoint markers in the print document", () => {
+  const doc = document.implementation.createHTMLDocument();
+  vi.spyOn(window, "open").mockReturnValue({ document: doc, print: vi.fn() } as unknown as Window);
+  render(
+    <TripPlanPanel
+      routes={[evidenceRoute]}
+      selected={evidenceRoute.id}
+      states={{}}
+      from="A"
+      to="B"
+      departure={departure}
+    />,
+  );
+  fireEvent.click(screen.getByRole("button", { name: "Save as PDF" }));
+  expect(doc.querySelector("svg polyline")).toBeTruthy();
+  expect(doc.querySelectorAll("svg circle")).toHaveLength(2);
+  expect(doc.querySelector("img")).toBeNull();
 });
 it("updates the share link when departure or destination changes and reports blocked tabs", () => {
   const props = {
