@@ -121,49 +121,105 @@ function Brand() {
   );
 }
 
-function JourneyEntry() {
-  const [hash, setHash] = useState("");
+const sessionKey = `shepath.journey.v1.${routingProvider}`;
+
+type JourneySnapshot = {
+  screen: Screen;
+  travelMode: "walk" | "drive";
+  from: string;
+  to: string;
+  originPoint: LatLng | null;
+  destinationPoint: LatLng | null;
+  routes: RouteData[];
+  selected: string;
+  departure: string;
+  summaryComparison: string;
+  priorities: typeof learnedPriorities;
+  weights: Weights;
+  observations: Observations;
+  maxExtra: number | null;
+  mlEnabled: boolean;
+  showModelLab: boolean;
+  showSavedPilot: boolean;
+  interrupted: boolean;
+  error: string | null;
+};
+
+function restoredJourney(): JourneySnapshot | null {
+  try {
+    const entry = performance.getEntriesByType("navigation")[0] as PerformanceNavigationTiming | undefined;
+    if (entry?.type !== "reload") return null;
+    const saved = JSON.parse(sessionStorage.getItem(sessionKey) ?? "null");
+    if (!saved || !steps.includes(saved.screen) || !Array.isArray(saved.routes)) return null;
+    if (saved.screen === "details" && !saved.routes.some((route: RouteData) => route.id === saved.selected)) return null;
+    return saved;
+  } catch {
+    return null;
+  }
+}
+
+export function JourneyEntry() {
+  const [hash, setHash] = useState<string | null>(null);
+  const [initial, setInitial] = useState<JourneySnapshot | null>(null);
   useEffect(() => {
     const update = () => setHash(window.location.hash);
+    if (!window.location.hash.startsWith("#plan=")) setInitial(restoredJourney());
     update();
     window.addEventListener("hashchange", update);
     return () => window.removeEventListener("hashchange", update);
   }, []);
-  return hash.startsWith("#plan=") ? <SharedPlan hash={hash}/> : <ShePathApp/>;
+  if (hash === null) return null;
+  return hash.startsWith("#plan=") ? <SharedPlan hash={hash}/> : <ShePathApp initial={initial}/>;
 }
 
-export function ShePathApp() {
-  const [travelMode, setTravelMode] = useState<"walk" | "drive">("walk");
+export function ShePathApp({ initial = null }: { initial?: JourneySnapshot | null } = {}) {
+  const [travelMode, setTravelMode] = useState<"walk" | "drive">(initial?.travelMode ?? "walk");
   const driving = travelMode === "drive";
-  const [showSavedPilot, setShowSavedPilot] = useState(false);
-  const [screen, setScreen] = useState<Screen>("welcome");
+  const [showSavedPilot, setShowSavedPilot] = useState(initial?.showSavedPilot ?? false);
+  const [screen, setScreen] = useState<Screen>(initial?.screen ?? "welcome");
   const { openSaved } = useJourneyFocus(screen, showSavedPilot, () => {
     interruptRouteRequest();
     setShowSavedPilot(true);
   });
-  const manuallySelected = useRef(false);
-  const [selected, setSelected] = useState<RouteKey>("");
-  const [summaryComparison, setSummaryComparison] = useState("");
-  const [departure, setDeparture] = useState("");
+  const manuallySelected = useRef(Boolean(initial?.selected));
+  const [selected, setSelected] = useState<RouteKey>(initial?.selected ?? "");
+  const [summaryComparison, setSummaryComparison] = useState(initial?.summaryComparison ?? "");
+  const [departure, setDeparture] = useState(initial?.departure ?? "");
   useEffect(() => {
-    setDeparture(istInputValue(new Date()));
-  }, []);
-  const [showModelLab, setShowModelLab] = useState(false);
-  const [priorities, setPriorities] = useState({ ...learnedPriorities });
-  const [mlEnabled, setMlEnabled] = useState(true);
-  const [maxExtra, setMaxExtra] = useState(Infinity);
-  const [observations, setObservations] = useState<Observations>({});
-  const [weights, setWeights] = useState<Weights>({ ...emptyWeights });
-  const [from, setFrom] = useState("Albert Ekka Chowk, Ranchi");
-  const [to, setTo] = useState("Ranchi Railway Station, Ranchi");
-  const [originPoint, setOriginPoint] = useState<LatLng | null>(null);
+    if (!initial) setDeparture(istInputValue(new Date()));
+  }, [initial]);
+  const [showModelLab, setShowModelLab] = useState(initial?.showModelLab ?? false);
+  const [priorities, setPriorities] = useState(initial?.priorities ?? { ...learnedPriorities });
+  const [mlEnabled, setMlEnabled] = useState(initial?.mlEnabled ?? true);
+  const [maxExtra, setMaxExtra] = useState(initial?.maxExtra ?? Infinity);
+  const [observations, setObservations] = useState<Observations>(initial?.observations ?? {});
+  const [weights, setWeights] = useState<Weights>(initial?.weights ?? { ...emptyWeights });
+  const [from, setFrom] = useState(initial?.from ?? "Albert Ekka Chowk, Ranchi");
+  const [to, setTo] = useState(initial?.to ?? "Ranchi Railway Station, Ranchi");
+  const [originPoint, setOriginPoint] = useState<LatLng | null>(initial?.originPoint ?? null);
   const locationPicker = useRef<{ locate: () => void }>(null);
-  const [destinationPoint, setDestinationPoint] = useState<LatLng | null>(null);
-  const [routes, setRoutes] = useState<RouteData[]>([]);
-  const [interrupted, setInterrupted] = useState(false);
+  const [destinationPoint, setDestinationPoint] = useState<LatLng | null>(initial?.destinationPoint ?? null);
+  const [routes, setRoutes] = useState<RouteData[]>(initial?.routes ?? []);
+  const [interrupted, setInterrupted] = useState(initial?.interrupted ?? false);
   const [loading, setLoading] = useState(false);
   const [searchSubmitted, setSearchSubmitted] = useState(false);
-  const [error, setError] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(initial?.error ?? null);
+  useEffect(() => {
+    const snapshot: JourneySnapshot = {
+      screen, travelMode, from, to, originPoint, destinationPoint, routes, selected,
+      departure, summaryComparison, priorities, weights, observations, mlEnabled,
+      maxExtra: Number.isFinite(maxExtra) ? maxExtra : null,
+      showModelLab, showSavedPilot, interrupted: interrupted || loading, error,
+    };
+    try {
+      sessionStorage.setItem(sessionKey, JSON.stringify(snapshot));
+    } catch {
+      // The planner remains usable if browser storage is disabled or full.
+      try { sessionStorage.removeItem(sessionKey); } catch { /* Storage unavailable. */ }
+    }
+  }, [screen, travelMode, from, to, originPoint, destinationPoint, routes, selected,
+    departure, summaryComparison, priorities, weights, observations, mlEnabled,
+    maxExtra, showModelLab, showSavedPilot, interrupted, loading, error]);
   const inFlight = useRef(false);
   const requestGeneration = useRef(0);
   function interruptRouteRequest() {
