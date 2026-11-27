@@ -1,78 +1,8 @@
-import type { EvidenceState } from "@/hooks/useRouteEvidence";
-import type { RouteData } from "./types";
-import { summarizeRoute } from "./routeSummary";
-import { daylightEstimate, formatIst, parseDeparture } from "./departureTime";
-import { summarizeHours } from "./facilityHours";
-
-export function tripPlanText(
-  routes: RouteData[],
-  selected: string,
-  states: Record<string, EvidenceState>,
-  from: string,
-  to: string,
-  departure: string,
-  mode: "walk" | "drive" = "walk",
-): string | null {
-  const route = routes.find((r) => r.id === selected);
-  const summary = summarizeRoute(routes, selected, states);
-  if (!route || !summary) return null;
-  const instant = parseDeparture(departure);
-  const lines = [
-    `SHEPATH · ${mode === "drive" ? "Driving" : "Walking"} trip plan`,
-    `From: ${from}`,
-    `To: ${to}`,
-    `Selected: ${summary.name}`,
-    instant
-      ? `Departure: ${departure.replace("T", " ")} IST (UTC+05:30)`
-      : "Departure: not set to a valid date/time",
-    summary.travel,
-    summary.mapped,
-  ];
-  const state = states[selected];
-  const e =
-    state?.status === "complete" &&
-    state.evidence.route.id === selected &&
-    state.evidence.status === "available" &&
-    state.evidence.coverage.full_buffer_covered &&
-    state.evidence.route_context
-      ? state.evidence
-      : null;
-  if (e) {
-    if (instant) {
-      const sun = daylightEstimate(instant, route.durationSeconds);
-      if (sun)
-        lines.push(
-          `Estimated arrival: ${formatIst(sun.arrival)}.`,
-          sun.nightMinutes < 0.01
-            ? "Estimated trip falls between sunrise and sunset."
-            : `About ${Math.max(1, Math.round(sun.nightMinutes))} min falls between sunset and sunrise.`,
-          "Daylight is an offline estimate for central Ranchi; weather, terrain, stops and actual lighting are not modeled.",
-        );
-      if (e.route_context?.facility_hours) {
-        const hours = summarizeHours(e.route_context.facility_hours, instant);
-        lines.push(
-          `Facilities at departure: ${hours.counts.likely_open} likely open; ${hours.counts.likely_closed} likely closed; ${hours.counts.missing + hours.counts.unsupported} hours unknown. Historical schedules, not confirmed operation or hours when passing each facility.`,
-        );
-      } else lines.push("Facility opening hours unavailable.");
-    }
-    lines.push(
-      ...summary.context,
-      `Geometry SHA-256: ${e.route.geometry_sha256}`,
-      `Evidence identity SHA-256: ${e.evidence_identity_sha256}`,
-      `${e.source_provenance.attribution} · ${e.source_provenance.license}`,
-    );
-  }
-  lines.push(
-    "Static plan only: no live location, tracking or turn-by-turn navigation. Travel times are estimates. Historical mapped evidence is incomplete; missing records mean unknown, not unsafe. No personal-safety assessment.",
-  );
-  return lines.join("\n\n");
-}
-
 export function whatsappPlanUrl(text: string): string {
   return `https://wa.me/?text=${encodeURIComponent(text)}`;
 }
 
-export function openPrintablePlan(text: string): boolean {
+export function openPrintablePlan(text: string, chart?: HTMLElement | null): boolean {
   const win = window.open("", "_blank");
   if (!win) return false;
   win.opener = null;
@@ -94,5 +24,6 @@ export function openPrintablePlan(text: string): boolean {
   const content = doc.createElement("pre");
   content.textContent = text;
   doc.body.replaceChildren(button, heading, content);
+  if (chart) doc.body.append(doc.importNode(chart, true));
   return true;
 }

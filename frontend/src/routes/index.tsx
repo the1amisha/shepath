@@ -1,3 +1,4 @@
+import { SharedPlan } from "@/components/SharedPlan";
 import {
   preferenceIsSeparated,
   recommendationSummary,
@@ -65,7 +66,7 @@ export const Route = createFileRoute("/")({
       { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
-  component: ShePathApp,
+  component: JourneyEntry,
 });
 
 type Screen = "welcome" | "search" | "preferences" | "results" | "details";
@@ -118,6 +119,17 @@ function Brand() {
       </div>
     </div>
   );
+}
+
+function JourneyEntry() {
+  const [hash, setHash] = useState("");
+  useEffect(() => {
+    const update = () => setHash(window.location.hash);
+    update();
+    window.addEventListener("hashchange", update);
+    return () => window.removeEventListener("hashchange", update);
+  }, []);
+  return hash.startsWith("#plan=") ? <SharedPlan hash={hash}/> : <ShePathApp/>;
 }
 
 export function ShePathApp() {
@@ -917,6 +929,7 @@ export function ShePathApp() {
                 from={from}
                 to={to}
                 departure={departure}
+                reason={mlEnabled && preferenceSummary?.route.id === selected ? preferenceSummary.reason : undefined}
                 mode={travelMode}
               />
             )}
