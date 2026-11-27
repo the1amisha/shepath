@@ -92,7 +92,7 @@ describe("time fallback card summaries", () => {
   const empty = { rows: [], message: "" };
   it("explains fastest and slower ranks from travel time", () => {
     expect(timeFallbackSummary(a, [a, b], empty)).toBe(
-      "Fastest estimated walk; ranked by travel time.",
+      "Fastest estimated trip; ranked by travel time.",
     );
     expect(timeFallbackSummary(b, [a, b], empty)).toContain(
       "About 1 minute longer than the fastest",

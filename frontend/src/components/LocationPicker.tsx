@@ -126,7 +126,7 @@ export function LocationPicker(props: Props) {
           <p className="text-sm">
             Select a point for your {target === "origin" ? "start" : "destination"}. Click the map,
             or focus it and use arrow keys to pan, then choose its centre. A = start; B =
-            destination. Routing may snap to a nearby walkable road.
+            destination. Routing may snap to a nearby road for your travel mode.
           </p>
           <PickerMap
             {...props}

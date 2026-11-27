@@ -66,7 +66,7 @@ export function recommendRoutes(
     maxExtraMinutes !== Infinity &&
     (!Number.isFinite(maxExtraMinutes) || maxExtraMinutes < 0 || maxExtraMinutes > 30)
   )
-    return stop("Extra walking time must be between 0 and 30 minutes.");
+    return stop("Extra travel time must be between 0 and 30 minutes.");
   // This version deliberately uses a zero learned time coefficient and a separate
   // user budget. Refuse a changed artifact rather than silently ignoring time.
   if (
@@ -87,7 +87,7 @@ export function recommendRoutes(
       !state.evidence.route_context
     )
       return stop(
-        "Comparable evidence is unavailable for at least one route. No ML recommendation; routes are shown by walking time.",
+        "Comparable evidence is unavailable for at least one route. No ML recommendation; routes are shown by travel time.",
       );
     const e = state.evidence;
     const source = JSON.stringify([
@@ -181,7 +181,7 @@ export function recommendRoutes(
     ...(winner ? { recommendedId: winner.id } : {}),
     message: winner
       ? "The model found a stronger preference match. It appears first; you can choose any route."
-      : "There is not enough evidence to identify a clear ML preference. Unresolved alternatives are ordered by walking time, not safety.",
+      : "There is not enough evidence to identify a clear ML preference. Unresolved alternatives are ordered by travel time, not safety.",
   };
 }
 
@@ -220,7 +220,7 @@ export function routeExplanation(
   const comparison =
     routes.length === 1
       ? "Only one route was returned; no alternatives to compare."
-      : `${route.distanceMeters === shortest ? "Shortest distance among returned routes" : `${Math.round(route.distanceMeters - shortest)} m longer than the shortest returned route`}; ${route.durationSeconds === fastest ? "fastest estimated walk" : `about ${Math.round((route.durationSeconds - fastest) / 60)} min longer than the fastest`}.`;
+      : `${route.distanceMeters === shortest ? "Shortest distance among returned routes" : `${Math.round(route.distanceMeters - shortest)} m longer than the shortest returned route`}; ${route.durationSeconds === fastest ? "fastest estimated trip" : `about ${Math.round((route.durationSeconds - fastest) / 60)} min longer than the fastest`}.`;
   const row = result.rows.find((r) => r.id === route.id);
   if (!row) return travel + comparison;
   const labels = {
@@ -232,7 +232,7 @@ export function routeExplanation(
   const known = attributes.filter((key) => row.values[key].high - row.values[key].low < 1);
   const evidence = known.length
     ? ` Available inputs: ${known.map((key) => labels[key]).join(", ")}.`
-    : " Walking-condition inputs are unknown.";
+    : " Route-condition inputs are unknown.";
   const reason =
     result.recommendedId === route.id
       ? " Recommended because its survey-weighted preference fit stays higher than the other eligible routes even across the missing-input ranges."

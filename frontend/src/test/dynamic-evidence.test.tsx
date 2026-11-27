@@ -35,8 +35,8 @@ it("loads routes sequentially and displays mapped context with unknowns", async 
   expect(screen.getByText(/OpenStreetMap contributors/)).toBeInTheDocument();
   expect(screen.queryByText(/safest/i)).not.toBeInTheDocument();
 });
-it.each(["cycle", "drive"] as TravelMode[])("skips %s", (mode) => {
-  renderHook(() => useRouteEvidence([route], mode, "journey", true));
+it("skips cycle mode", () => {
+  renderHook(() => useRouteEvidence([route], "cycle", "journey", true));
   expect(fetchEvidence).not.toHaveBeenCalled();
 });
 it("skips disabled/mock/saved pilot views", () => {
@@ -81,9 +81,11 @@ it("cancels when travel mode changes or the component unmounts", () => {
   const signal = fetchEvidence.mock.calls[0]![1] as AbortSignal;
   rerender({ mode: "drive" });
   expect(signal.aborted).toBe(true);
-  expect(result.current).toEqual({});
+  expect(result.current[route.id]?.status).toBe("loading");
+  const driveSignal = fetchEvidence.mock.calls[1]![1] as AbortSignal;
   rerender({ mode: "walk" });
-  const next = fetchEvidence.mock.calls[1]![1] as AbortSignal;
+  expect(driveSignal.aborted).toBe(true);
+  const next = fetchEvidence.mock.calls[2]![1] as AbortSignal;
   unmount();
   expect(next.aborted).toBe(true);
 });

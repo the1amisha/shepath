@@ -16,8 +16,7 @@ export function SegmentEvidencePanel({ evidence }: { evidence: SegmentEvidence }
         footpath (sidewalk) tags: <strong>{evidence.sidewalk_unknown_percent.toFixed(1)}%</strong>.
       </p>
       <p className="mt-2 text-muted-foreground">
-        These measure proximity to historical OSM records, not the conditions on the street you
-        walk. A recorded “no” is known tag evidence. Missing records remain unknown.
+        These measure proximity to historical OSM records, not the conditions on the street along this route. A recorded “no” is known tag evidence. Missing records remain unknown.
       </p>
       <div className="mt-3 flex h-4 overflow-hidden rounded" aria-hidden="true">
         {evidence.segments.map((segment) => (

@@ -84,12 +84,12 @@ export function summarizeRoute(
       (best, r) => (!best || r.durationSeconds < best.durationSeconds ? r : best),
       undefined,
     );
-  let travel = `${name} is ${distanceText(selected.distanceMeters)} with an estimated walk of ${minutes(selected.durationSeconds)}.`;
+  let travel = `${name} is ${distanceText(selected.distanceMeters)} with an estimated travel time of ${minutes(selected.durationSeconds)}.`;
   if (reference) {
     const delta = selected.durationSeconds - reference.durationSeconds;
     travel +=
       delta === 0
-        ? ` It has the same estimated walking time as ${nameOf(reference)}.`
+        ? ` It has the same estimated travel time as ${nameOf(reference)}.`
         : ` It is ${Math.abs(delta) < 60 ? "" : "about "}${minutes(Math.abs(delta))} ${delta > 0 ? "slower" : "faster"} than ${nameOf(reference)}.`;
   }
   const result: RouteSummary = {
@@ -112,7 +112,7 @@ export function summarizeRoute(
         ? " A mapped business or healthcare record lies within 100 m along the whole route."
         : ` Its longest stretch with no mapped business or healthcare record within 100 m is ${distanceText(gap)}.`;
     result.context.push(
-      `Usable tags on nearby roads are missing along ${segments.lighting_unknown_percent.toFixed(1)}% of the route for lighting and ${segments.sidewalk_unknown_percent.toFixed(1)}% for sidewalks. These tags are not verified conditions on the walked street.`,
+      `Usable tags on nearby roads are missing along ${segments.lighting_unknown_percent.toFixed(1)}% of the route for lighting and ${segments.sidewalk_unknown_percent.toFixed(1)}% for sidewalks. These tags are not verified conditions on the selected street.`,
     );
   } else {
     result.mapped += " Stretch-level evidence is unavailable, so a longest gap cannot be reported.";

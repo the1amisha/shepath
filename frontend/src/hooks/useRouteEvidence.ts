@@ -20,7 +20,7 @@ export function useRouteEvidence(
     states: Record<string, EvidenceState>;
   }>();
   useEffect(() => {
-    if (!enabled || mode !== "walk" || !routes.length) return;
+    if (!enabled || mode === "cycle" || !routes.length) return;
     const controller = new AbortController();
     const states: Record<string, EvidenceState> = Object.fromEntries(
       routes.map((r) => [r.id, { status: "queued" }]),
@@ -36,6 +36,7 @@ export function useRouteEvidence(
         publish();
         try {
           const key = JSON.stringify([
+            mode,
             route.id,
             route.coordinates,
             route.distanceMeters,
@@ -72,7 +73,7 @@ export function useRouteEvidence(
     })();
     return () => controller.abort();
   }, [routes, mode, journey, enabled]);
-  return enabled && mode === "walk" && batch?.routes === routes && batch.journey === journey
+  return enabled && mode !== "cycle" && batch?.routes === routes && batch.journey === journey
     ? batch.states
     : {};
 }

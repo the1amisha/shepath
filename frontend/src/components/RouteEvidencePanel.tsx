@@ -39,7 +39,7 @@ export function RouteEvidencePanel({
       {context && (
         <p className="mt-2">
           Mapped records and tag availability are available for this route's 100 m buffer;
-          conditions on the walked street remain unverified.
+          conditions on the selected street remain unverified.
         </p>
       )}
       {context?.segment_evidence && <SegmentEvidencePanel evidence={context.segment_evidence} />}

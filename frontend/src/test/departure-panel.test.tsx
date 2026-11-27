@@ -49,7 +49,7 @@ it("updates locally and clears stale results for an invalid date", () => {
     target: { value: "2026-10-28T20:00" },
   });
   expect(screen.getByText("0 likely open · 1 likely closed")).toBeInTheDocument();
-  expect(screen.getByText(/7 min of this walk/)).toBeInTheDocument();
+  expect(screen.getByText(/7 min of this trip/)).toBeInTheDocument();
   fireEvent.change(screen.getByLabelText("Departure date and time (IST)"), {
     target: { value: "" },
   });

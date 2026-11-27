@@ -34,7 +34,7 @@ function FixMapList({ evidence }: { evidence: SegmentEvidence }) {
         {stretches.length === 0 ? (
           <p>
             No stretches have missing nearby tag evidence in this snapshot. This does not establish
-            complete or accurate mapping of the walked street.
+            complete or accurate mapping of the selected street.
           </p>
         ) : (
           <>
