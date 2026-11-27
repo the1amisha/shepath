@@ -64,7 +64,7 @@ export function readPlan(hash: string) {
 export function planMessage([from, to, mode, departure, distance, duration]: PlanInfo) {
   const start = parseDeparture(departure);
   return [
-    `SHEPATH · ${mode === "drive" ? "Driving" : "Walking"} trip plan`,
+    `ShePath · ${mode === "drive" ? "Driving" : "Walking"} trip plan`,
     `${from} → ${to}`,
     `${(distance / 1000).toFixed(1)} km · about ${Math.max(1, Math.round(duration / 60))} min`,
     ...(start

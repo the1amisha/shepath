@@ -19,7 +19,7 @@ export function PreferenceExperiment() {
     <main className="min-h-screen bg-background px-4 py-8 text-foreground sm:px-8">
       <div className="mx-auto max-w-4xl space-y-6">
         <a href="/" className="inline-block text-sm font-bold text-primary underline">
-          ← Back to SHEPATH
+          ← Back to ShePath
         </a>
         <header>
           <p className="text-xs font-bold uppercase tracking-widest text-primary">

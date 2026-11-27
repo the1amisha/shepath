@@ -7,7 +7,7 @@ export function openPrintablePlan(text: string, chart?: HTMLElement | null): boo
   if (!win) return false;
   win.opener = null;
   const doc = win.document;
-  doc.title = "SHEPATH trip plan";
+  doc.title = "ShePath trip plan";
   doc.documentElement.lang = "en";
   const viewport = doc.createElement("meta");
   viewport.name = "viewport";
@@ -20,7 +20,7 @@ export function openPrintablePlan(text: string, chart?: HTMLElement | null): boo
   button.textContent = "Print / save as PDF";
   button.onclick = () => win.print();
   const heading = doc.createElement("h1");
-  heading.textContent = "SHEPATH trip plan";
+  heading.textContent = "ShePath trip plan";
   const content = doc.createElement("pre");
   content.textContent = text;
   doc.body.replaceChildren(button, heading, content);
